@@ -19,6 +19,9 @@ exports.uploadResource = async (req, res, next) => {
       "edubridge/resources"
     );
 
+    console.log("Cloudinary Result:", result);
+    console.log("Cloudinary URL:", result.secure_url);
+
     // Tags parse karo
     let parsedTags = [];
     if (tags) {

@@ -83,14 +83,22 @@ export default function RegisterPage() {
   const stepTitles = ["Account Details", "Academic Info", "Profile (Optional)"];
 
   return (
-    <div>
+    <div className="bg-gradient-to-br from-slate-900 via-indigo-950 to-violet-950 rounded-3xl p-8 shadow-2xl">
       <div className="mb-6">
-        <h2 className="text-2xl font-display font-bold text-slate-800 dark:text-slate-100">Join EduBridge</h2>
-        <p className="text-slate-500 text-sm mt-1">Step {step} of 3 — {stepTitles[step - 1]}</p>
+        <h2
+  className="text-2xl font-bold text-white mb-1"
+  style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+>
+  Join EduBridge
+</h2>
+
+<p className="text-slate-400 text-sm mt-1">
+  Step {step} of 3 — {stepTitles[step - 1]}
+</p>
       </div>
 
       {/* Progress */}
-      <div className="flex gap-2 mb-8">
+      <div className="flex gap-2 mb-8 ">
         {[1, 2, 3].map((s) => (
           <div key={s} className={`h-1.5 flex-1 rounded-full transition-all ${s <= step ? "bg-primary-600" : "bg-slate-200 dark:bg-slate-600"}`} />
         ))}
@@ -101,23 +109,23 @@ export default function RegisterPage() {
         {step === 1 && (
           <div className="space-y-4 animate-fade-in">
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Full Name *</label>
+              <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-1.5">Full Name *</label>
               <input className="input" placeholder="Arjun Sharma" value={form.name} onChange={set("name")} required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Email *</label>
+              <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-1.5">Email *</label>
               <input className="input" type="email" placeholder="you@college.edu" value={form.email} onChange={set("email")} required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Phone</label>
+              <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-1.5">Phone</label>
               <input className="input" type="tel" placeholder="+91 9876543210" value={form.phone} onChange={set("phone")} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Password *</label>
+              <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-1.5">Password *</label>
               <input className="input" type="password" placeholder="Min. 6 characters" value={form.password} onChange={set("password")} required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Confirm Password *</label>
+              <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-1.5">Confirm Password *</label>
               <input className="input" type="password" placeholder="Re-enter password" value={form.confirmPassword} onChange={set("confirmPassword")} required />
             </div>
             <button type="button" onClick={validateStep1} className="btn-primary w-full flex items-center justify-center gap-2 py-3">
@@ -130,7 +138,7 @@ export default function RegisterPage() {
         {step === 2 && (
           <div className="space-y-4 animate-fade-in">
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">University</label>
+              <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-1.5">University</label>
               <select className="input" value={form.universityId} onChange={set("universityId")}>
                 <option value="">Select University</option>
                 {universities.map((u) => (
@@ -139,23 +147,23 @@ export default function RegisterPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">College Name *</label>
+              <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-1.5">College Name *</label>
               <input className="input" placeholder="Your College Name" value={form.collegeName} onChange={set("collegeName")} required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">State</label>
+              <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-1.5">State</label>
               <input className="input" placeholder="Uttar Pradesh" value={form.state} onChange={set("state")} />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Branch *</label>
+                <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-1.5">Branch *</label>
                 <select className="input" value={form.branch} onChange={set("branch")} required>
                   <option value="">Branch</option>
                   {BRANCHES.map((b) => <option key={b} value={b}>{b}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Semester *</label>
+                <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-1.5">Semester *</label>
                 <select className="input" value={form.semester} onChange={set("semester")} required>
                   <option value="">Sem</option>
                   {SEMESTERS.map((s) => <option key={s} value={s}>Sem {s}</option>)}
@@ -163,7 +171,7 @@ export default function RegisterPage() {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Graduation Year</label>
+              <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-1.5">Graduation Year</label>
               <input className="input" type="number" placeholder="2026" value={form.graduationYear} onChange={set("graduationYear")} min="2024" max="2032" />
             </div>
             <div className="flex gap-3">
@@ -181,23 +189,23 @@ export default function RegisterPage() {
         {step === 3 && (
           <div className="space-y-4 animate-fade-in">
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Skills <span className="text-slate-400">(comma-separated)</span></label>
+              <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-1.5">Skills <span className="text-slate-400">(comma-separated)</span></label>
               <input className="input" placeholder="React, Node.js, Python" value={form.skills} onChange={set("skills")} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Interest Areas</label>
+              <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-1.5">Interest Areas</label>
               <input className="input" placeholder="Web Dev, AI/ML, Data Science" value={form.interestAreas} onChange={set("interestAreas")} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">LinkedIn URL</label>
+              <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-1.5">LinkedIn URL</label>
               <input className="input" placeholder="https://linkedin.com/in/..." value={form.linkedIn} onChange={set("linkedIn")} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">GitHub URL</label>
+              <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-1.5">GitHub URL</label>
               <input className="input" placeholder="https://github.com/..." value={form.github} onChange={set("github")} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Bio</label>
+              <label className="block text-sm font-medium text-slate-300 dark:text-slate-300 mb-1.5">Bio</label>
               <textarea className="input resize-none" rows={3} placeholder="Tell other students about yourself…" value={form.bio} onChange={set("bio")} />
             </div>
             <div className="flex gap-3">
@@ -213,14 +221,12 @@ export default function RegisterPage() {
         )}
       </form>
 
-      <p className="text-center text-sm text-slate-500 mt-6">
+      <p className="text-center text-sm text-slate-400 mt-6">
         Already have an account?{" "}
         <Link to="/login" className="text-primary-600 font-medium hover:underline">Sign in</Link>
       </p>
     </div>
   );
 }
-
-
 
 

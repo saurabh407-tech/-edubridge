@@ -131,7 +131,7 @@ export default function AuthLayout() {
             style={{ background: "radial-gradient(circle, #8b5cf6, transparent)" }} />
         </div>
 
-        <div className="w-full max-w-md relative bg-slate-600">
+        <div className="w-full max-w-md relative">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-2 justify-center mb-8 ">
             <div className="w-9 h-9 rounded-2xl flex items-center justify-center"

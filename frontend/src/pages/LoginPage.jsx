@@ -52,7 +52,7 @@ export default function LoginPage() {
   const inputClass = "w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-slate-500 text-sm outline-none transition-all focus:border-indigo-500 focus:bg-white/15 focus:ring-2 focus:ring-indigo-500/20";
 
   return (
-    <div>
+     <div className="bg-gradient-to-br from-slate-900 via-indigo-950 to-violet-950 rounded-3xl p-8 shadow-2xl">
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-white mb-1"
           style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
@@ -161,3 +161,6 @@ export default function LoginPage() {
     </div>
   );
 }
+
+
+

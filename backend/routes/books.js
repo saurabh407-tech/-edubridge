@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { protect } = require("../middleware/auth");
 const Book = require("../models/Book");
-const { uploadImage } = require("../middleware/upload");
+const { uploadImage, uploadToCloudinary } = require("../middleware/upload");
 const { createNotification } = require("../services/notificationService");
 
 // GET all books
@@ -38,17 +38,58 @@ router.get("/", async (req, res, next) => {
 // POST create book listing
 router.post("/", protect, uploadImage.array("images", 5), async (req, res, next) => {
   try {
-    const images = req.files ? req.files.map(f => f.path) : [];
+    console.log("🔥 BOOK UPLOAD STARTED");
+    console.log("📁 Files received:", req.files?.length || 0);
+
+    // Upload all images to Cloudinary
+    const images = [];
+
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        console.log("⬆️ Uploading:", file.originalname);
+
+        const result = await uploadToCloudinary(
+          file.buffer,
+          file.mimetype,
+          "edubridge/books"
+        );
+
+        console.log("☁️ Cloudinary URL:", result.secure_url);
+
+        images.push(result.secure_url);
+      }
+    }
+
+    console.log("🖼️ Final images:", images);
+
     const bookData = {
       ...req.body,
       images,
       seller: req.user._id,
-      price: req.body.isFree === "true" ? 0 : (parseFloat(req.body.price) || 0),
+      price:
+        req.body.isFree === "true"
+          ? 0
+          : parseFloat(req.body.price) || 0,
     };
+
     const book = await Book.create(bookData);
-    await book.populate("seller", "name profilePhoto phone collegeName");
-    res.status(201).json({ success: true, data: book });
-  } catch (err) { next(err); }
+
+    await book.populate(
+      "seller",
+      "name profilePhoto phone collegeName"
+    );
+
+    console.log("✅ Book created:", book._id);
+    console.log("✅ Saved images:", book.images);
+
+    res.status(201).json({
+      success: true,
+      data: book,
+    });
+  } catch (err) {
+    console.error("❌ Book upload error:", err);
+    next(err);
+  }
 });
 
 // GET single book

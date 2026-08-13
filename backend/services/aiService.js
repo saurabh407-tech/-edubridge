@@ -8,7 +8,9 @@ let model = null;
 try {
   if (process.env.GEMINI_API_KEY) {
     genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    model = genAI.getGenerativeModel({
+  model: "gemini-3.1-flash-lite"
+});
     console.log("✅ Gemini AI initialized");
   }
 } catch (err) {
@@ -16,15 +18,58 @@ try {
 }
 
 async function askGemini(prompt) {
-  if (!model) return null;
+  if (!model) {
+    console.error("❌ Gemini model is not initialized");
+    return null;
+  }
+
   try {
     const result = await model.generateContent(prompt);
+
     const text = result.response.text().trim();
-    const jsonMatch = text.match(/```json\n?([\s\S]*?)\n?```/) || text.match(/(\[[\s\S]*\]|\{[\s\S]*\})/);
-    if (jsonMatch) return JSON.parse(jsonMatch[1] || jsonMatch[0]);
-    return JSON.parse(text);
+
+    console.log("🤖 Gemini Response:", text);
+
+    // Remove ```json ... ``` if Gemini returns markdown
+    let cleanedText = text
+      .replace(/^```json\s*/i, "")
+      .replace(/^```\s*/i, "")
+      .replace(/\s*```$/i, "")
+      .trim();
+
+    // Direct JSON parsing
+    try {
+      return JSON.parse(cleanedText);
+    } catch (parseError) {
+      console.warn("⚠️ Direct JSON parsing failed");
+
+      // Try JSON object
+      const objectMatch = cleanedText.match(/\{[\s\S]*\}/);
+
+      if (objectMatch) {
+        try {
+          return JSON.parse(objectMatch[0]);
+        } catch (err) {
+          console.error("❌ Object JSON parsing failed");
+        }
+      }
+
+      // Try JSON array
+      const arrayMatch = cleanedText.match(/\[[\s\S]*\]/);
+
+      if (arrayMatch) {
+        try {
+          return JSON.parse(arrayMatch[0]);
+        } catch (err) {
+          console.error("❌ Array JSON parsing failed");
+        }
+      }
+
+      return null;
+    }
+
   } catch (err) {
-    console.error("Gemini parse error:", err.message);
+    console.error("❌ Gemini API Error:", err.message);
     return null;
   }
 }
@@ -224,26 +269,211 @@ Return ONLY JSON:
 // ─────────────────────────────────────────────
 exports.smartSearch = async (query) => {
   try {
-    if (!model) return { keywords: [query] };
-    const prompt = `
-Convert this student search query to structured params.
-Query: "${query}"
-Return ONLY JSON:
+    // -----------------------------------------
+    // STEP 1: Ask Gemini to understand query
+    // -----------------------------------------
+
+    let aiParams = {
+      category: null,
+      subject: null,
+      semester: null,
+      branch: null,
+      keywords: [query],
+      intent: query,
+    };
+
+    if (model) {
+      const prompt = `
+You are an AI search assistant for a college student resource platform.
+
+Understand the student's search query and convert it into structured search parameters.
+
+Student Query:
+"${query}"
+
+Return ONLY valid JSON in this exact format:
+
+{
+  "category": null,
+  "subject": null,
+  "semester": null,
+  "branch": null,
+  "keywords": [],
+  "intent": ""
+}
+
+Rules:
+
+1. category can ONLY be:
+notes,
+pyq,
+assignments,
+lab_manuals,
+placement,
+interview_questions,
+projects,
+research_papers
+
+2. If semester is not mentioned, use null.
+
+3. If branch is not mentioned, use null.
+
+4. If subject is not mentioned, use null.
+
+5. keywords should contain important search terms from the query.
+
+6. Do not invent information.
+
+Example:
+
+Query:
+"DBMS 4th semester PYQ"
+
+Return:
 {
   "category": "pyq",
   "subject": "DBMS",
   "semester": 4,
-  "branch": "CSE",
-  "keywords": ["DBMS","questions"],
-  "intent": "Looking for DBMS PYQ"
+  "branch": null,
+  "keywords": ["DBMS", "PYQ"],
+  "intent": "Looking for DBMS previous year questions for semester 4"
 }
-Valid categories: notes,pyq,assignments,lab_manuals,placement,interview_questions,projects,research_papers
-Use null for fields not applicable.
-    `;
-    const result = await askGemini(prompt);
-    return result || { keywords: [query] };
-  } catch {
-    return { keywords: [query] };
+`;
+
+      const result = await askGemini(prompt);
+
+      if (result && typeof result === "object") {
+        aiParams = {
+          ...aiParams,
+          ...result,
+        };
+      }
+    }
+
+    console.log("🤖 AI Search Parameters:", aiParams);
+
+    // -----------------------------------------
+    // STEP 2: Build MongoDB search query
+    // -----------------------------------------
+
+    const mongoQuery = {
+      isActive: true,
+    };
+
+    // Category
+    if (aiParams.category) {
+      mongoQuery.category = new RegExp(
+        `^${escapeRegex(aiParams.category)}$`,
+        "i"
+      );
+    }
+
+    // Subject
+    if (aiParams.subject) {
+      mongoQuery.subject = new RegExp(
+        escapeRegex(aiParams.subject),
+        "i"
+      );
+    }
+
+    // Branch
+    if (aiParams.branch) {
+      mongoQuery.branch = new RegExp(
+        escapeRegex(aiParams.branch),
+        "i"
+      );
+    }
+
+    // Semester
+    if (aiParams.semester !== null && aiParams.semester !== undefined) {
+      mongoQuery.semester = Number(aiParams.semester);
+    }
+
+    // -----------------------------------------
+    // STEP 3: Search database
+    // -----------------------------------------
+
+    let resources = await Resource.find(mongoQuery)
+      .populate("uploadedBy", "name profilePhoto")
+      .sort({
+        downloadCount: -1,
+        createdAt: -1,
+      })
+      .limit(20);
+
+    // -----------------------------------------
+    // STEP 4: If strict filters give no result,
+    // perform broader keyword search
+    // -----------------------------------------
+
+    if (resources.length === 0) {
+      const keywords = Array.isArray(aiParams.keywords)
+        ? aiParams.keywords.filter(Boolean)
+        : [query];
+
+      const keywordRegex = keywords.map((keyword) =>
+        escapeRegex(keyword)
+      );
+
+      resources = await Resource.find({
+        isActive: true,
+        $or: [
+          {
+            title: {
+              $in: keywordRegex.map(
+                (keyword) => new RegExp(keyword, "i")
+              ),
+            },
+          },
+          {
+            description: {
+              $in: keywordRegex.map(
+                (keyword) => new RegExp(keyword, "i")
+              ),
+            },
+          },
+          {
+            subject: {
+              $in: keywordRegex.map(
+                (keyword) => new RegExp(keyword, "i")
+              ),
+            },
+          },
+        ],
+      })
+        .populate("uploadedBy", "name profilePhoto")
+        .sort({
+          downloadCount: -1,
+          createdAt: -1,
+        })
+        .limit(20);
+    }
+
+    console.log(`🔎 Search results found: ${resources.length}`);
+
+    // -----------------------------------------
+    // STEP 5: Return AI params + DB results
+    // -----------------------------------------
+
+    return {
+      query,
+      filters: aiParams,
+      results: resources,
+      count: resources.length,
+    };
+
+  } catch (err) {
+    console.error("❌ Smart Search Error:", err);
+
+    return {
+      query,
+      filters: {
+        keywords: [query],
+      },
+      results: [],
+      count: 0,
+      error: "Search failed",
+    };
   }
 };
 
@@ -278,3 +508,7 @@ Suggest 5 internships. Return ONLY JSON array:
     return [];
   }
 };
+
+function escapeRegex(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
