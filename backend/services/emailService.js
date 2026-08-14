@@ -2,25 +2,43 @@ const https = require("https");
 
 exports.sendEmail = async ({ to, subject, html, text }) => {
   return new Promise((resolve, reject) => {
+    // Brevo requires textContent.
+    // Agar text nahi diya gaya hai, HTML se plain text bana denge.
+    const textContent =
+      text ||
+      (html
+        ? html
+            .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+            .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+            .replace(/<[^>]+>/g, " ")
+            .replace(/\s+/g, " ")
+            .trim()
+        : "Please verify your EduBridge account.");
+
     const data = JSON.stringify({
       sender: {
         name: "EduBridge",
         email: process.env.SMTP_FROM,
       },
+
       to: [
         {
           email: to,
         },
       ],
+
       subject,
+
       htmlContent: html,
-      textContent: text || "",
+
+      textContent,
     });
 
     const options = {
       hostname: "api.brevo.com",
       path: "/v3/smtp/email",
       method: "POST",
+
       headers: {
         "api-key": process.env.BREVO_API_KEY,
         "Content-Type": "application/json",
