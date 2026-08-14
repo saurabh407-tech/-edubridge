@@ -1,7 +1,9 @@
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT) || 587,
+  secure: false, // Brevo SMTP port 587 ke liye false
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
@@ -10,15 +12,20 @@ const transporter = nodemailer.createTransport({
 
 exports.sendEmail = async ({ to, subject, html, text }) => {
   try {
-    await transporter.sendMail({
-      from: `"EduBridge" <${process.env.SMTP_USER}>`,
+    const info = await transporter.sendMail({
+      // Brevo me verified sender email
+      from: `"EduBridge" <${process.env.SMTP_FROM}>`,
       to,
       subject,
       html,
       text,
     });
+
+    console.log("✅ Email sent:", info.messageId);
+
+    return info;
   } catch (err) {
-    console.error("Email send error:", err.message);
+    console.error("❌ Email send error:", err.message);
     throw err;
   }
 };
