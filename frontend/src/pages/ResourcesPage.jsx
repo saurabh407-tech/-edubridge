@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
@@ -14,24 +13,23 @@ import {
   Star,
   FileText,
   ChevronRight,
-  Layers3,
+  Layers,
   GraduationCap,
   ArrowUpRight,
+  Award,
+  Filter,
+  RefreshCw,
+  FolderOpen
 } from "lucide-react";
 
 import api from "../services/api";
-import {
-  CardSkeleton,
-  EmptyState,
-  Pagination,
-} from "../components/common";
-
+import { CardSkeleton, EmptyState, Pagination } from "../components/common";
 import UploadResourceModal from "../components/resources/UploadResourceModal";
 import ResourceCard from "../components/resources/ResourceCard";
 import { useDebounce } from "../hooks/useDebounce";
 
 /* =========================================================
-   DATA
+   CATEGORY DEFINITIONS
 ========================================================= */
 
 const CATEGORIES = [
@@ -46,105 +44,61 @@ const CATEGORIES = [
 ];
 
 const BRANCHES = ["CSE", "ECE", "ME", "CE", "EE", "IT", "BCA", "MCA"];
-
 const SEMESTERS = [1, 2, 3, 4, 5, 6, 7, 8];
 
 const CATEGORY_CONFIG = {
   notes: {
-    emoji: "📝",
     label: "Notes",
-    description: "Class notes & study material",
     icon: FileText,
-    from: "#3b82f6",
-    to: "#6366f1",
-    soft: "bg-blue-50 dark:bg-blue-500/10",
+    badgeColor: "bg-primary-50 text-primary-700 border-primary-200",
   },
-
   pyq: {
-    emoji: "📄",
     label: "PYQs",
-    description: "Previous year papers",
     icon: BookOpen,
-    from: "#8b5cf6",
-    to: "#a855f7",
-    soft: "bg-violet-50 dark:bg-violet-500/10",
+    badgeColor: "bg-violet-50 text-violet-700 border-violet-200",
   },
-
   assignments: {
-    emoji: "✏️",
     label: "Assignments",
-    description: "Assignments & solutions",
-    icon: Layers3,
-    from: "#f59e0b",
-    to: "#f97316",
-    soft: "bg-orange-50 dark:bg-orange-500/10",
+    icon: Layers,
+    badgeColor: "bg-amber-50 text-amber-700 border-amber-200",
   },
-
   lab_manuals: {
-    emoji: "🔬",
     label: "Lab Manuals",
-    description: "Practical & lab resources",
-    icon: GraduationCap,
-    from: "#10b981",
-    to: "#14b8a6",
-    soft: "bg-emerald-50 dark:bg-emerald-500/10",
+    icon: Award,
+    badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
   },
-
   placement: {
-    emoji: "💼",
     label: "Placement",
-    description: "Placement preparation",
     icon: TrendingUp,
-    from: "#f43f5e",
-    to: "#ec4899",
-    soft: "bg-rose-50 dark:bg-rose-500/10",
+    badgeColor: "bg-rose-50 text-rose-700 border-rose-200",
   },
-
   interview_questions: {
-    emoji: "🎯",
     label: "Interview",
-    description: "Interview questions",
     icon: Star,
-    from: "#ef4444",
-    to: "#f43f5e",
-    soft: "bg-red-50 dark:bg-red-500/10",
+    badgeColor: "bg-rose-50 text-rose-700 border-rose-200",
   },
-
   projects: {
-    emoji: "🚀",
     label: "Projects",
-    description: "Project ideas & resources",
     icon: Sparkles,
-    from: "#06b6d4",
-    to: "#3b82f6",
-    soft: "bg-cyan-50 dark:bg-cyan-500/10",
+    badgeColor: "bg-sky-50 text-sky-700 border-sky-200",
   },
-
   research_papers: {
-    emoji: "🔍",
     label: "Research",
-    description: "Research papers & references",
-    icon: BookOpen,
-    from: "#9333ea",
-    to: "#7c3aed",
-    soft: "bg-purple-50 dark:bg-purple-500/10",
+    icon: FileText,
+    badgeColor: "bg-violet-50 text-violet-700 border-violet-200",
   },
 };
 
 /* =========================================================
-   COMPONENT
+   RESOURCES PAGE COMPONENT
 ========================================================= */
 
 export default function ResourcesPage() {
   const [searchParams] = useSearchParams();
-
   const [showUpload, setShowUpload] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
-  const [search, setSearch] = useState(
-    searchParams.get("search") || ""
-  );
-
+  const [search, setSearch] = useState(searchParams.get("search") || "");
   const debouncedSearch = useDebounce(search, 400);
 
   const [filters, setFilters] = useState({
@@ -157,12 +111,11 @@ export default function ResourcesPage() {
   const [page, setPage] = useState(1);
 
   /* =========================================================
-     API
+     API QUERY
   ========================================================= */
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["resources", debouncedSearch, filters, page],
-
     queryFn: () => {
       const params = new URLSearchParams({
         page,
@@ -173,37 +126,26 @@ export default function ResourcesPage() {
       if (debouncedSearch) {
         params.set("search", debouncedSearch);
       }
-
       if (filters.category) {
         params.set("category", filters.category);
       }
-
       if (filters.semester) {
         params.set("semester", filters.semester);
       }
-
       if (filters.branch) {
         params.set("branch", filters.branch);
       }
 
-      return api
-        .get(`/resources?${params}`)
-        .then((response) => response.data);
+      return api.get(`/resources?${params}`).then((response) => response.data);
     },
-
     keepPreviousData: true,
   });
-
-  /* =========================================================
-     FILTER HELPERS
-  ========================================================= */
 
   const setFilter = (key, value) => {
     setFilters((current) => ({
       ...current,
       [key]: value,
     }));
-
     setPage(1);
   };
 
@@ -214,704 +156,324 @@ export default function ResourcesPage() {
       branch: "",
       sortBy: "newest",
     });
-
     setSearch("");
     setPage(1);
   };
 
-  const activeFiltersCount = [
-    filters.category,
-    filters.semester,
-    filters.branch,
-  ].filter(Boolean).length;
+  const activeFiltersCount = [filters.category, filters.semester, filters.branch].filter(
+    Boolean
+  ).length;
 
   const totalResources = data?.pagination?.total || 0;
 
-  /* =========================================================
-     UI
-  ========================================================= */
-
   return (
-    //<div className="min-h-screen bg-gray-100 dark:bg-slate-950">
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-blue-200 to-violet-50 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950">
+    <div className="space-y-6 max-w-7xl mx-auto animate-fade-in pb-12">
       {/* =====================================================
-          BACKGROUND DECORATION
-      ===================================================== */}
+          HEADER & SEARCH HERO BANNER
+      ====================================================== */}
+      <section className="relative rounded-3xl overflow-hidden p-6 sm:p-8 bg-gradient-to-r from-primary-600 via-indigo-600 to-sky-600 text-white shadow-card">
+        {/* Ambient glows */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-sky-300/20 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div
-          className="absolute -top-40 -right-40 h-96 w-96 rounded-full opacity-20 blur-3xl"
-          style={{
-            background:
-              "linear-gradient(135deg, #6366f1, #a855f7)",
-          }}
-        />
-
-        <div
-          className="absolute top-[40%] -left-40 h-80 w-80 rounded-full opacity-10 blur-3xl"
-          style={{
-            background:
-              "linear-gradient(135deg, #06b6d4, #6366f1)",
-          }}
-        />
-      </div>
-
-      <div className="relative mx-auto w-full max-w-[1600px] px-4 py-6 sm:px-6 lg:px-8">
-
-        {/* ===================================================
-            HERO
-        =================================================== */}
-
-        <section className="relative mb-8 overflow-hidden rounded-[28px] border border-white/20 bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 p-6 text-white shadow-2xl shadow-indigo-500/20 sm:p-8 lg:p-10">
-
-          {/* Decorative circles */}
-
-          <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-white/10 blur-2xl" />
-
-          <div className="absolute -bottom-32 left-1/3 h-80 w-80 rounded-full bg-fuchsia-400/10 blur-3xl" />
-
-          <div className="absolute right-10 top-10 hidden opacity-10 lg:block">
-            <BookOpen size={180} strokeWidth={1} />
+        <div className="relative z-10 max-w-3xl space-y-4">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-xs font-semibold">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Curated Academic Repository</span>
           </div>
 
-          <div className="relative z-10 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+          <h1 className="text-2xl sm:text-4xl font-display font-bold tracking-tight text-white leading-tight">
+            Explore Study Resources & Notes
+          </h1>
 
-            {/* Hero content */}
+          <p className="text-xs sm:text-sm text-primary-100 max-w-xl leading-relaxed">
+            Discover verified handwritten notes, PYQs, practical manuals, and exam guides shared by students and top achievers.
+          </p>
 
-            <div className="max-w-3xl">
-
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold backdrop-blur-md">
-                <Sparkles size={13} />
-                EduBridge Resource Hub
-              </div>
-
-              <h1 className="max-w-2xl text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">
-                Everything you need to
-                <span className="block text-indigo-100">
-                  learn, prepare & grow.
-                </span>
-              </h1>
-
-              <p className="mt-4 max-w-2xl text-sm leading-6 text-indigo-100 sm:text-base">
-                Discover notes, previous year papers, assignments,
-                projects, placement material and more — all shared
-                by your student community.
-              </p>
-
-              {/* Hero Search */}
-
-              <div className="mt-7 flex max-w-2xl flex-col gap-3 sm:flex-row">
-
-                <div className="relative flex-1">
-
-                  <Search
-                    size={19}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                  />
-
-                  <input
-                    value={search}
-                    onChange={(e) => {
-                      setSearch(e.target.value);
-                      setPage(1);
-                    }}
-                    placeholder="Search notes, subjects, projects..."
-                    className="h-13 w-full rounded-2xl border border-white/20 bg-white px-11 pr-10 text-sm font-medium text-slate-800 outline-none transition-all placeholder:text-slate-400 focus:ring-4 focus:ring-white/20"
-                  />
-
-                  {search && (
-                    <button
-                      onClick={() => setSearch("")}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
-                    >
-                      <X size={16} />
-                    </button>
-                  )}
-                </div>
-
+          {/* Search bar inside Hero */}
+          <div className="pt-2 flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setPage(1);
+                }}
+                placeholder="Search by subject, topic, course code, or notes..."
+                className="w-full h-12 pl-11 pr-10 rounded-2xl bg-white text-slate-900 text-xs sm:text-sm font-medium placeholder-slate-400 shadow-md focus:outline-none focus:ring-4 focus:ring-white/30"
+              />
+              {search && (
                 <button
-                  onClick={() => setShowUpload(true)}
-                  className="flex h-13 items-center justify-center gap-2 rounded-2xl bg-white px-5 text-sm font-bold text-indigo-600 shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl"
+                  onClick={() => setSearch("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
                 >
-                  <Upload size={17} />
-                  Upload Resource
+                  <X className="w-4 h-4" />
                 </button>
-              </div>
-            </div>
-
-            {/* Hero stats */}
-
-            <div className="grid grid-cols-2 gap-3 lg:w-64">
-
-              <div className="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-md">
-                <BookOpen size={19} className="mb-3 text-indigo-100" />
-
-                <p className="text-2xl font-black">
-                  {totalResources.toLocaleString()}
-                </p>
-
-                <p className="mt-1 text-xs text-indigo-100">
-                  Resources
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-md">
-                <Layers3 size={19} className="mb-3 text-indigo-100" />
-
-                <p className="text-2xl font-black">
-                  {CATEGORIES.length}+
-                </p>
-
-                <p className="mt-1 text-xs text-indigo-100">
-                  Categories
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-md">
-                <GraduationCap size={19} className="mb-3 text-indigo-100" />
-
-                <p className="text-2xl font-black">
-                  8
-                </p>
-
-                <p className="mt-1 text-xs text-indigo-100">
-                  Semesters
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-md">
-                <Sparkles size={19} className="mb-3 text-indigo-100" />
-
-                <p className="text-2xl font-black">
-                  24/7
-                </p>
-
-                <p className="mt-1 text-xs text-indigo-100">
-                  Available
-                </p>
-              </div>
-
-            </div>
-          </div>
-        </section>
-
-        {/* ===================================================
-            QUICK CATEGORY SECTION
-        =================================================== */}
-
-        <section className="mb-8">
-
-          <div className="mb-4 flex items-end justify-between">
-
-            <div>
-              <div className="flex items-center gap-2">
-                <div className="rounded-lg bg-indigo-100 p-2 dark:bg-indigo-500/10">
-                  <Layers3
-                    size={17}
-                    className="text-indigo-600 dark:text-indigo-400"
-                  />
-                </div>
-
-                <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-                  Explore Resources
-                </h2>
-              </div>
-
-              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                Find exactly what you need for your studies
-              </p>
+              )}
             </div>
 
             <button
-              onClick={() => setFilter("category", "")}
-              className={`hidden items-center gap-1 text-xs font-semibold transition sm:flex ${
-                !filters.category
-                  ? "text-indigo-600"
-                  : "text-slate-500 hover:text-indigo-600"
-              }`}
+              onClick={() => setShowUpload(true)}
+              className="h-12 px-6 rounded-2xl bg-white text-primary-700 hover:bg-slate-50 font-bold text-xs sm:text-sm shadow-md flex items-center justify-center gap-2 hover:-translate-y-0.5 transition-all flex-shrink-0"
             >
-              View all
-              <ChevronRight size={14} />
+              <Upload className="w-4 h-4" />
+              <span>Share Notes</span>
             </button>
           </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
-
-            {/* ALL */}
-
+      {/* =====================================================
+          CATEGORY SELECTOR PILLS
+      ====================================================== */}
+      <section>
+        <div className="flex items-center justify-between mb-3 px-1">
+          <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+            Explore Categories
+          </p>
+          {filters.category && (
             <button
               onClick={() => setFilter("category", "")}
-              className={`group relative overflow-hidden rounded-2xl border p-4 text-left transition-all duration-300 ${
-                !filters.category
-                  ? "border-indigo-500 bg-indigo-50 shadow-lg shadow-indigo-500/10 dark:border-indigo-500 dark:bg-indigo-500/10"
-                  : "border-slate-200 bg-white hover:-translate-y-1 hover:border-indigo-300 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900"
-              }`}
+              className="text-xs font-semibold text-primary-600 hover:text-primary-700"
             >
-
-              <div
-                className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl text-lg ${
-                  !filters.category
-                    ? "bg-indigo-600 text-white"
-                    : "bg-slate-100 dark:bg-slate-800"
-                }`}
-              >
-                ✨
-              </div>
-
-              <p className="text-xs font-bold text-slate-800 dark:text-white">
-                All
-              </p>
-
-              <p className="mt-1 hidden text-[10px] leading-4 text-slate-400 sm:block">
-                Everything
-              </p>
-
+              Reset Category
             </button>
-
-            {CATEGORIES.map((category) => {
-              const config = CATEGORY_CONFIG[category];
-              const Icon = config.icon;
-              const active = filters.category === category;
-
-              return (
-                <button
-                  key={category}
-                  onClick={() =>
-                    setFilter(
-                      "category",
-                      active ? "" : category
-                    )
-                  }
-                  className={`group relative overflow-hidden rounded-2xl border p-4 text-left transition-all duration-300 ${
-                    active
-                      ? "border-transparent shadow-lg"
-                      : "border-slate-200 bg-white hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900"
-                  }`}
-                  style={
-                    active
-                      ? {
-                          background: `linear-gradient(135deg, ${config.from}, ${config.to})`,
-                        }
-                      : {}
-                  }
-                >
-
-                  {active && (
-                    <div className="absolute -right-4 -top-4 h-16 w-16 rounded-full bg-white/10" />
-                  )}
-
-                  <div
-                    className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl text-lg transition ${
-                      active
-                        ? "bg-white/20"
-                        : config.soft
-                    }`}
-                  >
-                    {active ? (
-                      <Icon size={18} className="text-white" />
-                    ) : (
-                      config.emoji
-                    )}
-                  </div>
-
-                  <p
-                    className={`text-xs font-bold ${
-                      active
-                        ? "text-white"
-                        : "text-slate-800 dark:text-white"
-                    }`}
-                  >
-                    {config.label}
-                  </p>
-
-                  <p
-                    className={`mt-1 hidden text-[10px] leading-4 sm:block ${
-                      active
-                        ? "text-white/70"
-                        : "text-slate-400"
-                    }`}
-                  >
-                    {config.description}
-                  </p>
-
-                </button>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* ===================================================
-            SEARCH / FILTER TOOLBAR
-        =================================================== */}
-
-        <section className="mb-6">
-
-          <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-
-            <div className="flex flex-col gap-3 lg:flex-row">
-
-              {/* Search */}
-
-              <div className="relative flex-1">
-
-                <Search
-                  size={17}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                />
-
-                <input
-                  value={search}
-                  onChange={(e) => {
-                    setSearch(e.target.value);
-                    setPage(1);
-                  }}
-                  placeholder="Search resources, subjects, tags..."
-                  className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 pl-11 pr-10 text-sm text-slate-800 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 dark:border-slate-700 dark:bg-slate-800/70 dark:text-white dark:focus:border-indigo-500 dark:focus:bg-slate-800"
-                />
-
-                {search && (
-                  <button
-                    onClick={() => setSearch("")}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1 text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
-                  >
-                    <X size={15} />
-                  </button>
-                )}
-
-              </div>
-
-              <div className="flex gap-2">
-
-                {/* Filter */}
-
-                <button
-                  onClick={() =>
-                    setShowFilters((value) => !value)
-                  }
-                  className={`flex h-11 items-center gap-2 rounded-xl border px-4 text-sm font-semibold transition ${
-                    showFilters
-                      ? "border-indigo-400 bg-indigo-50 text-indigo-600 dark:border-indigo-500 dark:bg-indigo-500/10 dark:text-indigo-400"
-                      : "border-slate-200 bg-white text-slate-600 hover:border-indigo-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
-                  }`}
-                >
-                  <SlidersHorizontal size={16} />
-
-                  <span className="hidden sm:inline">
-                    Filters
-                  </span>
-
-                  {activeFiltersCount > 0 && (
-                    <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-indigo-600 px-1 text-[10px] font-bold text-white">
-                      {activeFiltersCount}
-                    </span>
-                  )}
-                </button>
-
-                {/* Sort */}
-
-                <div className="relative">
-
-                  <Clock3
-                    size={15}
-                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-                  />
-
-                  <select
-                    value={filters.sortBy}
-                    onChange={(e) =>
-                      setFilter("sortBy", e.target.value)
-                    }
-                    className="h-11 w-36 appearance-none rounded-xl border border-slate-200 bg-white pl-9 pr-3 text-xs font-semibold text-slate-600 outline-none focus:border-indigo-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
-                  >
-                    <option value="newest">
-                      Newest
-                    </option>
-
-                    <option value="popular">
-                      Most Popular
-                    </option>
-
-                    <option value="rating">
-                      Top Rated
-                    </option>
-                  </select>
-
-                </div>
-
-              </div>
-            </div>
-
-            {/* =================================================
-                FILTER PANEL
-            ================================================= */}
-
-            {showFilters && (
-              <div className="mt-3 border-t border-slate-100 pt-4 dark:border-slate-800">
-
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-
-                  {/* Semester */}
-
-                  <div>
-                    <label className="mb-2 block text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                      Semester
-                    </label>
-
-                    <select
-                      value={filters.semester}
-                      onChange={(e) =>
-                        setFilter(
-                          "semester",
-                          e.target.value
-                        )
-                      }
-                      className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-medium text-slate-700 outline-none focus:border-indigo-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
-                    >
-                      <option value="">
-                        All Semesters
-                      </option>
-
-                      {SEMESTERS.map((semester) => (
-                        <option
-                          key={semester}
-                          value={semester}
-                        >
-                          Semester {semester}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Branch */}
-
-                  <div>
-                    <label className="mb-2 block text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                      Branch
-                    </label>
-
-                    <select
-                      value={filters.branch}
-                      onChange={(e) =>
-                        setFilter(
-                          "branch",
-                          e.target.value
-                        )
-                      }
-                      className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-medium text-slate-700 outline-none focus:border-indigo-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
-                    >
-                      <option value="">
-                        All Branches
-                      </option>
-
-                      {BRANCHES.map((branch) => (
-                        <option
-                          key={branch}
-                          value={branch}
-                        >
-                          {branch}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Active filters */}
-
-                  <div className="flex items-end lg:col-span-2">
-
-                    <div className="flex w-full items-center justify-between rounded-xl bg-slate-50 px-4 py-3 dark:bg-slate-800/70">
-
-                      <div>
-                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
-                          {activeFiltersCount
-                            ? `${activeFiltersCount} filter${
-                                activeFiltersCount > 1
-                                  ? "s"
-                                  : ""
-                              } applied`
-                            : "No filters applied"}
-                        </p>
-
-                        <p className="mt-0.5 text-[10px] text-slate-400">
-                          Refine your resource search
-                        </p>
-                      </div>
-
-                      {activeFiltersCount > 0 && (
-                        <button
-                          onClick={clearFilters}
-                          className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-bold text-rose-500 transition hover:bg-rose-50 dark:hover:bg-rose-500/10"
-                        >
-                          <X size={13} />
-                          Clear
-                        </button>
-                      )}
-
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            )}
-
-          </div>
-        </section>
-
-        {/* ===================================================
-            RESULTS HEADER
-        =================================================== */}
-
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-
-          <div>
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-              {filters.category
-                ? CATEGORY_CONFIG[filters.category]?.label
-                : "All Resources"}
-            </h2>
-
-            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-              {isLoading
-                ? "Finding resources..."
-                : totalResources > 0
-                ? `${totalResources.toLocaleString()} resources found`
-                : "Explore resources shared by students"}
-            </p>
-          </div>
-
-          <div className="hidden items-center gap-2 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-slate-500 shadow-sm dark:bg-slate-900 dark:text-slate-400 sm:flex">
-            <TrendingUp size={13} className="text-emerald-500" />
-            Updated regularly
-          </div>
-
+          )}
         </div>
 
-        {/* ===================================================
-            RESOURCE GRID
-        =================================================== */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+          {/* ALL Category Button */}
+          <button
+            onClick={() => setFilter("category", "")}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold flex-shrink-0 transition-all ${
+              !filters.category
+                ? "bg-primary-600 text-white shadow-card"
+                : "bg-white text-slate-700 border border-slate-200/80 hover:bg-slate-50 hover:border-slate-300 shadow-2xs"
+            }`}
+          >
+            <FolderOpen className="w-3.5 h-3.5" />
+            <span>All Material</span>
+          </button>
 
-        {isLoading ? (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {Array(8)
-              .fill(0)
-              .map((_, index) => (
-                <CardSkeleton key={index} />
-              ))}
+          {CATEGORIES.map((catKey) => {
+            const config = CATEGORY_CONFIG[catKey] || { label: catKey, icon: FileText };
+            const Icon = config.icon;
+            const isActive = filters.category === catKey;
+            return (
+              <button
+                key={catKey}
+                onClick={() => setFilter("category", isActive ? "" : catKey)}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold flex-shrink-0 transition-all ${
+                  isActive
+                    ? "bg-primary-600 text-white shadow-card"
+                    : "bg-white text-slate-700 border border-slate-200/80 hover:bg-slate-50 hover:border-slate-300 shadow-2xs"
+                }`}
+              >
+                <Icon className={`w-3.5 h-3.5 ${isActive ? "text-white" : "text-slate-500"}`} />
+                <span>{config.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* =====================================================
+          FILTER & SORT TOOLBAR
+      ====================================================== */}
+      <section className="card bg-white p-3.5 border border-slate-200/80 shadow-xs">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+          {/* Left: Filter Toggle Button */}
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all ${
+                showFilters || activeFiltersCount > 0
+                  ? "bg-primary-50 text-primary-700 border-primary-200"
+                  : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
+              }`}
+            >
+              <SlidersHorizontal className="w-3.5 h-3.5 text-primary-600" />
+              <span>Filters</span>
+              {activeFiltersCount > 0 && (
+                <span className="w-4 h-4 rounded-full bg-primary-600 text-white text-[10px] font-bold flex items-center justify-center">
+                  {activeFiltersCount}
+                </span>
+              )}
+            </button>
+
+            {/* Active filters pill */}
+            {activeFiltersCount > 0 && (
+              <button
+                onClick={clearFilters}
+                className="text-xs font-semibold text-rose-600 hover:text-rose-700 px-2 py-1 rounded-lg hover:bg-rose-50 transition-colors flex items-center gap-1"
+              >
+                <X className="w-3 h-3" />
+                <span>Clear all</span>
+              </button>
+            )}
           </div>
-        ) : data?.data?.length === 0 ? (
-          <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-14">
 
-            <EmptyState
-              icon={BookOpen}
-              title="No resources found"
-              description="We couldn't find anything matching your search. Try different keywords or clear your filters."
-              action={
-                <div className="flex flex-col gap-2 sm:flex-row">
+          {/* Right: Results Count & Sort Dropdown */}
+          <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
+            <span className="text-xs font-medium text-slate-500">
+              {isLoading ? "Searching..." : `${totalResources.toLocaleString()} resources`}
+            </span>
 
-                  <button
-                    onClick={clearFilters}
-                    className="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-700 dark:text-slate-300"
-                  >
-                    Clear Filters
-                  </button>
-
-                  <button
-                    onClick={() => setShowUpload(true)}
-                    className="flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:bg-indigo-700"
-                  >
-                    <Upload size={15} />
-                    Upload First Resource
-                  </button>
-
-                </div>
-              }
-            />
-
+            <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200/70 rounded-xl px-2.5 py-1.5">
+              <Clock3 className="w-3.5 h-3.5 text-slate-400" />
+              <select
+                value={filters.sortBy}
+                onChange={(e) => setFilter("sortBy", e.target.value)}
+                className="bg-transparent text-xs font-semibold text-slate-700 outline-none cursor-pointer"
+              >
+                <option value="newest">Newest Added</option>
+                <option value="popular">Most Popular</option>
+                <option value="rating">Top Rated</option>
+              </select>
+            </div>
           </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        </div>
 
-              {data?.data?.map((resource) => (
-                <ResourceCard
-                  key={resource._id}
-                  resource={resource}
-                  onDownloaded={refetch}
-                />
-              ))}
-
+        {/* Collapsible Filter Panel */}
+        {showFilters && (
+          <div className="mt-3 pt-3 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 animate-slide-down">
+            {/* Semester Select */}
+            <div>
+              <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                Semester
+              </label>
+              <select
+                value={filters.semester}
+                onChange={(e) => setFilter("semester", e.target.value)}
+                className="input text-xs py-2"
+              >
+                <option value="">All Semesters</option>
+                {SEMESTERS.map((sem) => (
+                  <option key={sem} value={sem}>
+                    Semester {sem}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            {/* =================================================
-                PAGINATION
-            ================================================= */}
+            {/* Branch Select */}
+            <div>
+              <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                Branch / Major
+              </label>
+              <select
+                value={filters.branch}
+                onChange={(e) => setFilter("branch", e.target.value)}
+                className="input text-xs py-2"
+              >
+                <option value="">All Branches</option>
+                {BRANCHES.map((b) => (
+                  <option key={b} value={b}>
+                    {b}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        )}
+      </section>
 
-            <div className="mt-10 flex justify-center">
+      {/* =====================================================
+          RESOURCES GRID
+      ====================================================== */}
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          {Array(8)
+            .fill(0)
+            .map((_, index) => (
+              <CardSkeleton key={index} />
+            ))}
+        </div>
+      ) : data?.data?.length === 0 ? (
+        <div className="card bg-white p-8 sm:p-12 text-center border border-slate-200/80 shadow-xs">
+          <EmptyState
+            icon={BookOpen}
+            title="No study materials found"
+            description="We couldn't find any resources matching your search. Try changing keywords or clearing your filters."
+            action={
+              <div className="flex flex-col sm:flex-row gap-2.5 justify-center mt-2">
+                <button
+                  onClick={clearFilters}
+                  className="btn btn-secondary text-xs px-4 py-2"
+                >
+                  Clear Filters
+                </button>
+                <button
+                  onClick={() => setShowUpload(true)}
+                  className="btn btn-primary text-xs px-4 py-2 flex items-center gap-1.5"
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>Upload Resource</span>
+                </button>
+              </div>
+            }
+          />
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {data?.data?.map((resource) => (
+              <ResourceCard
+                key={resource._id}
+                resource={resource}
+                onDownloaded={refetch}
+              />
+            ))}
+          </div>
+
+          {/* Pagination Controls */}
+          {data?.pagination?.pages > 1 && (
+            <div className="mt-8 flex justify-center">
               <Pagination
                 page={data?.pagination?.page || 1}
                 pages={data?.pagination?.pages || 1}
                 onPageChange={setPage}
               />
             </div>
-          </>
-        )}
+          )}
+        </>
+      )}
 
-        {/* ===================================================
-            BOTTOM CTA
-        =================================================== */}
+      {/* =====================================================
+          BOTTOM CONTRIBUTION BANNER
+      ====================================================== */}
+      <section className="relative rounded-2xl overflow-hidden p-6 bg-gradient-to-br from-slate-50 via-primary-50/40 to-sky-50 border border-slate-200/70 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-xl bg-primary-600 text-white flex items-center justify-center flex-shrink-0 shadow-card">
+            <Upload className="w-5 h-5" />
+          </div>
+          <div>
+            <h3 className="font-display font-bold text-sm text-slate-900">
+              Have notes, assignments, or PYQs to share?
+            </h3>
+            <p className="text-xs text-slate-600 mt-0.5">
+              Empower your fellow students and earn verified contributor badges.
+            </p>
+          </div>
+        </div>
 
-        {!isLoading && data?.data?.length > 0 && (
-          <section className="relative mt-12 overflow-hidden rounded-3xl border border-indigo-100 bg-gradient-to-r from-indigo-50 via-white to-purple-50 p-6 dark:border-indigo-500/10 dark:from-indigo-500/10 dark:via-slate-900 dark:to-purple-500/10 sm:p-8">
+        <button
+          onClick={() => setShowUpload(true)}
+          className="btn btn-primary text-xs py-2.5 px-5 flex-shrink-0 flex items-center gap-1.5 shadow-card hover:shadow-card-hover"
+        >
+          <span>Share Study Material</span>
+          <ArrowUpRight className="w-3.5 h-3.5" />
+        </button>
+      </section>
 
-            <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-indigo-500/10 blur-2xl" />
-
-            <div className="relative flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-center">
-
-              <div className="flex items-start gap-4">
-
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-indigo-600 text-white shadow-lg shadow-indigo-500/20">
-                  <Upload size={21} />
-                </div>
-
-                <div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                    Have something useful to share?
-                  </h3>
-
-                  <p className="mt-1 max-w-xl text-xs leading-5 text-slate-500 dark:text-slate-400">
-                    Help your fellow students by uploading notes,
-                    PYQs, projects or other useful resources.
-                  </p>
-                </div>
-
-              </div>
-
-              <button
-                onClick={() => setShowUpload(true)}
-                className="group flex shrink-0 items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-bold text-white shadow-lg shadow-indigo-500/20 transition hover:-translate-y-0.5 hover:bg-indigo-700"
-              >
-                Upload Resource
-                <ArrowUpRight
-                  size={14}
-                  className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                />
-              </button>
-
-            </div>
-          </section>
-        )}
-
-        {/* ===================================================
-            MODAL
-        =================================================== */}
-
-        <UploadResourceModal
-          isOpen={showUpload}
-          onClose={() => setShowUpload(false)}
-          onSuccess={refetch}
-        />
-
-      </div>
+      {/* Modal */}
+      <UploadResourceModal
+        isOpen={showUpload}
+        onClose={() => setShowUpload(false)}
+        onSuccess={refetch}
+      />
     </div>
   );
 }
-

@@ -1,367 +1,661 @@
-
 import React from "react";
 import { useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import {
-  BookOpen, Users, UserCheck, Briefcase, Upload,
-  Award, Star, ArrowRight, Sparkles, Zap, Target,
-  Activity, ChevronRight, Download, BookMarked,
+  BookOpen,
+  Users,
+  UserCheck,
+  Briefcase,
+  Upload,
+  Award,
+  Star,
+  ArrowRight,
+  Sparkles,
+  Zap,
+  Target,
+  Activity,
+  ChevronRight,
+  Download,
+  BookMarked,
+  Clock,
+  Compass,
+  GraduationCap,
+  FileText,
+  Calendar,
+  Layers,
+  ArrowUpRight,
+  User
 } from "lucide-react";
 import api from "../services/api";
 import { formatDistanceToNow } from "date-fns";
 
-// ── Real Stat Card ──
-function StatCard({ icon: Icon, label, value, gradient, isLoading }) {
-  return (
-    <div className="card p-5 relative overflow-hidden hover:-translate-y-1 transition-all duration-300 bg-blue-200">
-      <div className="absolute top-0 right-0 w-20 h-20 rounded-full opacity-10 -translate-y-4 translate-x-4"
-        style={{ background: `linear-gradient(135deg, ${gradient})` }} />
-      <div className="flex items-start justify-between mb-4">
-        <div className="w-11 h-11 rounded-2xl flex items-center justify-center"
-          style={{ background: `linear-gradient(135deg, ${gradient})` }}>
-          <Icon size={20} className="text-white" />
-        </div>
-      </div>
-      {isLoading ? (
-        <div className="h-8 w-16 bg-slate-200 dark:bg-slate-700 rounded-lg animate-pulse mb-1" />
-      ) : (
-        <div className="text-2xl font-bold text-slate-900 dark:text-white mb-1">{value}</div>
-      )}
-      <div className="text-sm text-slate-500 dark:text-slate-400">{label}</div>
-    </div>
-  );
-}
+/* =========================================================
+   STATISTIC CARD COMPONENT (LIGHT DESIGN SYSTEM)
+========================================================= */
 
-function QuickAction({ icon: Icon, label, to, gradient }) {
+function StatCard({ icon: Icon, label, value, colorStyle, isLoading, to }) {
   return (
-    <Link to={to} className="flex flex-col items-center gap-2 p-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all group">
-      <div className="w-12 h-12 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform"
-        style={{ background: `linear-gradient(135deg, ${gradient})` }}>
-        <Icon size={22} className="text-white" />
+    <Link
+      to={to || "#"}
+      className="card group relative overflow-hidden p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover border border-slate-200/80 bg-white flex flex-col justify-between"
+    >
+      {/* Subtle background glow */}
+      <div
+        className={`absolute -top-8 -right-8 w-24 h-24 rounded-full ${colorStyle.glow} blur-2xl opacity-40 pointer-events-none group-hover:opacity-70 transition-opacity`}
+      />
+
+      <div className="flex items-center justify-between mb-4">
+        <div
+          className={`w-11 h-11 rounded-2xl ${colorStyle.bg} ${colorStyle.text} flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform`}
+        >
+          <Icon className="w-5 h-5" />
+        </div>
+        <span className="text-[11px] font-semibold text-slate-600 group-hover:text-primary-600 flex items-center gap-0.5 transition-colors">
+          <span>View</span>
+          <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+        </span>
       </div>
-      <span className="text-xs font-medium text-slate-600 dark:text-slate-400 text-center">{label}</span>
+
+      <div>
+        {isLoading ? (
+          <div className="h-8 w-20 bg-slate-100 rounded-lg animate-pulse mb-1.5" />
+        ) : (
+          <div className="text-2xl sm:text-3xl font-display font-bold text-slate-900 mb-1 tracking-tight">
+            {typeof value === "number" ? value.toLocaleString() : value}
+          </div>
+        )}
+        <p className="text-xs font-medium text-slate-600">{label}</p>
+      </div>
     </Link>
   );
 }
 
-// ── AI Resource Widget ──
+/* =========================================================
+   QUICK ACTION TILE
+========================================================= */
+
+function QuickActionTile({ icon: Icon, label, to, colorStyle }) {
+  return (
+    <Link
+      to={to}
+      className="flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-slate-50 transition-all duration-200 group border border-transparent hover:border-slate-200/60"
+    >
+      <div
+        className={`w-11 h-11 rounded-xl ${colorStyle.bg} ${colorStyle.text} flex items-center justify-center shadow-2xs group-hover:scale-110 group-hover:shadow-card transition-all duration-200`}
+      >
+        <Icon className="w-5 h-5" />
+      </div>
+      <span className="text-xs font-semibold text-slate-700 group-hover:text-primary-700 text-center line-clamp-1 transition-colors">
+        {label}
+      </span>
+    </Link>
+  );
+}
+
+/* =========================================================
+   AI RESOURCE RECOMMENDATIONS WIDGET
+========================================================= */
+
 function AIResourceWidget() {
   const { data: aiRecs, isLoading } = useQuery({
     queryKey: ["aiRecommendations"],
-    queryFn: () => api.get("/ai/recommendations/resources").then(r => r.data.data),
+    queryFn: () => api.get("/ai/recommendations/resources").then((r) => r.data.data),
     staleTime: 10 * 60 * 1000,
   });
 
   return (
-    <div className="card p-5 h-full bg-pink-100">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center"
-            style={{ background: "linear-gradient(135deg, #8b5cf6, #6366f1)" }}>
-            <Sparkles size={17} className="text-white" />
-          </div>
-          <div>
-            <h2 className="font-bold text-slate-900 dark:text-white text-sm"
-              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-              AI Picks For You
-            </h2>
-            <p className="text-xs text-slate-400">Personalized resources</p>
-          </div>
-        </div>
-        <Link to="/resources"
-          className="text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1">
-          View all <ArrowRight size={12} />
-        </Link>
-      </div>
-
-      {isLoading ? (
-        <div className="space-y-3">
-          {[1, 2].map(i => (
-            <div key={i} className="flex items-center gap-3 animate-pulse">
-              <div className="w-10 h-10 rounded-xl bg-slate-200 dark:bg-slate-700 flex-shrink-0" />
-              <div className="flex-1 space-y-1.5">
-                <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-3/4" />
-                <div className="h-2.5 bg-slate-200 dark:bg-slate-700 rounded w-1/2" />
-              </div>
+    <div className="card bg-white p-5 lg:p-6 border border-slate-200/80 shadow-xs flex flex-col justify-between h-full">
+      <div>
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-violet-50 text-violet-700 flex items-center justify-center shadow-2xs">
+              <Sparkles className="w-4 h-4" />
             </div>
-          ))}
-        </div>
-      ) : !aiRecs || aiRecs.length === 0 ? (
-        <div className="text-center py-6">
-          <div className="w-12 h-12 rounded-2xl mx-auto mb-3 flex items-center justify-center"
-            style={{ background: "linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.1))" }}>
-            <BookOpen size={22} className="text-indigo-400" />
+            <div>
+              <h2 className="font-display font-bold text-slate-900 text-sm">
+                AI Picks For You
+              </h2>
+              <p className="text-[11px] text-slate-600">Personalized study materials</p>
+            </div>
           </div>
-          <p className="text-xs text-slate-400 mb-3">Add skills to get AI recommendations</p>
-          <Link to="/profile" className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">
-            Update Profile →
+          <Link
+            to="/resources"
+            className="text-xs font-semibold text-primary-600 hover:text-primary-700 flex items-center gap-1 group"
+          >
+            <span>View all</span>
+            <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
-      ) : (
-        <div className="space-y-2">
-          {aiRecs.slice(0, 2).map((r, i) => (
-            <Link key={r._id} to={`/resources/${r._id}`}
-              className="flex items-center gap-3 p-3 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all group border border-transparent hover:border-indigo-100 dark:hover:border-indigo-900"
-            >
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-lg"
-                style={{ background: `linear-gradient(135deg, ${i === 0 ? "#6366f1, #8b5cf6" : "#06b6d4, #0284c7"})` }}>
-                📄
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 truncate group-hover:text-indigo-600 transition-colors">
-                  {r.title}
-                </p>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-xs text-slate-400 truncate">{r.subject}</span>
-                  <span className="w-1 h-1 rounded-full bg-slate-300 flex-shrink-0" />
-                  <span className="text-xs text-slate-400 capitalize">{r.category?.replace("_", " ")}</span>
+
+        {/* Content list */}
+        {isLoading ? (
+          <div className="space-y-3 py-1">
+            {[1, 2].map((i) => (
+              <div key={i} className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 animate-pulse">
+                <div className="w-9 h-9 rounded-lg bg-slate-200 flex-shrink-0" />
+                <div className="flex-1 space-y-1.5">
+                  <div className="h-3 bg-slate-200 rounded w-3/4" />
+                  <div className="h-2.5 bg-slate-200 rounded w-1/2" />
                 </div>
               </div>
-              <div className="flex items-center gap-1 text-xs text-slate-400">
-                <Download size={12} /> {r.downloadCount || 0}
-              </div>
+            ))}
+          </div>
+        ) : !aiRecs || aiRecs.length === 0 ? (
+          <div className="text-center py-7 px-3">
+            <div className="w-11 h-11 rounded-2xl mx-auto mb-2.5 bg-primary-50 text-primary-600 flex items-center justify-center shadow-2xs">
+              <BookOpen className="w-5 h-5" />
+            </div>
+            <p className="text-xs font-semibold text-slate-800">Add skills for smart recommendations</p>
+            <p className="text-[11px] text-slate-600 mt-1 max-w-[220px] mx-auto leading-relaxed">
+              Update your profile interests to receive curated notes and PYQs.
+            </p>
+            <Link
+              to="/profile"
+              className="inline-flex items-center gap-1 text-xs font-semibold text-primary-600 hover:text-primary-700 mt-3"
+            >
+              <span>Update Profile</span>
+              <ArrowRight className="w-3 h-3" />
             </Link>
-          ))}
-          <Link to="/ai"
-            className="flex items-center justify-center gap-1.5 w-full py-2.5 mt-1 rounded-xl text-xs font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 hover:bg-indigo-100 transition-all">
-            <Sparkles size={13} /> More AI Recommendations
-          </Link>
-        </div>
-      )}
+          </div>
+        ) : (
+          <div className="space-y-2.5">
+            {aiRecs.slice(0, 2).map((r, i) => (
+              <Link
+                key={r._id}
+                to={`/resources/${r._id}`}
+                className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 border border-slate-100 hover:border-slate-200/80 transition-all group"
+              >
+                <div
+                  className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-bold text-white shadow-2xs ${
+                    i === 0
+                      ? "bg-gradient-to-tr from-primary-600 to-indigo-600"
+                      : "bg-gradient-to-tr from-sky-500 to-blue-600"
+                  }`}
+                >
+                  <FileText className="w-4 h-4" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-semibold text-slate-900 truncate group-hover:text-primary-600 transition-colors">
+                    {r.title}
+                  </p>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <span className="text-[10px] text-slate-600 truncate">{r.subject}</span>
+                    <span className="w-1 h-1 rounded-full bg-slate-300 flex-shrink-0" />
+                    <span className="text-[10px] text-slate-600 capitalize">
+                      {r.category?.replace("_", " ")}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 text-[11px] font-medium text-slate-600 flex-shrink-0">
+                  <Download className="w-3 h-3" />
+                  <span>{r.downloadCount || 0}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* AI Hub Link at bottom */}
+      <div className="pt-3 mt-3 border-t border-slate-100">
+        <Link
+          to="/ai"
+          className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl text-xs font-semibold text-violet-700 bg-violet-50 hover:bg-violet-100/80 transition-all border border-violet-100"
+        >
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>Launch AI Study Assistant</span>
+        </Link>
+      </div>
     </div>
   );
 }
 
+/* =========================================================
+   MAIN DASHBOARD PAGE
+========================================================= */
+
 export default function DashboardPage() {
-  const { user } = useSelector(s => s.auth);
+  const { user } = useSelector((s) => s.auth);
 
   // ── Fetch REAL stats from backend ──
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ["platformStats"],
-    queryFn: () => api.get("/stats").then(r => r.data.data),
+    queryFn: () => api.get("/stats").then((r) => r.data.data),
     staleTime: 5 * 60 * 1000,
   });
 
-  const { data: opportunities } = useQuery({
+  const { data: opportunities, isLoading: oppsLoading } = useQuery({
     queryKey: ["latestOpportunities"],
-    queryFn: () => api.get("/opportunities?limit=3").then(r => r.data.data),
+    queryFn: () => api.get("/opportunities?limit=3").then((r) => r.data.data),
   });
 
-  const { data: projects } = useQuery({
+  const { data: projects, isLoading: projectsLoading } = useQuery({
     queryKey: ["latestProjects"],
-    queryFn: () => api.get("/projects?limit=3&status=open").then(r => r.data.data),
+    queryFn: () => api.get("/projects?limit=3&status=open").then((r) => r.data.data),
   });
 
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
   const greetEmoji = hour < 12 ? "☀️" : hour < 17 ? "👋" : "🌙";
 
-  const completionFields = [user?.bio, user?.skills?.length, user?.linkedIn, user?.github, user?.profilePhoto];
-  const completionPct = Math.round((completionFields.filter(Boolean).length / completionFields.length) * 100);
+  const completionFields = [
+    user?.bio,
+    user?.skills?.length,
+    user?.linkedIn,
+    user?.github,
+    user?.profilePhoto,
+  ];
+  const completionPct = Math.round(
+    (completionFields.filter(Boolean).length / completionFields.length) * 100
+  );
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto animate-fade-in">
+    <div className="space-y-6 max-w-7xl mx-auto animate-fade-in pb-8">
+      {/* =========================================================
+          HERO BANNER & STUDENT IDENTITY
+      ========================================================== */}
+      <div className="relative rounded-3xl overflow-hidden p-6 sm:p-8 bg-gradient-to-r from-primary-600 via-indigo-600 to-sky-600 text-white shadow-card">
+        {/* Ambient background glows */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-sky-300/20 rounded-full blur-3xl pointer-events-none" />
 
-      {/* ── Hero Banner ── */}
-      <div className="relative rounded-3xl overflow-hidden p-6 lg:p-8 "
-        style={{ background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 60%, #06b6d4 100%)" }}>
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 left-1/4 w-64 h-64 bg-white rounded-full filter blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-48 h-48 bg-cyan-300 rounded-full filter blur-3xl" />
-        </div>
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          {/* Left Info */}
+          <div className="space-y-3 flex-1">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-xs font-semibold">
+              <span>{greetEmoji}</span>
+              <span>{greeting}</span>
+            </div>
 
-        <div className="relative flex items-start justify-between gap-4">
-          <div className="flex-1">
-            <p className="text-indigo-200 text-sm font-medium mb-1">{greeting} {greetEmoji}</p>
-            <h1 className="text-3xl lg:text-4xl font-bold text-white mb-2"
-              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-              {user?.name?.split(" ")[0]} 👋
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold tracking-tight text-white">
+              {user?.name || "Student"}
             </h1>
-            <p className="text-indigo-200 text-sm">
-              {user?.branch} • Semester {user?.semester} • {user?.collegeName}
+
+            <p className="text-xs sm:text-sm text-primary-100 flex flex-wrap items-center gap-2">
+              <span className="font-medium">{user?.branch || "General Engineering"}</span>
+              <span>•</span>
+              <span>Semester {user?.semester || "1"}</span>
+              {user?.collegeName && (
+                <>
+                  <span>•</span>
+                  <span className="truncate max-w-xs">{user.collegeName}</span>
+                </>
+              )}
             </p>
 
-            <div className="flex gap-6 mt-5">
+            {/* Achievement counters */}
+            <div className="flex flex-wrap gap-4 sm:gap-6 pt-2">
               {[
-                { label: "Uploads", value: user?.uploadedResourcesCount || 0, icon: Upload },
-                { label: "Score", value: user?.contributionScore || 0, icon: Award },
-                { label: "Rating", value: user?.mentorshipRating ? user.mentorshipRating.toFixed(1) : "–", icon: Star },
+                {
+                  label: "Uploads",
+                  value: user?.uploadedResourcesCount || 0,
+                  icon: Upload,
+                },
+                {
+                  label: "Contribution",
+                  value: user?.contributionScore || 0,
+                  icon: Award,
+                },
+                {
+                  label: "Mentorship",
+                  value: user?.mentorshipRating ? user.mentorshipRating.toFixed(1) + " ★" : "–",
+                  icon: Star,
+                },
               ].map(({ label, value, icon: Icon }) => (
-                <div key={label} className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center">
-                    <Icon size={16} className="text-white" />
+                <div key={label} className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center shadow-2xs">
+                    <Icon className="w-4 h-4 text-white" />
                   </div>
                   <div>
-                    <p className="text-white font-bold text-lg leading-none">{value}</p>
-                    <p className="text-indigo-200 text-xs">{label}</p>
+                    <p className="text-base sm:text-lg font-display font-bold leading-none text-white">
+                      {value}
+                    </p>
+                    <p className="text-[11px] text-primary-100 mt-0.5">{label}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="flex-shrink-0 relative">
-            <img
-              src={user?.profilePhoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || "U")}&background=ffffff&color=6366f1&size=128&bold=true`}
-              alt={user?.name}
-              className="w-20 h-20 lg:w-24 lg:h-24 rounded-2xl object-cover border-4 border-white/30"
-            />
+          {/* Right Avatar & Profile Shortcut */}
+          <div className="flex flex-row md:flex-col items-center md:items-end gap-4 flex-shrink-0">
+            <Link to="/profile" className="group relative" title="View Profile">
+              <img
+                src={
+                  user?.profilePhoto ||
+                  `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                    user?.name || "Student"
+                  )}&background=ffffff&color=4f46e5&size=128&bold=true`
+                }
+                alt={user?.name || "Student"}
+                className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover border-2 border-white/50 shadow-elevated group-hover:scale-105 transition-transform"
+              />
+              <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-400 rounded-full border-2 border-white" />
+            </Link>
+
+            <Link
+              to="/profile"
+              className="px-3.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/20 text-xs font-semibold text-white transition-all flex items-center gap-1.5"
+            >
+              <User className="w-3.5 h-3.5" />
+              <span>Edit Profile</span>
+            </Link>
           </div>
         </div>
 
+        {/* Profile Completion Bar (if incomplete) */}
         {completionPct < 100 && (
-          <div className="relative mt-5 bg-white/10 rounded-2xl p-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-white text-sm font-medium">Profile Completion</span>
-              <span className="text-white font-bold">{completionPct}%</span>
+          <div className="relative z-10 mt-6 pt-4 border-t border-white/15 bg-white/10 rounded-2xl p-3.5">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-xs font-semibold text-white">Profile Strength</span>
+              <span className="text-xs font-bold text-white">{completionPct}% Complete</span>
             </div>
             <div className="h-2 bg-white/20 rounded-full overflow-hidden">
-              <div className="h-full rounded-full bg-white transition-all duration-700"
-                style={{ width: `${completionPct}%` }} />
+              <div
+                className="h-full rounded-full bg-white transition-all duration-700"
+                style={{ width: `${completionPct}%` }}
+              />
             </div>
           </div>
         )}
       </div>
 
-      {/* ── REAL Stats Grid ── */}
+      {/* =========================================================
+          REAL STATISTICS GRID
+      ========================================================== */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           icon={BookOpen}
-          label="Total Resources"
-          value={statsLoading ? "..." : (stats?.totalResources ?? 0)}
-          gradient="#6366f1, #8b5cf6"
+          label="Total Learning Resources"
+          value={statsLoading ? 0 : stats?.totalResources ?? 0}
+          colorStyle={{
+            bg: "bg-primary-50",
+            text: "text-primary-700",
+            glow: "bg-primary-500",
+          }}
           isLoading={statsLoading}
+          to="/resources"
         />
         <StatCard
           icon={Users}
-          label="Open Projects"
-          value={statsLoading ? "..." : (stats?.openProjects ?? 0)}
-          gradient="#06b6d4, #0284c7"
+          label="Open Project Teams"
+          value={statsLoading ? 0 : stats?.openProjects ?? 0}
+          colorStyle={{
+            bg: "bg-sky-50",
+            text: "text-sky-700",
+            glow: "bg-sky-500",
+          }}
           isLoading={statsLoading}
+          to="/projects"
         />
         <StatCard
           icon={UserCheck}
-          label="Active Mentors"
-          value={statsLoading ? "..." : (stats?.activeMentors ?? 0)}
-          gradient="#8b5cf6, #7c3aed"
+          label="Verified Mentors"
+          value={statsLoading ? 0 : stats?.activeMentors ?? 0}
+          colorStyle={{
+            bg: "bg-violet-50",
+            text: "text-violet-700",
+            glow: "bg-violet-500",
+          }}
           isLoading={statsLoading}
+          to="/mentorship"
         />
         <StatCard
           icon={Briefcase}
-          label="Opportunities"
-          value={statsLoading ? "..." : (stats?.activeOpportunities ?? 0)}
-          gradient="#f59e0b, #d97706"
+          label="Career Opportunities"
+          value={statsLoading ? 0 : stats?.activeOpportunities ?? 0}
+          colorStyle={{
+            bg: "bg-amber-50",
+            text: "text-amber-700",
+            glow: "bg-amber-500",
+          }}
           isLoading={statsLoading}
+          to="/opportunities"
         />
       </div>
 
-      {/* ── Quick Actions ── */}
-      <div className="card p-5 bg-green-200">
-        <h2 className="font-semibold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
-          <Zap size={18} className="text-amber-500" /> Quick Actions
-        </h2>
-        <div className="grid grid-cols-4 md:grid-cols-8 gap-2">
+      {/* =========================================================
+          QUICK ACTIONS STATION
+      ========================================================== */}
+      <div className="card bg-white p-5 border border-slate-200/80 shadow-xs">
+        <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+          <h2 className="font-display font-bold text-sm text-slate-900 flex items-center gap-2">
+            <Zap className="w-4 h-4 text-amber-500" />
+            <span>Quick Actions</span>
+          </h2>
+          <span className="text-[11px] font-medium text-slate-600">
+            Student shortcuts
+          </span>
+        </div>
+
+        <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
           {[
-            { icon: Upload, label: "Upload Resource", to: "/resources", gradient: "#6366f1, #8b5cf6" },
-            { icon: Users, label: "Find Team", to: "/projects", gradient: "#06b6d4, #0284c7" },
-            { icon: UserCheck, label: "Get Mentor", to: "/mentorship", gradient: "#8b5cf6, #7c3aed" },
-            { icon: Briefcase, label: "Opportunities", to: "/opportunities", gradient: "#f59e0b, #d97706" },
-            { icon: BookMarked, label: "Book Exchange", to: "/books", gradient: "#10b981, #059669" },
-            { icon: Sparkles, label: "AI Tools", to: "/ai", gradient: "#ec4899, #be185d" },
-            { icon: Target, label: "My Profile", to: "/profile", gradient: "#6366f1, #4f46e5" },
-            { icon: Activity, label: "All Users", to: "/resources", gradient: "#64748b, #475569" },
-          ].map(item => <QuickAction key={item.label} {...item} />)}
+            {
+              icon: Upload,
+              label: "Upload Notes",
+              to: "/resources",
+              colorStyle: { bg: "bg-primary-50", text: "text-primary-600" },
+            },
+            {
+              icon: Users,
+              label: "Find Team",
+              to: "/projects",
+              colorStyle: { bg: "bg-sky-50", text: "text-sky-600" },
+            },
+            {
+              icon: UserCheck,
+              label: "Get Mentor",
+              to: "/mentorship",
+              colorStyle: { bg: "bg-violet-50", text: "text-violet-600" },
+            },
+            {
+              icon: Briefcase,
+              label: "Internships",
+              to: "/opportunities",
+              colorStyle: { bg: "bg-amber-50", text: "text-amber-600" },
+            },
+            {
+              icon: BookMarked,
+              label: "Book Exchange",
+              to: "/books",
+              colorStyle: { bg: "bg-emerald-50", text: "text-emerald-600" },
+            },
+            {
+              icon: Sparkles,
+              label: "AI Tools",
+              to: "/ai",
+              colorStyle: { bg: "bg-fuchsia-50", text: "text-fuchsia-600" },
+            },
+            {
+              icon: Target,
+              label: "My Profile",
+              to: "/profile",
+              colorStyle: { bg: "bg-indigo-50", text: "text-indigo-600" },
+            },
+            {
+              icon: Activity,
+              label: "Explore All",
+              to: "/resources",
+              colorStyle: { bg: "bg-slate-100", text: "text-slate-600" },
+            },
+          ].map((item) => (
+            <QuickActionTile key={item.label} {...item} />
+          ))}
         </div>
       </div>
 
-      {/* ── AI Resources + Opportunities ── */}
+      {/* =========================================================
+          AI RESOURCE PICKS + LATEST OPPORTUNITIES
+      ========================================================== */}
       <div className="grid lg:grid-cols-3 gap-6">
+        {/* Left 1 Column: AI Picks */}
         <div className="lg:col-span-1">
           <AIResourceWidget />
         </div>
 
-        <div className="lg:col-span-2 card p-5 bg-orange-200">
-          <div className="flex items-center justify-between mb-5">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl flex items-center justify-center"
-                style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)" }}>
-                <Briefcase size={16} className="text-white" />
-              </div>
-              <h2 className="font-semibold text-slate-800 dark:text-slate-200">Latest Opportunities</h2>
-            </div>
-            <Link to="/opportunities" className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1">
-              See all <ArrowRight size={12} />
-            </Link>
-          </div>
-
-          <div className="space-y-3">
-            {opportunities?.length > 0 ? opportunities.map(opp => (
-              <Link key={opp._id} to={`/opportunities/${opp._id}`}
-                className="flex items-center gap-4 p-3 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-indigo-200 dark:hover:border-indigo-700 hover:bg-indigo-50/50 transition-all group"
-              >
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className={`badge text-xs
-                      ${opp.type === "hackathon" ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300" :
-                        opp.type === "internship" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300" :
-                        "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"}`}>
-                      {opp.type?.replace("_", " ")}
-                    </span>
-                  </div>
-                  <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate group-hover:text-indigo-600 transition-colors">{opp.title}</p>
-                  <p className="text-xs text-slate-400">{opp.organizer}</p>
+        {/* Right 2 Columns: Opportunities */}
+        <div className="lg:col-span-2 card bg-white p-5 lg:p-6 border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-5 pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center shadow-2xs">
+                  <Briefcase className="w-4 h-4" />
                 </div>
-                {opp.deadline && (
-                  <p className="text-xs text-rose-500 flex-shrink-0">
-                    ⏰ {formatDistanceToNow(new Date(opp.deadline), { addSuffix: true })}
-                  </p>
-                )}
-              </Link>
-            )) : (
-              <div className="text-center py-8 text-slate-400">
-                <Briefcase size={28} className="mx-auto mb-2 opacity-30" />
-                <p className="text-sm">No opportunities yet</p>
-                <Link to="/opportunities" className="text-xs text-indigo-500 hover:underline mt-1 block">Post one →</Link>
+                <div>
+                  <h2 className="font-display font-bold text-slate-900 text-sm">
+                    Latest Opportunities
+                  </h2>
+                  <p className="text-[11px] text-slate-600">Internships, hackathons & drives</p>
+                </div>
               </div>
-            )}
+              <Link
+                to="/opportunities"
+                className="text-xs font-semibold text-primary-600 hover:text-primary-700 flex items-center gap-1 group"
+              >
+                <span>See all</span>
+                <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+              </Link>
+            </div>
+
+            <div className="space-y-3">
+              {oppsLoading ? (
+                <div className="space-y-3">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="p-3.5 rounded-xl bg-slate-50 animate-pulse space-y-2">
+                      <div className="h-3.5 bg-slate-200 rounded w-1/3" />
+                      <div className="h-3 bg-slate-200 rounded w-2/3" />
+                    </div>
+                  ))}
+                </div>
+              ) : opportunities?.length > 0 ? (
+                opportunities.map((opp) => (
+                  <Link
+                    key={opp._id}
+                    to={`/opportunities/${opp._id}`}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl border border-slate-100 hover:border-primary-200 hover:bg-slate-50/80 transition-all group shadow-2xs"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span
+                          className={`badge text-[10px] font-bold uppercase tracking-wider ${
+                            opp.type === "hackathon"
+                              ? "badge-sky"
+                              : opp.type === "internship"
+                              ? "badge-emerald"
+                              : "badge-amber"
+                          }`}
+                        >
+                          {opp.type?.replace("_", " ")}
+                        </span>
+                        <span className="text-[11px] text-slate-600 truncate font-medium">
+                          {opp.organizer}
+                        </span>
+                      </div>
+                      <p className="text-xs sm:text-sm font-semibold text-slate-900 truncate group-hover:text-primary-600 transition-colors">
+                        {opp.title}
+                      </p>
+                    </div>
+
+                    {opp.deadline && (
+                      <div className="flex items-center gap-1 text-[11px] font-medium text-rose-600 bg-rose-50 px-2.5 py-1 rounded-lg flex-shrink-0 self-start sm:self-auto border border-rose-100">
+                        <Clock className="w-3 h-3" />
+                        <span>
+                          {formatDistanceToNow(new Date(opp.deadline), { addSuffix: true })}
+                        </span>
+                      </div>
+                    )}
+                  </Link>
+                ))
+              ) : (
+                <div className="text-center py-10">
+                  <div className="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-2">
+                    <Briefcase className="w-6 h-6" />
+                  </div>
+                  <p className="text-xs font-semibold text-slate-800">No opportunities yet</p>
+                  <p className="text-[11px] text-slate-600 mt-1">Be the first to post a student opportunity</p>
+                  <Link
+                    to="/opportunities"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-primary-600 hover:text-primary-700 mt-2"
+                  >
+                    <span>Post an Opportunity</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* ── Open Projects ── */}
+      {/* =========================================================
+          OPEN PROJECT TEAMS GRID
+      ========================================================== */}
       {projects?.length > 0 && (
-        <div className="card p-5 bg-red-200">
-          <div className="flex items-center justify-between mb-5">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl flex items-center justify-center"
-                style={{ background: "linear-gradient(135deg, #06b6d4, #0284c7)" }}>
-                <Users size={16} className="text-white" />
+        <div className="card bg-white p-5 lg:p-6 border border-slate-200/80 shadow-xs">
+          <div className="flex items-center justify-between mb-5 pb-3 border-b border-slate-100">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl bg-sky-50 text-sky-700 flex items-center justify-center shadow-2xs">
+                <Users className="w-4 h-4" />
               </div>
               <div>
-                <h2 className="font-semibold text-slate-800 dark:text-slate-200">Open Projects</h2>
-                <p className="text-xs text-slate-400">Looking for team members</p>
+                <h2 className="font-display font-bold text-slate-900 text-sm">
+                  Open Project Teams
+                </h2>
+                <p className="text-[11px] text-slate-600">Students actively looking for teammates</p>
               </div>
             </div>
-            <Link to="/projects"
-              className="flex items-center gap-1 text-xs text-indigo-600 dark:text-indigo-400 hover:underline font-medium">
-              Browse all <ArrowRight size={14} />
+            <Link
+              to="/projects"
+              className="flex items-center gap-1 text-xs font-semibold text-primary-600 hover:text-primary-700 group"
+            >
+              <span>Browse all projects</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
-          <div className="grid md:grid-cols-3 gap-4">
-            {projects.map(p => (
-              <Link key={p._id} to={`/projects/${p._id}`}
-                className="group p-4 rounded-2xl border border-slate-100 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-md transition-all"
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {projects.map((p) => (
+              <Link
+                key={p._id}
+                to={`/projects/${p._id}`}
+                className="group p-4 rounded-2xl border border-slate-200/70 hover:border-primary-300 hover:shadow-card-hover transition-all bg-white flex flex-col justify-between"
               >
-                <div className="flex items-center justify-between mb-3">
-                  <span className="badge bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 text-xs">Open</span>
-                  <span className="text-xs text-slate-400">{p.members?.length}/{p.maxMembers} members</span>
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="badge badge-emerald text-[10px] font-bold">Open</span>
+                    <span className="text-[11px] font-medium text-slate-600 flex items-center gap-1">
+                      <Users className="w-3 h-3 text-slate-600" />
+                      <span>
+                        {p.members?.length || 1}/{p.maxMembers || 4} members
+                      </span>
+                    </span>
+                  </div>
+
+                  <h3 className="font-display font-bold text-slate-900 text-xs sm:text-sm mb-2 group-hover:text-primary-600 transition-colors line-clamp-1">
+                    {p.title}
+                  </h3>
+
+                  <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-3">
+                    {p.description || "Looking for collaborators to build and ship together."}
+                  </p>
                 </div>
-                <h3 className="font-semibold text-slate-800 dark:text-slate-200 text-sm mb-2 group-hover:text-indigo-600 transition-colors line-clamp-1">{p.title}</h3>
-                <div className="flex flex-wrap gap-1">
-                  {p.requiredSkills?.slice(0, 3).map(s => (
-                    <span key={s} className="badge bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 text-xs">{s}</span>
+
+                <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                  {p.requiredSkills?.slice(0, 3).map((s) => (
+                    <span
+                      key={s}
+                      className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[10px] font-semibold"
+                    >
+                      {s}
+                    </span>
                   ))}
+                  {p.requiredSkills?.length > 3 && (
+                    <span className="px-1.5 py-0.5 rounded-md bg-slate-50 text-slate-600 text-[10px] font-semibold">
+                      +{p.requiredSkills.length - 3}
+                    </span>
+                  )}
                 </div>
               </Link>
             ))}

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +19,9 @@ import {
   MessageCircle,
   CheckCircle2,
   UserPlus,
+  Award,
+  ChevronRight,
+  ExternalLink
 } from "lucide-react";
 
 import api from "../services/api";
@@ -30,11 +32,10 @@ import {
   Avatar,
   Modal,
 } from "../components/common";
-
 import toast from "react-hot-toast";
 
 /* =========================================================
-   CATEGORIES
+   CATEGORIES CONFIGURATION
 ========================================================= */
 
 const CATEGORIES = [
@@ -50,267 +51,165 @@ const CATEGORIES = [
 const CATEGORY_CONFIG = {
   dsa: {
     label: "DSA & Coding",
-    icon: "💻",
+    badge: "badge-primary",
   },
   resume_review: {
     label: "Resume Review",
-    icon: "📄",
+    badge: "badge-violet",
   },
   internship_guidance: {
-    label: "Internship",
-    icon: "🚀",
+    label: "Internship Prep",
+    badge: "badge-sky",
   },
   mock_interview: {
     label: "Mock Interview",
-    icon: "🎯",
+    badge: "badge-rose",
   },
   project_help: {
     label: "Project Help",
-    icon: "🛠️",
+    badge: "badge-amber",
   },
   career_guidance: {
     label: "Career Guidance",
-    icon: "🧭",
+    badge: "badge-emerald",
   },
   other: {
-    label: "Other",
-    icon: "✨",
+    label: "General Mentorship",
+    badge: "badge-primary",
   },
 };
 
 /* =========================================================
-   MENTOR CARD
+   MENTOR CARD COMPONENT
 ========================================================= */
 
 function MentorCard({ mentorship, onBook, onClick }) {
   const freeSlots =
-    mentorship.availableSlots?.filter(
-      (slot) => !slot.isBooked
-    ).length || 0;
-
+    mentorship.availableSlots?.filter((slot) => !slot.isBooked).length || 0;
   const rating = mentorship.averageRating || 0;
-
-  const mentorName =
-    mentorship.mentor?.name || "Mentor";
-
-  const category =
-    CATEGORY_CONFIG[mentorship.category] ||
-    CATEGORY_CONFIG.other;
+  const mentorName = mentorship.mentor?.name || "Mentor";
+  const category = CATEGORY_CONFIG[mentorship.category] || CATEGORY_CONFIG.other;
 
   return (
     <div
       onClick={onClick}
-      className="
-        group relative cursor-pointer overflow-hidden
-        rounded-3xl border border-white/70
-        bg-white/90 p-5
-        shadow-sm backdrop-blur-xl
-        transition-all duration-300
-        hover:-translate-y-1.5
-        hover:shadow-2xl hover:shadow-indigo-500/10
-        dark:border-slate-800
-        dark:bg-slate-900/90
-      "
+      className="card group relative flex flex-col justify-between p-5 bg-white border border-slate-200/80 hover:border-primary-300 hover:shadow-card-hover transition-all duration-300 rounded-2xl cursor-pointer"
     >
-      {/* Decorative Glow */}
-
-      <div className="pointer-events-none absolute -right-16 -top-16 h-36 w-36 rounded-full bg-indigo-500/10 blur-3xl transition-all duration-500 group-hover:bg-indigo-500/20" />
-
-      <div className="pointer-events-none absolute -bottom-20 -left-20 h-32 w-32 rounded-full bg-violet-500/10 blur-3xl" />
-
-      {/* ===================================================
-          MENTOR HEADER
-      =================================================== */}
-
-      <div className="relative flex items-start gap-3">
-        <div className="relative shrink-0">
-          <Avatar
-            src={mentorship.mentor?.profilePhoto}
-            name={mentorName}
-            size="md"
-          />
-
-          <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white bg-emerald-500 dark:border-slate-900" />
-        </div>
-
-        <div className="min-w-0 flex-1">
-          <div className="flex items-start justify-between gap-2">
-            <div className="min-w-0">
-              <h3 className="truncate text-base font-black text-slate-900 dark:text-white">
-                {mentorName}
-              </h3>
-
-              <p className="mt-0.5 flex items-center gap-1 text-[11px] text-slate-400">
-                <GraduationCap size={11} />
-
-                {mentorship.mentor?.branch ||
-                  "Student Mentor"}
-              </p>
+      <div>
+        {/* Top Header: Avatar & Basic Info */}
+        <div className="flex items-start justify-between gap-3 mb-4">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="relative flex-shrink-0">
+              <Avatar
+                src={mentorship.mentor?.profilePhoto}
+                name={mentorName}
+                size="md"
+              />
+              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white" />
             </div>
 
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-400 transition-all group-hover:bg-indigo-100 group-hover:text-indigo-600 dark:bg-slate-800 dark:group-hover:bg-indigo-500/10 dark:group-hover:text-indigo-400">
-              <ArrowUpRight size={15} />
+            <div className="min-w-0">
+              <h3 className="font-display font-bold text-sm text-slate-900 truncate group-hover:text-primary-600 transition-colors">
+                {mentorName}
+              </h3>
+              <p className="text-[11px] text-slate-600 truncate flex items-center gap-1">
+                <GraduationCap className="w-3 h-3 text-slate-600" />
+                <span>{mentorship.mentor?.branch || "Student Mentor"}</span>
+              </p>
             </div>
           </div>
 
-          {/* Rating */}
-
-          {rating > 0 && (
-            <div className="mt-2 flex items-center gap-1.5">
-              <div className="flex items-center gap-1 rounded-lg bg-amber-50 px-2 py-1 dark:bg-amber-500/10">
-                <Star
-                  size={12}
-                  className="fill-amber-400 text-amber-400"
-                />
-
-                <span className="text-[11px] font-bold text-amber-600 dark:text-amber-400">
-                  {rating.toFixed(1)}
-                </span>
-              </div>
-
-              <span className="text-[10px] text-slate-400">
-                {mentorship.totalSessions || 0} sessions
-              </span>
-            </div>
-          )}
+          <div className="p-1 rounded-lg text-slate-600 group-hover:text-primary-600 group-hover:bg-primary-50 transition-colors">
+            <ArrowUpRight className="w-4 h-4" />
+          </div>
         </div>
-      </div>
 
-      {/* ===================================================
-          CATEGORY + MODE
-      =================================================== */}
+        {/* Rating & Sessions Pill */}
+        {rating > 0 && (
+          <div className="flex items-center gap-2 mb-3">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-200/60 text-xs font-bold">
+              <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+              <span>{rating.toFixed(1)}</span>
+            </span>
+            <span className="text-[11px] font-medium text-slate-600">
+              {mentorship.totalSessions || 0} sessions completed
+            </span>
+          </div>
+        )}
 
-      <div className="mt-5 flex items-center justify-between gap-2">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 px-2.5 py-1.5 text-[10px] font-bold text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300">
-          <span>{category.icon}</span>
-          {category.label}
-        </span>
+        {/* Category & Mode Badges */}
+        <div className="flex items-center gap-2 mb-3 flex-wrap">
+          <span className={`badge text-[10px] font-bold uppercase ${category.badge}`}>
+            {category.label}
+          </span>
 
-        <span
-          className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[10px] font-bold ${
-            mentorship.meetingMode === "online"
-              ? "bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400"
-              : "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
-          }`}
-        >
-          {mentorship.meetingMode === "online" ? (
-            <Video size={11} />
-          ) : (
-            <MapPin size={11} />
-          )}
+          <span
+            className={`badge text-[10px] font-bold flex items-center gap-1 ${
+              mentorship.meetingMode === "online" ? "badge-sky" : "badge-emerald"
+            }`}
+          >
+            {mentorship.meetingMode === "online" ? (
+              <Video className="w-3 h-3" />
+            ) : (
+              <MapPin className="w-3 h-3" />
+            )}
+            <span className="capitalize">{mentorship.meetingMode}</span>
+          </span>
+        </div>
 
-          {mentorship.meetingMode === "online"
-            ? "Online"
-            : "In Person"}
-        </span>
-      </div>
-
-      {/* ===================================================
-          TOPIC
-      =================================================== */}
-
-      <div className="mt-4">
-        <h4 className="line-clamp-1 text-lg font-black text-slate-800 dark:text-slate-100">
+        {/* Topic & Description */}
+        <h4 className="font-display font-bold text-sm text-slate-900 line-clamp-1 mb-1.5">
           {mentorship.topic}
         </h4>
 
         {mentorship.description && (
-          <p className="mt-2 line-clamp-2 min-h-[40px] text-sm leading-5 text-slate-500 dark:text-slate-400">
+          <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-4">
             {mentorship.description}
           </p>
         )}
-      </div>
 
-      {/* ===================================================
-          SKILLS
-      =================================================== */}
-
-      <div className="mt-4">
-        <div className="mb-2 flex items-center gap-1.5">
-          <Briefcase
-            size={12}
-            className="text-indigo-500"
-          />
-
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-            Mentor Skills
-          </span>
-        </div>
-
-        <div className="flex flex-wrap gap-1.5">
-          {mentorship.mentor?.skills
-            ?.slice(0, 4)
-            .map((skill) => (
+        {/* Mentor Skills */}
+        {mentorship.mentor?.skills?.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mb-4">
+            {mentorship.mentor.skills.slice(0, 3).map((skill) => (
               <span
                 key={skill}
-                className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-[10px] font-semibold text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
+                className="px-2 py-0.5 rounded-md bg-slate-50 border border-slate-200/60 text-slate-700 text-[10px] font-semibold"
               >
                 {skill}
               </span>
             ))}
-
-          {mentorship.mentor?.skills?.length > 4 && (
-            <span className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-[10px] font-semibold text-slate-400 dark:border-slate-700 dark:bg-slate-800">
-              +
-              {mentorship.mentor.skills.length - 4}
-            </span>
-          )}
-        </div>
+            {mentorship.mentor.skills.length > 3 && (
+              <span className="px-1.5 py-0.5 rounded-md bg-slate-50 text-slate-600 text-[10px] font-medium">
+                +{mentorship.mentor.skills.length - 3}
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* ===================================================
-          AVAILABILITY
-      =================================================== */}
-
-      <div className="mt-5 rounded-2xl bg-slate-50 p-3.5 dark:bg-slate-800/60">
-        <div className="flex items-center justify-between">
+      {/* Footer Availability & Booking */}
+      <div>
+        <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <div
-              className={`flex h-8 w-8 items-center justify-center rounded-xl ${
-                freeSlots > 0
-                  ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
-                  : "bg-slate-200 text-slate-400 dark:bg-slate-700"
+            <Calendar
+              className={`w-4 h-4 ${freeSlots > 0 ? "text-emerald-600" : "text-slate-600"}`}
+            />
+            <span
+              className={`text-xs font-semibold ${
+                freeSlots > 0 ? "text-emerald-700" : "text-slate-600"
               }`}
             >
-              <Calendar size={14} />
-            </div>
-
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                Availability
-              </p>
-
-              <p
-                className={`mt-0.5 text-xs font-bold ${
-                  freeSlots > 0
-                    ? "text-emerald-600 dark:text-emerald-400"
-                    : "text-slate-400"
-                }`}
-              >
-                {freeSlots > 0
-                  ? `${freeSlots} slots available`
-                  : "No slots available"}
-              </p>
-            </div>
+              {freeSlots > 0 ? `${freeSlots} slots available` : "Fully Booked"}
+            </span>
           </div>
 
           {freeSlots > 0 && (
-            <span className="flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-1 text-[9px] font-bold text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400">
-              <CheckCircle2 size={10} />
-              Available
+            <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-100/60 px-2 py-0.5 rounded-md">
+              <CheckCircle2 className="w-3 h-3" />
+              <span>Open</span>
             </span>
           )}
-        </div>
-      </div>
-
-      {/* ===================================================
-          FOOTER
-      =================================================== */}
-
-      <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-4 dark:border-slate-800">
-        <div className="flex items-center gap-1.5 text-[10px] font-medium text-slate-400">
-          <Clock size={12} />
-          1-on-1 Session
         </div>
 
         <button
@@ -319,17 +218,14 @@ function MentorCard({ mentorship, onBook, onClick }) {
             onBook(mentorship);
           }}
           disabled={freeSlots === 0}
-          className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold transition-all ${
+          className={`btn w-full py-2.5 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
             freeSlots > 0
-              ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-500/20 hover:-translate-y-0.5"
-              : "cursor-not-allowed bg-slate-100 text-slate-400 dark:bg-slate-800"
+              ? "btn-primary shadow-card hover:shadow-card-hover"
+              : "bg-slate-100 text-slate-600 cursor-not-allowed border border-slate-200"
           }`}
         >
-          <Calendar size={13} />
-
-          {freeSlots > 0
-            ? "Book Session"
-            : "Fully Booked"}
+          <Calendar className="w-3.5 h-3.5" />
+          <span>{freeSlots > 0 ? "Book 1-on-1 Session" : "Fully Booked"}</span>
         </button>
       </div>
     </div>
@@ -338,16 +234,10 @@ function MentorCard({ mentorship, onBook, onClick }) {
 
 /* =========================================================
    OFFER MENTORSHIP MODAL
-   KEEPING YOUR ORIGINAL FUNCTIONALITY
 ========================================================= */
 
-function OfferMentorshipModal({
-  isOpen,
-  onClose,
-  onSuccess,
-}) {
+function OfferMentorshipModal({ isOpen, onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
-
   const [form, setForm] = useState({
     topic: "",
     description: "",
@@ -365,11 +255,7 @@ function OfferMentorshipModal({
     },
   ]);
 
-  const set = (field) => (e) =>
-    setForm((f) => ({
-      ...f,
-      [field]: e.target.value,
-    }));
+  const set = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
 
   const addSlot = () =>
     setSlots([
@@ -382,47 +268,32 @@ function OfferMentorshipModal({
     ]);
 
   const removeSlot = (index) =>
-    setSlots(
-      slots.filter((_, idx) => idx !== index)
-    );
+    setSlots(slots.filter((_, idx) => idx !== index));
 
   const updateSlot = (index, field, value) => {
     const next = [...slots];
-
     next[index] = {
       ...next[index],
       [field]: value,
     };
-
     setSlots(next);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!form.topic.trim()) {
-      return toast.error("Topic required");
+      return toast.error("Please enter a mentorship topic");
     }
 
-    const validSlots = slots.filter(
-      (slot) =>
-        slot.date &&
-        slot.startTime &&
-        slot.endTime
-    );
-
+    const validSlots = slots.filter((slot) => slot.date && slot.startTime && slot.endTime);
     if (validSlots.length === 0) {
-      return toast.error(
-        "At least one slot required"
-      );
+      return toast.error("Please add at least one available date and time slot");
     }
 
     setLoading(true);
-
     try {
       await api.post("/mentorship", {
         ...form,
-
         availableSlots: validSlots.map((slot) => ({
           date: new Date(slot.date),
           startTime: slot.startTime,
@@ -431,12 +302,8 @@ function OfferMentorshipModal({
         })),
       });
 
-      toast.success(
-        "Mentorship slot created! 🎉"
-      );
-
+      toast.success("Mentorship session published successfully! 🎉");
       onSuccess?.();
-
       onClose();
 
       setForm({
@@ -456,160 +323,102 @@ function OfferMentorshipModal({
         },
       ]);
     } catch (err) {
-      toast.error(
-        err.response?.data?.message ||
-          "Failed to create mentorship"
-      );
+      toast.error(err.response?.data?.message || "Failed to create mentorship");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title="Offer Mentorship"
-    >
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-4"
-      >
-        {/* Topic */}
-
+    <Modal isOpen={isOpen} onClose={onClose} title="Offer 1-on-1 Mentorship">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
-            Topic *
+          <label className="block text-xs font-semibold text-slate-700 mb-1">
+            Session Topic <span className="text-rose-500">*</span>
           </label>
-
           <input
-            className="input"
-            placeholder="e.g. DSA Preparation, Resume Review"
+            className="input text-xs"
+            placeholder="e.g. DSA Preparation, Resume Review & Mock Interview"
             value={form.topic}
             onChange={set("topic")}
             required
           />
         </div>
 
-        {/* Category */}
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
+              Category
+            </label>
+            <select
+              className="input text-xs"
+              value={form.category}
+              onChange={set("category")}
+            >
+              {CATEGORIES.map((category) => (
+                <option key={category} value={category}>
+                  {category.replace("_", " ").replace(/\b\w/g, (l) => l.toUpperCase())}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <div>
-          <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
-            Category
-          </label>
-
-          <select
-            className="input"
-            value={form.category}
-            onChange={set("category")}
-          >
-            {CATEGORIES.map((category) => (
-              <option
-                key={category}
-                value={category}
-              >
-                {category
-                  .replace("_", " ")
-                  .replace(/\b\w/g, (letter) =>
-                    letter.toUpperCase()
-                  )}
-              </option>
-            ))}
-          </select>
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
+              Meeting Mode
+            </label>
+            <select
+              className="input text-xs"
+              value={form.meetingMode}
+              onChange={set("meetingMode")}
+            >
+              <option value="online">Online (Video Meet)</option>
+              <option value="offline">In-Person (Campus)</option>
+              <option value="both">Both Available</option>
+            </select>
+          </div>
         </div>
 
-        {/* Description */}
-
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
-            Description
+          <label className="block text-xs font-semibold text-slate-700 mb-1">
+            Session Description
           </label>
-
           <textarea
-            className="input resize-none"
-            rows={3}
-            placeholder="What will you cover in this session?"
+            className="input text-xs resize-none"
+            rows={2}
+            placeholder="Outline what students will learn or what they should prepare beforehand…"
             value={form.description}
             onChange={set("description")}
           />
         </div>
 
-        {/* Meeting + Capacity */}
-
-        <div className="grid grid-cols-2 gap-3">
+        {(form.meetingMode === "online" || form.meetingMode === "both") && (
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
-              Meeting Mode
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
+              Meeting URL <span className="text-slate-400 font-normal">(Google Meet, Zoom, Teams)</span>
             </label>
-
-            <select
-              className="input"
-              value={form.meetingMode}
-              onChange={set("meetingMode")}
-            >
-              <option value="online">
-                Online
-              </option>
-
-              <option value="offline">
-                Offline
-              </option>
-
-              <option value="both">
-                Both
-              </option>
-            </select>
-          </div>
-
-          <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
-              Capacity
-            </label>
-
             <input
-              type="number"
-              className="input"
-              min={1}
-              max={10}
-              value={form.capacity}
-              onChange={set("capacity")}
-            />
-          </div>
-        </div>
-
-        {/* Meeting Link */}
-
-        {(form.meetingMode === "online" ||
-          form.meetingMode === "both") && (
-          <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
-              Meeting Link
-            </label>
-
-            <input
-              className="input"
-              placeholder="Google Meet / Zoom link"
+              className="input text-xs"
+              placeholder="https://meet.google.com/xxx-xxxx-xxx"
               value={form.meetingLink}
               onChange={set("meetingLink")}
             />
           </div>
         )}
 
-        {/* Slots */}
-
-        <div>
-          <div className="mb-2 flex items-center justify-between">
-            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
-              Available Slots *
+        {/* Time Slots */}
+        <div className="pt-2">
+          <div className="flex items-center justify-between mb-2">
+            <label className="text-xs font-semibold text-slate-700">
+              Available Time Slots <span className="text-rose-500">*</span>
             </label>
-
             <button
               type="button"
               onClick={addSlot}
-              className="flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:underline"
+              className="inline-flex items-center gap-1 text-xs font-semibold text-primary-600 hover:text-primary-700"
             >
-              <Plus size={14} />
-              Add Slot
+              <Plus className="w-3.5 h-3.5" />
+              <span>Add Another Slot</span>
             </button>
           </div>
 
@@ -617,61 +426,37 @@ function OfferMentorshipModal({
             {slots.map((slot, index) => (
               <div
                 key={index}
-                className="flex flex-col gap-2 sm:flex-row sm:items-center"
+                className="flex flex-col sm:flex-row sm:items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200"
               >
                 <input
                   type="date"
-                  className="input flex-1 text-sm"
+                  className="input text-xs flex-1 py-1.5"
                   value={slot.date}
-                  min={
-                    new Date()
-                      .toISOString()
-                      .split("T")[0]
-                  }
-                  onChange={(e) =>
-                    updateSlot(
-                      index,
-                      "date",
-                      e.target.value
-                    )
-                  }
+                  min={new Date().toISOString().split("T")[0]}
+                  onChange={(e) => updateSlot(index, "date", e.target.value)}
+                  required
                 />
-
                 <input
                   type="time"
-                  className="input sm:w-28 text-sm"
+                  className="input text-xs sm:w-28 py-1.5"
                   value={slot.startTime}
-                  onChange={(e) =>
-                    updateSlot(
-                      index,
-                      "startTime",
-                      e.target.value
-                    )
-                  }
+                  onChange={(e) => updateSlot(index, "startTime", e.target.value)}
+                  required
                 />
-
                 <input
                   type="time"
-                  className="input sm:w-28 text-sm"
+                  className="input text-xs sm:w-28 py-1.5"
                   value={slot.endTime}
-                  onChange={(e) =>
-                    updateSlot(
-                      index,
-                      "endTime",
-                      e.target.value
-                    )
-                  }
+                  onChange={(e) => updateSlot(index, "endTime", e.target.value)}
+                  required
                 />
-
                 {slots.length > 1 && (
                   <button
                     type="button"
-                    onClick={() =>
-                      removeSlot(index)
-                    }
-                    className="self-end rounded-lg p-2 text-red-400 hover:bg-red-50 hover:text-red-600 sm:self-auto"
+                    onClick={() => removeSlot(index)}
+                    className="p-1.5 rounded-lg text-rose-500 hover:bg-rose-50"
                   >
-                    <X size={16} />
+                    <X className="w-4 h-4" />
                   </button>
                 )}
               </div>
@@ -679,205 +464,134 @@ function OfferMentorshipModal({
           </div>
         </div>
 
-        {/* Submit */}
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn-primary flex w-full items-center justify-center gap-2 py-3 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {loading ? (
-            <>
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-              Creating…
-            </>
-          ) : (
-            <>
-              <Plus size={16} />
-              Create Mentorship Slot
-            </>
-          )}
-        </button>
+        <div className="pt-3">
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn btn-primary w-full py-3 text-xs font-semibold flex items-center justify-center gap-2 shadow-card hover:shadow-card-hover"
+          >
+            {loading ? (
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : (
+              <Plus className="w-4 h-4" />
+            )}
+            <span>{loading ? "Creating Mentorship…" : "Publish Mentorship Availability"}</span>
+          </button>
+        </div>
       </form>
     </Modal>
   );
 }
 
 /* =========================================================
-   BOOKING MODAL
-   KEEPING YOUR ORIGINAL FUNCTIONALITY
+   BOOKING MODAL COMPONENT
 ========================================================= */
 
-function BookingModal({
-  mentorship,
-  onClose,
-  onSuccess,
-}) {
-  const slots =
-    mentorship?.availableSlots?.filter(
-      (slot) => !slot.isBooked
-    ) || [];
-
-  const [selectedSlot, setSelectedSlot] =
-    useState("");
-
+function BookingModal({ mentorship, onClose, onSuccess }) {
+  const slots = mentorship?.availableSlots?.filter((slot) => !slot.isBooked) || [];
+  const [selectedSlot, setSelectedSlot] = useState("");
   const [note, setNote] = useState("");
-
-  const [loading, setLoading] =
-    useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const availableSlots =
-      mentorship?.availableSlots?.filter(
-        (slot) => !slot.isBooked
-      ) || [];
-
+    const availableSlots = mentorship?.availableSlots?.filter((slot) => !slot.isBooked) || [];
     if (availableSlots.length > 0) {
-      const firstSlot = availableSlots[0];
-
-      setSelectedSlot(
-        firstSlot._id?.toString() || ""
-      );
+      setSelectedSlot(availableSlots[0]._id?.toString() || "");
     } else {
       setSelectedSlot("");
     }
-
     setNote("");
   }, [mentorship?._id]);
 
   const handleBook = async () => {
     if (!selectedSlot) {
-      return toast.error(
-        "Please select a slot"
-      );
+      return toast.error("Please select an available time slot");
     }
-
     if (!mentorship?._id) {
-      return toast.error(
-        "Mentorship information missing"
-      );
+      return toast.error("Mentorship information is missing");
     }
 
     setLoading(true);
-
     try {
-      await api.post(
-        `/mentorship/${mentorship._id}/book`,
-        {
-          slotId: selectedSlot,
-          studentNote: note,
-        }
-      );
+      await api.post(`/mentorship/${mentorship._id}/book`, {
+        slotId: selectedSlot,
+        studentNote: note,
+      });
 
-      toast.success(
-        "Session booked successfully! 🎉"
-      );
-
+      toast.success("1-on-1 session booked successfully! 🎉");
       onSuccess?.();
-
       onClose();
     } catch (err) {
-      toast.error(
-        err.response?.data?.message ||
-          "Booking failed"
-      );
+      toast.error(err.response?.data?.message || "Booking failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Modal
-      isOpen={!!mentorship}
-      onClose={onClose}
-      title="Book Mentorship Session"
-    >
+    <Modal isOpen={!!mentorship} onClose={onClose} title="Book Mentorship Session">
       <div className="space-y-4">
-        {/* Mentor */}
-
-        <div className="flex items-center gap-3 rounded-2xl bg-slate-50 p-4 dark:bg-slate-800">
+        {/* Mentor Preview */}
+        <div className="flex items-center gap-3 rounded-2xl bg-slate-50 p-3.5 border border-slate-200/70">
           <Avatar
-            src={
-              mentorship?.mentor?.profilePhoto
-            }
-            name={
-              mentorship?.mentor?.name
-            }
+            src={mentorship?.mentor?.profilePhoto}
+            name={mentorship?.mentor?.name}
             size="md"
           />
-
-          <div className="min-w-0">
-            <p className="truncate font-bold text-slate-800 dark:text-slate-200">
+          <div className="min-w-0 flex-1">
+            <p className="font-display font-bold text-xs text-slate-900 truncate">
               {mentorship?.mentor?.name}
             </p>
-
-            <p className="mt-0.5 truncate text-sm text-slate-500">
-              {mentorship?.topic}
+            <p className="text-[11px] text-slate-600 truncate mt-0.5">
+              Topic: <strong className="text-primary-700">{mentorship?.topic}</strong>
             </p>
           </div>
         </div>
 
-        {/* Slots */}
-
+        {/* Slot Selector */}
         <div>
-          <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
-            Select Time Slot *
+          <label className="block text-xs font-semibold text-slate-700 mb-2">
+            Select Your Preferred Time Slot <span className="text-rose-500">*</span>
           </label>
 
-          <div className="space-y-2">
+          <div className="space-y-2 max-h-48 overflow-y-auto">
             {slots.length === 0 ? (
-              <div className="rounded-xl bg-slate-50 py-6 text-center text-sm text-slate-400 dark:bg-slate-800">
-                No slots available
+              <div className="rounded-xl bg-slate-50 p-4 text-center text-xs text-slate-400">
+                No slots currently available.
               </div>
             ) : (
               slots.map((slot) => {
-                const slotId =
-                  slot._id?.toString() || "";
-
-                const isSelected =
-                  selectedSlot === slotId;
+                const slotId = slot._id?.toString() || "";
+                const isSelected = selectedSlot === slotId;
 
                 return (
                   <button
                     key={slotId}
                     type="button"
-                    onClick={() =>
-                      setSelectedSlot(slotId)
-                    }
-                    className={`w-full rounded-xl border-2 p-3 text-left text-sm transition-all ${
+                    onClick={() => setSelectedSlot(slotId)}
+                    className={`w-full p-3 rounded-xl border text-left text-xs transition-all flex items-center justify-between ${
                       isSelected
-                        ? "border-indigo-500 bg-indigo-50 ring-2 ring-indigo-200 dark:bg-indigo-900/20 dark:ring-indigo-900"
-                        : "border-slate-200 hover:border-indigo-300 dark:border-slate-700"
+                        ? "border-primary-500 bg-primary-50/80 font-bold text-primary-900 shadow-2xs"
+                        : "border-slate-200 bg-white hover:bg-slate-50 text-slate-800"
                     }`}
                   >
-                    <div className="flex items-center justify-between">
-                      <p className="font-semibold text-slate-800 dark:text-slate-200">
-                        {new Date(
-                          slot.date
-                        ).toLocaleDateString(
-                          "en-IN",
-                          {
-                            weekday: "short",
-                            month: "short",
-                            day: "numeric",
-                          }
-                        )}
+                    <div>
+                      <p className="font-semibold text-slate-900">
+                        {new Date(slot.date).toLocaleDateString("en-IN", {
+                          weekday: "short",
+                          month: "short",
+                          day: "numeric",
+                        })}
                       </p>
-
-                      {isSelected && (
-                        <CheckCircle2
-                          size={16}
-                          className="text-indigo-600"
-                        />
-                      )}
+                      <p className="text-[11px] text-slate-600 flex items-center gap-1 mt-0.5">
+                        <Clock className="w-3 h-3 text-slate-600" />
+                        <span>
+                          {slot.startTime} – {slot.endTime}
+                        </span>
+                      </p>
                     </div>
 
-                    <p className="mt-1 flex items-center gap-1.5 text-xs text-slate-500">
-                      <Clock size={12} />
-
-                      {slot.startTime} –{" "}
-                      {slot.endTime}
-                    </p>
+                    {isSelected && <CheckCircle2 className="w-4 h-4 text-primary-600" />}
                   </button>
                 );
               })
@@ -885,48 +599,34 @@ function BookingModal({
           </div>
         </div>
 
-        {/* Note */}
-
+        {/* Student Note */}
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
-            Note for Mentor{" "}
-            <span className="font-normal text-slate-400">
-              (optional)
-            </span>
+          <label className="block text-xs font-semibold text-slate-700 mb-1">
+            Note for Mentor <span className="text-slate-600 font-normal">(optional questions/context)</span>
           </label>
-
           <textarea
-            className="input resize-none"
-            rows={3}
-            placeholder="What would you like to discuss?"
+            className="input text-xs resize-none"
+            rows={2}
+            placeholder="Share your specific questions, project challenges, or topics to discuss…"
             value={note}
-            onChange={(e) =>
-              setNote(e.target.value)
-            }
+            onChange={(e) => setNote(e.target.value)}
           />
         </div>
 
-        {/* Confirm */}
-
-        <button
-          onClick={handleBook}
-          disabled={
-            loading || slots.length === 0
-          }
-          className="btn-primary flex w-full items-center justify-center gap-2 py-3 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {loading ? (
-            <>
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-              Booking…
-            </>
-          ) : (
-            <>
-              <Calendar size={16} />
-              Confirm Booking
-            </>
-          )}
-        </button>
+        <div className="pt-2">
+          <button
+            onClick={handleBook}
+            disabled={loading || slots.length === 0}
+            className="btn btn-primary w-full py-3 text-xs font-semibold flex items-center justify-center gap-2 shadow-card hover:shadow-card-hover"
+          >
+            {loading ? (
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : (
+              <Calendar className="w-4 h-4" />
+            )}
+            <span>{loading ? "Confirming Booking…" : "Confirm 1-on-1 Session"}</span>
+          </button>
+        </div>
       </div>
     </Modal>
   );
@@ -938,464 +638,198 @@ function BookingModal({
 
 export default function MentorshipPage() {
   const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("");
+  const [page, setPage] = useState(1);
+  const [bookingTarget, setBookingTarget] = useState(null);
+  const [showCreate, setShowCreate] = useState(false);
 
-  const [search, setSearch] =
-    useState("");
-
-  const [category, setCategory] =
-    useState("");
-
-  const [page, setPage] =
-    useState(1);
-
-  const [bookingTarget, setBookingTarget] =
-    useState(null);
-
-  const [showCreate, setShowCreate] =
-    useState(false);
-
-  const {
-    data,
-    isLoading,
-    refetch,
-  } = useQuery({
-    queryKey: [
-      "mentorship",
-      search,
-      category,
-      page,
-    ],
-
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["mentorship", search, category, page],
     queryFn: () =>
       api
         .get(
-          `/mentorship?page=${page}&limit=9${
-            category
-              ? `&category=${category}`
-              : ""
-          }${
-            search
-              ? `&search=${encodeURIComponent(
-                  search
-                )}`
-              : ""
+          `/mentorship?page=${page}&limit=9${category ? `&category=${category}` : ""}${
+            search ? `&search=${encodeURIComponent(search)}` : ""
           }`
         )
         .then((res) => res.data),
-
     keepPreviousData: true,
   });
 
-  const totalMentors =
-    data?.pagination?.total || 0;
+  const totalMentors = data?.pagination?.total || 0;
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-100 via-blue-200 to-violet-50 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950">
+    <div className="space-y-6 max-w-7xl mx-auto animate-fade-in pb-12 font-sans">
+      {/* Hero Banner */}
+      <section className="relative rounded-3xl overflow-hidden p-6 sm:p-8 bg-gradient-to-r from-primary-600 via-indigo-600 to-violet-600 text-white shadow-card">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-violet-400/20 rounded-full blur-3xl pointer-events-none" />
 
-      {/* =================================================
-          BACKGROUND DECORATIONS
-      ================================================= */}
+        <div className="relative z-10 max-w-3xl space-y-4">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-xs font-semibold">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Senior Student & Alumni Guidance</span>
+          </div>
 
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-indigo-400/20 blur-3xl" />
+          <h1 className="text-2xl sm:text-4xl font-display font-bold tracking-tight text-white leading-tight">
+            Learn faster with verified student mentors.
+          </h1>
 
-        <div className="absolute -left-32 top-[45%] h-80 w-80 rounded-full bg-blue-400/10 blur-3xl" />
+          <p className="text-xs sm:text-sm text-primary-100 max-w-xl leading-relaxed">
+            Book 1-on-1 sessions for coding challenges, resume critique, mock technical interviews, and real internship guidance.
+          </p>
 
-        <div className="absolute bottom-0 right-[20%] h-72 w-72 rounded-full bg-violet-400/10 blur-3xl" />
-      </div>
-
-      <div className="relative mx-auto max-w-[1600px] px-4 py-6 sm:px-6 lg:px-8">
-
-        {/* =================================================
-            HERO
-        ================================================= */}
-
-        <section className="relative mb-8 overflow-hidden rounded-[30px] bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 p-6 text-white shadow-2xl shadow-indigo-500/20 sm:p-8 lg:p-10">
-
-          <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-white/10 blur-2xl" />
-
-          <div className="absolute -bottom-32 left-1/3 h-80 w-80 rounded-full bg-fuchsia-400/10 blur-3xl" />
-
-          <GraduationCap
-            className="absolute right-8 top-8 hidden opacity-10 lg:block"
-            size={190}
-            strokeWidth={1}
-          />
-
-          <div className="relative z-10 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
-
-            <div className="max-w-3xl">
-
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold backdrop-blur-md">
-                <Sparkles size={13} />
-                Learn From People Ahead Of You
-              </div>
-
-              <h1 className="text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">
-                Learn faster.
-                <span className="block text-indigo-100">
-                  Grow together. 🎓
-                </span>
-              </h1>
-
-              <p className="mt-4 max-w-xl text-sm leading-6 text-indigo-100 sm:text-base">
-                Connect with experienced students
-                and experts for personalized
-                guidance on coding, careers,
-                interviews, projects, internships
-                and more.
-              </p>
-
-              {/* Hero Search */}
-
-              <div className="mt-7 flex max-w-2xl flex-col gap-3 sm:flex-row">
-                <div className="relative flex-1">
-                  <Search
-                    size={18}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                  />
-
-                  <input
-                    value={search}
-                    onChange={(e) => {
-                      setSearch(
-                        e.target.value
-                      );
-                      setPage(1);
-                    }}
-                    placeholder="Search mentors, topics or skills..."
-                    className="h-12 w-full rounded-2xl border border-white/20 bg-white px-11 text-sm font-medium text-slate-800 outline-none placeholder:text-slate-400 focus:ring-4 focus:ring-white/20"
-                  />
-
-                  {search && (
-                    <button
-                      onClick={() => {
-                        setSearch("");
-                        setPage(1);
-                      }}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700"
-                    >
-                      <X size={15} />
-                    </button>
-                  )}
-                </div>
-
+          <div className="pt-2 flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setPage(1);
+                }}
+                placeholder="Search mentors by name, topic, or technical skill..."
+                className="w-full h-12 pl-11 pr-10 rounded-2xl bg-white text-slate-900 text-xs sm:text-sm font-medium placeholder-slate-400 shadow-md focus:outline-none focus:ring-4 focus:ring-white/30"
+              />
+              {search && (
                 <button
-                  onClick={() =>
-                    setShowCreate(true)
-                  }
-                  className="flex h-12 items-center justify-center gap-2 rounded-2xl bg-white px-5 text-sm font-bold text-indigo-600 shadow-xl transition hover:-translate-y-0.5"
+                  onClick={() => setSearch("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg text-slate-400 hover:text-slate-700"
                 >
-                  <Plus size={17} />
-                  Become a Mentor
+                  <X className="w-4 h-4" />
                 </button>
-              </div>
+              )}
             </div>
 
-            {/* Hero Stats */}
-
-            <div className="grid grid-cols-2 gap-3 lg:w-64">
-              <div className="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-md">
-                <Users
-                  size={19}
-                  className="mb-3"
-                />
-
-                <p className="text-2xl font-black">
-                  {totalMentors.toLocaleString()}
-                </p>
-
-                <p className="mt-1 text-xs text-indigo-100">
-                  Mentors
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-md">
-                <MessageCircle
-                  size={19}
-                  className="mb-3"
-                />
-
-                <p className="text-2xl font-black">
-                  1-on-1
-                </p>
-
-                <p className="mt-1 text-xs text-indigo-100">
-                  Personal Guidance
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* =================================================
-            SECTION HEADER
-        ================================================= */}
-
-        <div className="mb-5 flex items-end justify-between">
-          <div>
-            <div className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-500/20">
-                <GraduationCap size={17} />
-              </div>
-
-              <h2 className="text-xl font-black text-slate-900 dark:text-white">
-                Find Your Mentor
-              </h2>
-            </div>
-
-            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-              Get personalized help from
-              students and experts
-            </p>
-          </div>
-
-          <div className="hidden rounded-full border border-white/60 bg-white/70 px-3 py-1.5 text-xs font-semibold text-slate-500 shadow-sm backdrop-blur sm:block dark:border-slate-800 dark:bg-slate-900/70 dark:text-slate-400">
-            {totalMentors} mentors
+            <button
+              onClick={() => setShowCreate(true)}
+              className="h-12 px-6 rounded-2xl bg-white text-primary-700 hover:bg-slate-50 font-bold text-xs sm:text-sm shadow-md flex items-center justify-center gap-2 hover:-translate-y-0.5 transition-all flex-shrink-0"
+            >
+              <UserPlus className="w-4 h-4" />
+              <span>Offer Mentorship</span>
+            </button>
           </div>
         </div>
+      </section>
 
-        {/* =================================================
-            CATEGORY PILLS
-        ================================================= */}
+      {/* Categories Bar */}
+      <section>
+        <div className="flex items-center justify-between mb-3 px-1">
+          <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+            Mentorship Focus Areas
+          </p>
+          {category && (
+            <button
+              onClick={() => setCategory("")}
+              className="text-xs font-semibold text-primary-600 hover:text-primary-700"
+            >
+              Reset Category
+            </button>
+          )}
+        </div>
 
-        <div className="mb-5 flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
           <button
-            onClick={() => {
-              setCategory("");
-              setPage(1);
-            }}
-            className={`flex shrink-0 items-center gap-2 rounded-2xl px-4 py-2.5 text-xs font-bold transition-all ${
+            onClick={() => setCategory("")}
+            className={`px-4 py-2.5 rounded-xl text-xs font-semibold flex-shrink-0 transition-all ${
               !category
-                ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-500/20"
-                : "border border-white/70 bg-white/80 text-slate-600 hover:border-indigo-300 dark:border-slate-700 dark:bg-slate-900/80 dark:text-slate-400"
+                ? "bg-primary-600 text-white shadow-card"
+                : "bg-white text-slate-700 border border-slate-200/80 hover:bg-slate-50 shadow-2xs"
             }`}
           >
-            ✨ All Mentorship
+            All Guidance
           </button>
 
           {CATEGORIES.map((cat) => {
-            const config =
-              CATEGORY_CONFIG[cat];
-
-            const active =
-              category === cat;
+            const config = CATEGORY_CONFIG[cat] || { label: cat };
+            const isActive = category === cat;
 
             return (
               <button
                 key={cat}
-                onClick={() => {
-                  setCategory(
-                    active ? "" : cat
-                  );
-                  setPage(1);
-                }}
-                className={`flex shrink-0 items-center gap-2 rounded-2xl px-4 py-2.5 text-xs font-bold transition-all ${
-                  active
-                    ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-500/20"
-                    : "border border-white/70 bg-white/80 text-slate-600 hover:border-indigo-300 dark:border-slate-700 dark:bg-slate-900/80 dark:text-slate-400"
+                onClick={() => setCategory(isActive ? "" : cat)}
+                className={`px-4 py-2.5 rounded-xl text-xs font-semibold flex-shrink-0 transition-all ${
+                  isActive
+                    ? "bg-primary-600 text-white shadow-card"
+                    : "bg-white text-slate-700 border border-slate-200/80 hover:bg-slate-50 shadow-2xs"
                 }`}
               >
-                <span>{config.icon}</span>
                 {config.label}
               </button>
             );
           })}
         </div>
+      </section>
 
-        {/* =================================================
-            SEARCH / FILTER
-        ================================================= */}
-
-        <div className="mb-6 flex flex-col gap-3 rounded-2xl border border-white/70 bg-white/60 p-2 shadow-sm backdrop-blur-xl sm:flex-row dark:border-slate-800 dark:bg-slate-900/60">
-
-          <div className="relative flex-1">
-            <Search
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
-              size={16}
-            />
-
-            <input
-              className="h-11 w-full rounded-xl border-0 bg-white/70 pl-10 pr-4 text-sm text-slate-700 outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-indigo-500/20 dark:bg-slate-800/70 dark:text-slate-200"
-              placeholder="Search by mentor name, topic or skill..."
-              value={search}
-              onChange={(e) => {
-                setSearch(
-                  e.target.value
-                );
-                setPage(1);
-              }}
-            />
-          </div>
-
-          <select
-            className="h-11 rounded-xl border-0 bg-white/70 px-4 text-sm font-medium text-slate-600 outline-none focus:ring-2 focus:ring-indigo-500/20 dark:bg-slate-800/70 dark:text-slate-300 sm:w-52"
-            value={category}
-            onChange={(e) => {
-              setCategory(
-                e.target.value
-              );
-              setPage(1);
-            }}
-          >
-            <option value="">
-              All Categories
-            </option>
-
-            {CATEGORIES.map((cat) => (
-              <option
-                key={cat}
-                value={cat}
-              >
-                {CATEGORY_CONFIG[cat]?.label ||
-                  cat}
-              </option>
+      {/* Mentors Grid */}
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {Array(6)
+            .fill(0)
+            .map((_, i) => (
+              <CardSkeleton key={i} />
             ))}
-          </select>
         </div>
-
-        {/* =================================================
-            MENTOR GRID
-        ================================================= */}
-
-        {isLoading ? (
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {Array(6)
-              .fill(0)
-              .map((_, i) => (
-                <CardSkeleton key={i} />
-              ))}
+      ) : data?.data?.length === 0 ? (
+        <div className="card bg-white p-8 sm:p-12 text-center border border-slate-200/80 shadow-xs">
+          <EmptyState
+            icon={UserCheck}
+            title="No mentors found"
+            description={
+              search
+                ? "Try searching for a different topic, skill, or department."
+                : "Be the first senior student to offer mentorship in this area!"
+            }
+            action={
+              <button
+                onClick={() => setShowCreate(true)}
+                className="btn btn-primary text-xs px-5 py-2.5 flex items-center gap-1.5 mx-auto"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Offer Mentorship</span>
+              </button>
+            }
+          />
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {data?.data?.map((mentorship) => (
+              <MentorCard
+                key={mentorship._id}
+                mentorship={mentorship}
+                onBook={setBookingTarget}
+                onClick={() => navigate(`/mentorship/${mentorship._id}`)}
+              />
+            ))}
           </div>
-        ) : data?.data?.length === 0 ? (
-          <div className="rounded-3xl border border-white/70 bg-white/80 p-10 shadow-xl backdrop-blur dark:border-slate-800 dark:bg-slate-900/80">
-            <EmptyState
-              icon={UserCheck}
-              title="No mentors found"
-              description={
-                search
-                  ? "Try searching for another topic, skill or mentor."
-                  : "Be the first to offer mentorship to fellow students!"
-              }
-              action={
-                <button
-                  onClick={() =>
-                    setShowCreate(true)
-                  }
-                  className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-5 py-2.5 text-sm font-bold text-white shadow-lg"
-                >
-                  <Plus size={15} />
-                  Offer Mentorship
-                </button>
-              }
-            />
-          </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {data?.data?.map(
-                (mentorship) => (
-                  <MentorCard
-                    key={mentorship._id}
-                    mentorship={
-                      mentorship
-                    }
-                    onBook={
-                      setBookingTarget
-                    }
-                    onClick={() =>
-                      navigate(
-                        `/mentorship/${mentorship._id}`
-                      )
-                    }
-                  />
-                )
-              )}
-            </div>
 
-            <div className="mt-10 flex justify-center">
+          {data?.pagination?.pages > 1 && (
+            <div className="mt-8 flex justify-center">
               <Pagination
-                page={
-                  data?.pagination
-                    ?.page || 1
-                }
-                pages={
-                  data?.pagination
-                    ?.pages || 1
-                }
+                page={data?.pagination?.page || 1}
+                pages={data?.pagination?.pages || 1}
                 onPageChange={setPage}
               />
             </div>
+          )}
+        </>
+      )}
 
-            {/* =================================================
-                BOTTOM CTA
-            ================================================= */}
+      {/* Modals */}
+      <OfferMentorshipModal
+        isOpen={showCreate}
+        onClose={() => setShowCreate(false)}
+        onSuccess={refetch}
+      />
 
-            <section className="relative mt-12 overflow-hidden rounded-3xl border border-white/60 bg-white/70 p-6 shadow-xl backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/70 sm:p-8">
-
-              <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-indigo-500/10 blur-2xl" />
-
-              <div className="relative flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-center">
-
-                <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-500/20">
-                    <UserPlus size={21} />
-                  </div>
-
-                  <div>
-                    <h3 className="text-base font-black text-slate-900 dark:text-white">
-                      Have something valuable to share?
-                    </h3>
-
-                    <p className="mt-1 max-w-xl text-xs leading-5 text-slate-500 dark:text-slate-400">
-                      Help fellow students with
-                      your experience in coding,
-                      interviews, projects,
-                      internships or career
-                      guidance.
-                    </p>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() =>
-                    setShowCreate(true)
-                  }
-                  className="group flex shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-5 py-3 text-xs font-bold text-white shadow-lg shadow-indigo-500/20 transition hover:-translate-y-0.5"
-                >
-                  Become a Mentor
-
-                  <ArrowUpRight
-                    size={14}
-                    className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                  />
-                </button>
-              </div>
-            </section>
-          </>
-        )}
-
-        {/* =================================================
-            MODALS
-        ================================================= */}
-
-        <OfferMentorshipModal
-          isOpen={showCreate}
-          onClose={() =>
-            setShowCreate(false)
-          }
-          onSuccess={refetch}
-        />
-
-        <BookingModal
-          mentorship={bookingTarget}
-          onClose={() =>
-            setBookingTarget(null)
-          }
-          onSuccess={refetch}
-        />
-      </div>
+      <BookingModal
+        mentorship={bookingTarget}
+        onClose={() => setBookingTarget(null)}
+        onSuccess={refetch}
+      />
     </div>
   );
 }
-

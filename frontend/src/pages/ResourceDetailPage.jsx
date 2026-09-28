@@ -1,16 +1,38 @@
 import React, { useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Download, Star, Eye, ArrowLeft, Tag, Share2, Flag } from "lucide-react";
+import {
+  Download,
+  Star,
+  Eye,
+  ArrowLeft,
+  Tag,
+  Share2,
+  FileText,
+  BookOpen,
+  Layers,
+  Sparkles,
+  Award,
+  Check,
+  Calendar,
+  Building,
+  User,
+  ExternalLink
+} from "lucide-react";
 import api from "../services/api";
 import { Skeleton, Badge, StarRating, Avatar } from "../components/common";
 import toast from "react-hot-toast";
 import { formatDistanceToNow } from "date-fns";
 
-const CATEGORY_COLORS = {
-  notes: "blue", pyq: "purple", assignments: "amber",
-  lab_manuals: "green", placement: "red", interview_questions: "red",
-  projects: "green", research_papers: "purple",
+const CATEGORY_STYLES = {
+  notes: { badge: "badge-primary", label: "Notes", icon: FileText },
+  pyq: { badge: "badge-violet", label: "PYQs", icon: BookOpen },
+  assignments: { badge: "badge-amber", label: "Assignments", icon: Layers },
+  lab_manuals: { badge: "badge-emerald", label: "Lab Manuals", icon: Award },
+  placement: { badge: "badge-rose", label: "Placement", icon: Sparkles },
+  interview_questions: { badge: "badge-rose", label: "Interview Questions", icon: Sparkles },
+  projects: { badge: "badge-sky", label: "Projects", icon: Layers },
+  research_papers: { badge: "badge-violet", label: "Research Papers", icon: FileText },
 };
 
 export default function ResourceDetailPage() {
@@ -21,178 +43,280 @@ export default function ResourceDetailPage() {
 
   const { data: resource, isLoading, refetch } = useQuery({
     queryKey: ["resource", id],
-    queryFn: () => api.get(`/resources/${id}`).then(r => r.data.data),
+    queryFn: () => api.get(`/resources/${id}`).then((r) => r.data.data),
   });
 
-  
   const handleDownload = async () => {
-  try {
-    const { data } = await api.post(`/resources/${id}/download`);
-    let downloadUrl = data.fileUrl;
+    try {
+      const { data } = await api.post(`/resources/${id}/download`);
+      let downloadUrl = data.fileUrl;
 
-    downloadUrl = downloadUrl
-      .replace("/image/upload/fl_attachment/", "/image/upload/")
-      .replace("/raw/upload/fl_attachment/", "/raw/upload/");
+      if (!downloadUrl) return toast.error("File download link not available");
 
-    const response = await fetch(downloadUrl);
-    const blob = await response.blob();
-    const pdfBlob = new Blob([blob], { type: "application/pdf" });
+      downloadUrl = downloadUrl
+        .replace("/image/upload/fl_attachment/", "/image/upload/")
+        .replace("/raw/upload/fl_attachment/", "/raw/upload/");
 
-    const filename = `${resource.title || "resource"}.pdf`;
-    const blobUrl = window.URL.createObjectURL(pdfBlob);
-    const link = document.createElement("a");
-    link.href = blobUrl;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(blobUrl);
+      const response = await fetch(downloadUrl);
+      const blob = await response.blob();
+      const pdfBlob = new Blob([blob], { type: "application/pdf" });
 
-    toast.success("Downloading…");
-    refetch();
-  } catch {
-    toast.error("Download failed");
-  }
-};
+      const filename = `${resource.title || "resource"}.pdf`;
+      const blobUrl = window.URL.createObjectURL(pdfBlob);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+
+      toast.success("Downloading document… 🎉");
+      refetch();
+    } catch {
+      toast.error("Download failed. Please try again.");
+    }
+  };
 
   const handleRate = async (rating) => {
     setUserRating(rating);
     setRatingLoading(true);
     try {
       await api.post(`/resources/${id}/rate`, { rating });
-      toast.success("Rating saved!");
+      toast.success("Thank you for your rating! ⭐");
       refetch();
-    } catch { toast.error("Rating failed"); }
-    finally { setRatingLoading(false); }
+    } catch {
+      toast.error("Rating submission failed");
+    } finally {
+      setRatingLoading(false);
+    }
   };
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
-    toast.success("Link copied!");
+    toast.success("Resource link copied to clipboard! 📋");
   };
 
-  if (isLoading) return (
-    <div className="max-w-3xl mx-auto space-y-6">
-      <Skeleton className="h-48 rounded-2xl" />
-      <Skeleton className="h-32 rounded-2xl" />
-    </div>
-  );
+  if (isLoading) {
+    return (
+      <div className="max-w-4xl mx-auto space-y-6 py-6">
+        <Skeleton className="h-6 w-32 rounded-lg" />
+        <Skeleton className="h-72 rounded-3xl" />
+        <Skeleton className="h-36 rounded-2xl" />
+      </div>
+    );
+  }
 
-  if (!resource) return <div className="text-center text-slate-400 py-16">Resource not found</div>;
+  if (!resource) {
+    return (
+      <div className="max-w-xl mx-auto text-center py-20">
+        <div className="w-14 h-14 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-4">
+          <FileText className="w-7 h-7" />
+        </div>
+        <h2 className="text-lg font-bold text-slate-800">Resource not found</h2>
+        <p className="text-xs text-slate-500 mt-1 mb-4">
+          This study material may have been removed or is no longer available.
+        </p>
+        <button onClick={() => navigate("/resources")} className="btn btn-primary text-xs px-5 py-2">
+          Back to Resources
+        </button>
+      </div>
+    );
+  }
+
+  const categoryConfig = CATEGORY_STYLES[resource.category] || {
+    badge: "badge-primary",
+    label: resource.category?.replace("_", " ") || "Study Material",
+    icon: FileText,
+  };
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
-      <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
-        <ArrowLeft className="w-4 h-4" /> Back to Resources
+    <div className="max-w-4xl mx-auto space-y-6 animate-fade-in pb-12">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-primary-600 transition-colors"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        <span>Back to Resources</span>
       </button>
 
-      {/* Main card */}
-      <div className="card p-6">
-        <div className="flex items-start justify-between gap-4 mb-4">
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-3">
-              <Badge color={CATEGORY_COLORS[resource.category] || "blue"}>
-                {resource.category?.replace("_", " ")}
-              </Badge>
-              {resource.isDuplicate && <Badge color="red">Possible Duplicate</Badge>}
+      {/* Main Details Card */}
+      <div className="card bg-white p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+        {/* Header Badges & Actions */}
+        <div className="flex items-start justify-between gap-4">
+          <div className="space-y-3 flex-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span
+                className={`badge text-[11px] font-bold uppercase tracking-wider ${categoryConfig.badge}`}
+              >
+                {categoryConfig.label}
+              </span>
+              {resource.fileType && (
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200 uppercase">
+                  {resource.fileType}
+                </span>
+              )}
+              {resource.isDuplicate && (
+                <span className="badge badge-rose text-[10px] font-bold">
+                  Possible Duplicate
+                </span>
+              )}
             </div>
-            <h1 className="text-2xl font-display font-bold text-slate-800 dark:text-slate-100 mb-2">
+
+            <h1 className="text-2xl sm:text-3xl font-display font-bold text-slate-900 leading-snug">
               {resource.title}
             </h1>
+
             {resource.description && (
-              <p className="text-slate-600 dark:text-slate-400">{resource.description}</p>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl">
+                {resource.description}
+              </p>
             )}
           </div>
         </div>
 
-        {/* Metadata grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl mb-5">
+        {/* Metadata Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 bg-slate-50 border border-slate-200/60 rounded-2xl">
           {[
             { label: "Subject", value: resource.subject },
-            { label: "Semester", value: resource.semester ? `Semester ${resource.semester}` : "N/A" },
-            { label: "Branch", value: resource.branch || "All Branches" },
-            { label: "File Type", value: resource.fileType?.toUpperCase() || "N/A" },
+            {
+              label: "Semester",
+              value: resource.semester ? `Semester ${resource.semester}` : "All Semesters",
+            },
+            { label: "Branch", value: resource.branch || "All Departments" },
+            {
+              label: "Format",
+              value: resource.fileType ? resource.fileType.toUpperCase() + " Document" : "PDF Document",
+            },
           ].map(({ label, value }) => (
-            <div key={label}>
-              <p className="text-xs text-slate-400 mb-0.5">{label}</p>
-              <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{value}</p>
+            <div key={label} className="p-2">
+              <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-0.5">
+                {label}
+              </p>
+              <p className="text-xs sm:text-sm font-semibold text-slate-800 truncate">
+                {value}
+              </p>
             </div>
           ))}
         </div>
 
         {/* Tags */}
         {resource.tags?.length > 0 && (
-          <div className="flex items-center gap-2 flex-wrap mb-5">
-            <Tag className="w-4 h-4 text-slate-400" />
-            {resource.tags.map(t => (
-              <span key={t} className="badge bg-slate-100 dark:bg-slate-700 text-slate-500">{t}</span>
+          <div className="flex items-center gap-2 flex-wrap">
+            <Tag className="w-3.5 h-3.5 text-slate-600" />
+            {resource.tags.map((t) => (
+              <span
+                key={t}
+                className="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-medium border border-slate-200/60"
+              >
+                #{t}
+              </span>
             ))}
           </div>
         )}
 
-        {/* Stats row */}
-        <div className="flex items-center gap-6 py-4 border-y border-slate-100 dark:border-slate-700 mb-5">
-          <div className="flex items-center gap-1.5 text-sm text-slate-500">
-            <Download className="w-4 h-4" />
-            <span><strong className="text-slate-700 dark:text-slate-300">{resource.downloadCount}</strong> downloads</span>
+        {/* Engagement Stats Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-4 py-4 border-y border-slate-100 text-xs text-slate-600">
+          <div className="flex items-center gap-6">
+            <span className="flex items-center gap-1.5 font-medium">
+              <Download className="w-4 h-4 text-slate-600" />
+              <span>
+                <strong className="text-slate-900">{resource.downloadCount || 0}</strong> downloads
+              </span>
+            </span>
+
+            <span className="flex items-center gap-1.5 font-medium">
+              <Eye className="w-4 h-4 text-slate-600" />
+              <span>
+                <strong className="text-slate-900">{resource.viewCount || 0}</strong> views
+              </span>
+            </span>
+
+            {resource.averageRating > 0 && (
+              <span className="flex items-center gap-1.5 font-semibold text-amber-600">
+                <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                <span>
+                  {resource.averageRating.toFixed(1)} / 5.0 ({resource.ratings?.length || 0} reviews)
+                </span>
+              </span>
+            )}
           </div>
-          <div className="flex items-center gap-1.5 text-sm text-slate-500">
-            <Eye className="w-4 h-4" />
-            <span><strong className="text-slate-700 dark:text-slate-300">{resource.viewCount}</strong> views</span>
-          </div>
-          {resource.averageRating > 0 && (
-            <div className="flex items-center gap-1.5 text-sm text-slate-500">
-              <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-              <span><strong className="text-slate-700 dark:text-slate-300">{resource.averageRating.toFixed(1)}</strong> rating</span>
-            </div>
-          )}
-          <span className="text-xs text-slate-400 ml-auto">
-            {formatDistanceToNow(new Date(resource.createdAt), { addSuffix: true })}
+
+          <span className="text-[11px] text-slate-600">
+            Uploaded {formatDistanceToNow(new Date(resource.createdAt), { addSuffix: true })}
           </span>
         </div>
 
-        {/* Action buttons */}
-        <div className="flex gap-3">
-          <button onClick={handleDownload} className="btn-primary flex-1 flex items-center justify-center gap-2 py-3">
-            <Download className="w-4 h-4" /> Download Resource
+        {/* Primary Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+          <button
+            onClick={handleDownload}
+            className="btn btn-primary flex-1 py-3.5 rounded-2xl flex items-center justify-center gap-2 text-sm font-semibold shadow-card hover:shadow-card-hover"
+          >
+            <Download className="w-4 h-4" />
+            <span>Download Full Document</span>
           </button>
-          <button onClick={handleShare} className="btn-secondary px-4">
-            <Share2 className="w-4 h-4" />
+
+          <button
+            onClick={handleShare}
+            className="btn btn-secondary px-5 py-3.5 rounded-2xl flex items-center justify-center gap-2 text-sm font-semibold"
+            title="Share Resource Link"
+          >
+            <Share2 className="w-4 h-4 text-slate-600" />
+            <span>Share</span>
           </button>
         </div>
       </div>
 
-      {/* Rating */}
-      <div className="card p-5">
-        <h2 className="font-semibold text-slate-800 dark:text-slate-200 mb-3">Rate this Resource</h2>
-        <div className="flex items-center gap-4">
+      {/* Rate this Resource Section */}
+      <div className="card bg-white p-6 border border-slate-200/80 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h2 className="font-display font-bold text-sm text-slate-900">
+            Rate this Study Material
+          </h2>
+          <p className="text-xs text-slate-600 mt-0.5">
+            Help other students find verified, high-quality notes and questions.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3">
           <StarRating rating={userRating} onRate={handleRate} />
-          {ratingLoading && <span className="text-xs text-slate-400">Saving…</span>}
-          {resource.averageRating > 0 && (
-            <span className="text-sm text-slate-500">
-              Average: <strong className="text-amber-600">{resource.averageRating.toFixed(1)}</strong>
-              /5 ({resource.ratings?.length} ratings)
-            </span>
+          {ratingLoading && (
+            <span className="text-xs font-semibold text-primary-600 animate-pulse">Saving…</span>
           )}
         </div>
       </div>
 
-      {/* Uploader */}
+      {/* Contributor Profile Card */}
       {resource.uploadedBy && (
-        <div className="card p-5">
-          <h2 className="font-semibold text-slate-800 dark:text-slate-200 mb-4">Uploaded by</h2>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Avatar src={resource.uploadedBy.profilePhoto} name={resource.uploadedBy.name} size="lg" />
-              <div>
-                <p className="font-medium text-slate-800 dark:text-slate-200">{resource.uploadedBy.name}</p>
-                <p className="text-sm text-slate-500">{resource.uploadedBy.branch} • {resource.uploadedBy.collegeName}</p>
-              </div>
+        <div className="card bg-white p-6 border border-slate-200/80 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <Avatar
+              src={resource.uploadedBy.profilePhoto}
+              name={resource.uploadedBy.name}
+              size="lg"
+            />
+            <div>
+              <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                Contributor
+              </p>
+              <h3 className="font-display font-bold text-sm text-slate-900 mt-0.5">
+                {resource.uploadedBy.name}
+              </h3>
+              <p className="text-xs text-slate-600 mt-0.5">
+                {resource.uploadedBy.branch || "Student"} • {resource.uploadedBy.collegeName || "Campus Member"}
+              </p>
             </div>
-            <Link to={`/profile/${resource.uploadedBy._id}`} className="btn-secondary text-sm">
-              View Profile
-            </Link>
           </div>
+
+          <Link
+            to={`/profile/${resource.uploadedBy._id}`}
+            className="btn btn-secondary text-xs px-4 py-2 flex items-center gap-1.5"
+          >
+            <span>View Profile</span>
+            <ExternalLink className="w-3.5 h-3.5" />
+          </Link>
         </div>
       )}
     </div>
