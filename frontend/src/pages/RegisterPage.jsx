@@ -104,14 +104,14 @@ export default function RegisterPage() {
       {/* Header */}
       <div>
         <div className="flex items-center justify-between">
-          <h2 className="text-xl sm:text-2xl font-display font-bold text-slate-900 tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-heading font-extrabold text-slate-950 tracking-tight">
             Create Account
           </h2>
-          <span className="text-[11px] font-bold text-primary-700 bg-primary-50 px-2.5 py-1 rounded-full border border-primary-100">
+          <span className="text-[11px] font-bold text-slate-800 bg-warm-100 px-2.5 py-1 rounded-full border border-warm-200">
             Step {step} of 3
           </span>
         </div>
-        <p className="text-xs text-slate-500 mt-1">
+        <p className="text-xs text-slate-500 mt-1 font-medium">
           {stepTitles[step - 1]}
         </p>
       </div>

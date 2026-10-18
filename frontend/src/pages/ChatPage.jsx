@@ -6,22 +6,14 @@ import {
   Search,
   MessageSquare,
   ArrowLeft,
-  Phone,
-  Video,
   Info,
-  Smile,
-  MoreHorizontal,
   Check,
   CheckCheck,
-  Image as ImageIcon,
-  Mic,
   X,
   Sparkles,
   ExternalLink,
   GraduationCap,
   Users,
-  Shield,
-  Clock
 } from "lucide-react";
 import api from "../services/api";
 import {
@@ -169,7 +161,6 @@ export default function ChatPage() {
       content,
     });
 
-    // Optimistic message
     dispatch(
       addMessage({
         _id: Date.now().toString(),
@@ -231,47 +222,47 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-6rem)] min-h-[580px] max-w-7xl mx-auto flex overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-card animate-fade-in font-sans">
+    <div className="h-[calc(100vh-7rem)] min-h-[580px] flex overflow-hidden rounded-3xl border border-[#EAE5D9] bg-white shadow-card">
       {/* =====================================================
-          CONVERSATION SIDEBAR (DESKTOP + MOBILE)
+          CONVERSATION SIDEBAR
       ====================================================== */}
       <aside
-        className={`flex flex-col w-full md:w-80 lg:w-96 border-r border-slate-200/80 bg-white flex-shrink-0 transition-all ${
+        className={`flex flex-col w-full md:w-80 lg:w-96 border-r border-[#EAE5D9] bg-white shrink-0 transition-all ${
           activeUserId ? "hidden md:flex" : "flex"
         }`}
       >
         {/* Sidebar Header */}
-        <div className="p-4 border-b border-slate-100 space-y-3">
+        <div className="p-4 border-b border-[#F2EFE8] space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <h1 className="font-display font-bold text-lg text-slate-900">
-                Messages
+              <h1 className="font-heading font-extrabold text-base text-slate-900">
+                Direct Messages
               </h1>
               {conversations.length > 0 && (
-                <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-primary-50 text-primary-700 border border-primary-100">
+                <span className="rounded-full bg-warm-100 border border-[#EAE5D9] px-2 py-0.5 text-[10px] font-bold text-slate-700">
                   {conversations.length}
                 </span>
               )}
             </div>
-            <span className="text-[11px] font-medium text-slate-600">
-              Peer Network
+            <span className="text-[11px] font-medium text-slate-400">
+              Campus Peers
             </span>
           </div>
 
           {/* Search Box */}
           <div className="relative">
-            <Search className="w-4 h-4 text-slate-600 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchConv}
               onChange={(e) => setSearchConv(e.target.value)}
               placeholder="Search conversations..."
-              className="w-full h-9 pl-9 pr-8 rounded-xl bg-slate-50 border border-slate-200/70 text-xs font-medium text-slate-800 placeholder-slate-600 outline-none focus:bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-500/15 transition-all"
+              className="w-full h-9 pl-9 pr-8 rounded-xl border border-[#EAE5D9] bg-[#FAF9F5] text-xs font-medium text-slate-800 placeholder-slate-400 outline-none focus:bg-white focus:border-slate-900 transition-all"
             />
             {searchConv && (
               <button
                 onClick={() => setSearchConv("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 rounded text-slate-600 hover:text-slate-700"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 text-slate-400 hover:text-slate-700"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -280,15 +271,15 @@ export default function ChatPage() {
         </div>
 
         {/* Conversation List */}
-        <div className="flex-1 overflow-y-auto p-2 space-y-1 divide-y divide-slate-50">
+        <div className="flex-1 overflow-y-auto p-2 space-y-1">
           {filteredConversations.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center p-6 text-center">
-              <div className="w-12 h-12 rounded-2xl bg-primary-50 text-primary-600 flex items-center justify-center mb-3 shadow-2xs">
+              <div className="w-12 h-12 rounded-2xl bg-warm-100 text-slate-500 border border-[#EAE5D9] flex items-center justify-center mb-3 shadow-2xs">
                 <MessageSquare className="w-6 h-6" />
               </div>
-              <p className="text-xs font-semibold text-slate-800">No chats yet</p>
-              <p className="text-[11px] text-slate-600 mt-1 max-w-[200px] leading-relaxed">
-                Connect with teammates on project pages or book a mentor session to start chatting.
+              <p className="text-xs font-bold text-slate-800">No active messages</p>
+              <p className="text-[11px] text-slate-500 mt-1 max-w-[200px] leading-relaxed">
+                Connect with project teammates, reserve books, or book a mentor to start collaborating.
               </p>
             </div>
           ) : (
@@ -304,36 +295,34 @@ export default function ChatPage() {
                   onClick={() => handleConversationClick(conv)}
                   className={`w-full flex items-center gap-3 p-3 rounded-2xl text-left transition-all duration-150 ${
                     isActive
-                      ? "bg-primary-50/80 border border-primary-100 shadow-2xs"
-                      : "hover:bg-slate-50 border border-transparent"
+                      ? "bg-warm-100 border border-[#EAE5D9] shadow-2xs"
+                      : "hover:bg-[#FAF9F5] border border-transparent"
                   }`}
                 >
-                  {/* Avatar & Online Dot */}
-                  <div className="relative flex-shrink-0">
+                  <div className="relative shrink-0">
                     <Avatar
                       src={conv.otherUser?.profilePhoto}
                       name={conv.otherUser?.name || "Student"}
                       size="md"
                     />
                     {isOnline(otherId) && (
-                      <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white" />
+                      <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-white" />
                     )}
                   </div>
 
-                  {/* Body */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-1 mb-0.5">
                       <p
                         className={`text-xs truncate ${
                           isActive || unread > 0
-                            ? "font-bold text-slate-900"
-                            : "font-semibold text-slate-700"
+                            ? "font-bold text-slate-900 font-heading"
+                            : "font-semibold text-slate-700 font-heading"
                         }`}
                       >
                         {conv.otherUser?.name || "Student"}
                       </p>
                       {lastMsg?.createdAt && (
-                        <span className="text-[10px] font-medium text-slate-600 flex-shrink-0">
+                        <span className="text-[10px] text-slate-400 shrink-0">
                           {formatDistanceToNow(new Date(lastMsg.createdAt), {
                             addSuffix: false,
                           })}
@@ -344,13 +333,13 @@ export default function ChatPage() {
                     <div className="flex items-center justify-between gap-1">
                       <p
                         className={`text-[11px] truncate ${
-                          unread > 0 ? "font-semibold text-slate-800" : "text-slate-600"
+                          unread > 0 ? "font-semibold text-slate-900" : "text-slate-500"
                         }`}
                       >
                         {lastMsg?.content || "Start conversation…"}
                       </p>
                       {unread > 0 && (
-                        <span className="px-1.5 py-0.2 rounded-full bg-rose-500 text-white text-[9px] font-bold min-w-[16px] text-center flex-shrink-0">
+                        <span className="px-1.5 py-0.5 rounded-full bg-slate-900 text-white text-[9px] font-bold min-w-[16px] text-center shrink-0">
                           {unread > 99 ? "99+" : unread}
                         </span>
                       )}
@@ -367,64 +356,61 @@ export default function ChatPage() {
           MAIN CHAT PANE
       ====================================================== */}
       {!activeUserId ? (
-        /* Empty Desktop State */
-        <main className="hidden md:flex flex-1 flex-col items-center justify-center p-8 bg-slate-50/50 text-center">
-          <div className="w-16 h-16 rounded-3xl bg-primary-50 text-primary-600 flex items-center justify-center mx-auto mb-4 shadow-card">
+        <main className="hidden md:flex flex-1 flex-col items-center justify-center p-8 bg-[#FAF9F5] text-center">
+          <div className="w-16 h-16 rounded-2xl bg-white border border-[#EAE5D9] text-slate-700 flex items-center justify-center mx-auto mb-4 shadow-2xs">
             <MessageSquare className="w-8 h-8" />
           </div>
-          <h2 className="font-display font-bold text-lg text-slate-900">
-            Select a Conversation
+          <h2 className="font-heading font-extrabold text-lg text-slate-900">
+            Select a Peer Conversation
           </h2>
-          <p className="text-xs text-slate-600 mt-1 max-w-sm leading-relaxed">
-            Chat in real-time with your classmates, project partners, and mentors across colleges.
+          <p className="text-xs text-slate-500 mt-1 max-w-sm leading-relaxed">
+            Message in real-time with classmates, project teammates, and mentors across campus.
           </p>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200/80 text-[11px] font-semibold text-slate-700 mt-5 shadow-2xs">
-            <Sparkles className="w-3.5 h-3.5 text-primary-600" />
-            <span>Real-time instant communication</span>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-[#EAE5D9] text-[11px] font-semibold text-slate-700 mt-5 shadow-2xs">
+            <Sparkles className="w-3.5 h-3.5 text-slate-500" />
+            <span>Real-time instant collaboration</span>
           </div>
         </main>
       ) : (
-        /* Active Chat Workspace */
-        <main className="flex-1 flex flex-col min-w-0 bg-slate-50/40">
+        <main className="flex-1 flex flex-col min-w-0 bg-[#FAF9F5]">
           {/* Header */}
-          <header className="h-16 px-4 sm:px-6 bg-white border-b border-slate-200/80 flex items-center justify-between flex-shrink-0 shadow-2xs">
+          <header className="h-16 px-4 sm:px-6 bg-white border-b border-[#EAE5D9] flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3 min-w-0">
-              {/* Back on Mobile */}
               <button
                 onClick={closeChat}
-                className="md:hidden p-1.5 rounded-xl text-slate-600 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+                className="md:hidden p-1.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-warm-100 transition-colors"
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
 
               {activeUser ? (
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="relative flex-shrink-0">
+                  <div className="relative shrink-0">
                     <Avatar
                       src={activeUser.profilePhoto}
                       name={activeUser.name}
                       size="md"
                     />
                     {isOnline(activeUserId) && (
-                      <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white" />
+                      <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-white" />
                     )}
                   </div>
                   <div className="min-w-0">
-                    <h2 className="font-display font-bold text-sm text-slate-900 truncate">
+                    <h2 className="font-heading font-bold text-sm text-slate-900 truncate">
                       {activeUser.name}
                     </h2>
                     <p className="text-[11px] truncate flex items-center gap-1">
                       {isTyping ? (
-                        <span className="font-bold text-primary-600 animate-pulse">
+                        <span className="font-bold text-slate-900 animate-pulse">
                           typing a message…
                         </span>
                       ) : isOnline(activeUserId) ? (
-                        <span className="font-semibold text-emerald-600 flex items-center gap-1">
+                        <span className="font-semibold text-emerald-700 flex items-center gap-1">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                           <span>Active now</span>
                         </span>
                       ) : (
-                        <span className="text-slate-600">
+                        <span className="text-slate-500">
                           {activeUser.branch || "Student"}
                           {activeUser.collegeName ? ` • ${activeUser.collegeName}` : ""}
                         </span>
@@ -434,31 +420,30 @@ export default function ChatPage() {
                 </div>
               ) : (
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-slate-200 animate-pulse" />
-                  <div className="w-28 h-4 bg-slate-200 rounded animate-pulse" />
+                  <div className="w-8 h-8 rounded-full bg-slate-200 animate-pulse" />
+                  <div className="w-24 h-4 bg-slate-200 rounded animate-pulse" />
                 </div>
               )}
             </div>
 
-            {/* Header Actions */}
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setShowInfo(!showInfo)}
                 className={`p-2 rounded-xl transition-colors ${
                   showInfo
-                    ? "bg-primary-50 text-primary-600"
-                    : "text-slate-600 hover:text-slate-800 hover:bg-slate-100"
+                    ? "bg-warm-100 text-slate-900"
+                    : "text-slate-500 hover:text-slate-900 hover:bg-warm-100"
                 }`}
-                title="Student Info"
+                title="Student Details"
               >
                 <Info className="w-4 h-4" />
               </button>
             </div>
           </header>
 
-          {/* Info Drawer (Collapsible) */}
+          {/* Info Drawer */}
           {showInfo && activeUser && (
-            <div className="p-4 bg-primary-50/50 border-b border-primary-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 animate-slide-down">
+            <div className="p-4 bg-white border-b border-[#EAE5D9] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 animate-slide-down">
               <div className="flex items-center gap-3">
                 <Avatar
                   src={activeUser.profilePhoto}
@@ -466,19 +451,21 @@ export default function ChatPage() {
                   size="md"
                 />
                 <div>
-                  <p className="font-bold text-xs text-slate-900">{activeUser.name}</p>
-                  <p className="text-[11px] text-slate-600">
-                    {activeUser.branch || "Engineering"} • Semester {activeUser.semester || "1"} •{" "}
-                    {activeUser.collegeName || "Campus"}
+                  <p className="font-bold font-heading text-xs text-slate-900">
+                    {activeUser.name}
+                  </p>
+                  <p className="text-[11px] text-slate-500">
+                    {activeUser.branch || "Student"} • Semester {activeUser.semester || "1"} •{" "}
+                    {activeUser.collegeName || "Campus Member"}
                   </p>
                 </div>
               </div>
 
               <Link
                 to={`/profile/${activeUser._id}`}
-                className="btn btn-secondary text-xs py-1.5 px-3 flex items-center gap-1"
+                className="rounded-xl border border-[#EAE5D9] bg-warm-100 px-3 py-1.5 text-xs font-semibold text-slate-800 hover:bg-slate-900 hover:text-white transition-all inline-flex items-center gap-1 shadow-2xs"
               >
-                <span>View Full Profile</span>
+                <span>View Student Profile</span>
                 <ExternalLink className="w-3 h-3" />
               </Link>
             </div>
@@ -488,8 +475,8 @@ export default function ChatPage() {
           <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-3">
             {loadingMessages ? (
               <div className="h-full flex items-center justify-center">
-                <div className="flex flex-col items-center gap-2 text-xs font-semibold text-slate-600">
-                  <div className="w-6 h-6 border-2 border-primary-600 border-t-transparent rounded-full animate-spin" />
+                <div className="flex flex-col items-center gap-2 text-xs font-semibold text-slate-500">
+                  <div className="w-5 h-5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin" />
                   <span>Loading messages…</span>
                 </div>
               </div>
@@ -501,17 +488,17 @@ export default function ChatPage() {
                       src={activeUser.profilePhoto}
                       name={activeUser.name}
                       size="lg"
-                      className="mb-3 shadow-card"
+                      className="mb-3 shadow-2xs ring-2 ring-[#EAE5D9]"
                     />
-                    <h3 className="font-display font-bold text-sm text-slate-900">
+                    <h3 className="font-heading font-bold text-sm text-slate-900">
                       {activeUser.name}
                     </h3>
-                    <p className="text-xs text-slate-600 mt-0.5 max-w-xs">
-                      Send a message to start collaborating on notes, projects, or study plans!
+                    <p className="text-xs text-slate-500 mt-1 max-w-xs leading-relaxed">
+                      Start collaborating on study materials, project milestones, or book exchanges!
                     </p>
                     <button
                       onClick={() => setInput("Hi! 👋 Ready to collaborate on EduBridge?")}
-                      className="mt-3 px-3.5 py-1.5 rounded-full bg-primary-50 hover:bg-primary-100 text-primary-700 text-xs font-semibold border border-primary-200 shadow-2xs transition-all"
+                      className="mt-3.5 px-3.5 py-1.5 rounded-full bg-white hover:bg-warm-100 text-slate-800 text-xs font-semibold border border-[#EAE5D9] shadow-2xs transition-all"
                     >
                       Say Hello 👋
                     </button>
@@ -530,17 +517,15 @@ export default function ChatPage() {
                         isMine ? "justify-end" : "justify-start"
                       }`}
                     >
-                      {/* Other User Avatar */}
                       {!isMine && (
                         <Avatar
                           src={activeUser?.profilePhoto}
                           name={activeUser?.name}
                           size="sm"
-                          className="flex-shrink-0 mb-1"
+                          className="shrink-0 mb-1"
                         />
                       )}
 
-                      {/* Bubble */}
                       <div
                         className={`flex flex-col max-w-[78%] sm:max-w-[65%] ${
                           isMine ? "items-end" : "items-start"
@@ -549,16 +534,15 @@ export default function ChatPage() {
                         <div
                           className={`px-4 py-2.5 text-xs sm:text-sm leading-relaxed ${
                             isMine
-                              ? "bg-primary-600 text-white rounded-2xl rounded-br-xs shadow-xs"
-                              : "bg-white border border-slate-200/80 text-slate-800 rounded-2xl rounded-bl-xs shadow-2xs"
+                              ? "bg-slate-900 text-white rounded-2xl rounded-br-xs shadow-2xs"
+                              : "bg-white border border-[#EAE5D9] text-slate-900 rounded-2xl rounded-bl-xs shadow-2xs"
                           }`}
                         >
                           <p className="break-words whitespace-pre-wrap">{msg.content}</p>
                         </div>
 
-                        {/* Timestamp & Read Receipt */}
                         <div
-                          className={`flex items-center gap-1 mt-1 text-[10px] text-slate-600 px-1 ${
+                          className={`flex items-center gap-1 mt-1 text-[10px] text-slate-400 px-1 ${
                             isMine ? "justify-end" : "justify-start"
                           }`}
                         >
@@ -569,23 +553,22 @@ export default function ChatPage() {
                                 })
                               : "just now"}
                           </span>
-                          {isMine && <CheckCheck className="w-3 h-3 text-primary-600" />}
+                          {isMine && <CheckCheck className="w-3 h-3 text-slate-600" />}
                         </div>
                       </div>
                     </div>
                   );
                 })}
 
-                {/* Real-time Typing Bubble */}
                 {isTyping && (
                   <div className="flex items-end gap-2">
                     <Avatar
                       src={activeUser?.profilePhoto}
                       name={activeUser?.name}
                       size="sm"
-                      className="flex-shrink-0 mb-1"
+                      className="shrink-0 mb-1"
                     />
-                    <div className="px-3.5 py-2.5 rounded-2xl rounded-bl-xs bg-white border border-slate-200 shadow-2xs flex items-center gap-1">
+                    <div className="px-3 py-2 rounded-2xl rounded-bl-xs bg-white border border-[#EAE5D9] shadow-2xs flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce" />
                       <span
                         className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce"
@@ -604,39 +587,38 @@ export default function ChatPage() {
             )}
           </div>
 
-          {/* Message Composer Area */}
-          <div className="p-3 sm:p-4 bg-white border-t border-slate-200/80">
+          {/* Composer */}
+          <div className="p-3 sm:p-4 bg-white border-t border-[#EAE5D9]">
             <form onSubmit={handleSend} className="max-w-3xl mx-auto flex items-center gap-2">
-              <div className="relative flex-1 flex items-center rounded-2xl bg-slate-50 border border-slate-200/80 focus-within:bg-white focus-within:border-primary-500 focus-within:ring-3 focus-within:ring-primary-500/15 transition-all">
+              <div className="relative flex-1 flex items-center rounded-2xl bg-[#FAF9F5] border border-[#EAE5D9] focus-within:bg-white focus-within:border-slate-900 transition-all">
                 <input
                   type="text"
                   value={input}
                   onChange={handleTyping}
                   placeholder="Type a message to collaborate…"
-                  className="w-full h-11 bg-transparent px-4 text-xs sm:text-sm text-slate-800 placeholder-slate-600 outline-none"
+                  className="w-full h-11 bg-transparent px-4 text-xs sm:text-sm text-slate-800 placeholder-slate-400 outline-none"
                 />
 
                 {input.trim() && (
                   <button
                     type="button"
                     onClick={() => setInput("")}
-                    className="p-1.5 mr-2 rounded-lg text-slate-600 hover:text-slate-800"
+                    className="p-1.5 mr-2 rounded-lg text-slate-400 hover:text-slate-700"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
                 )}
               </div>
 
-              {/* Send Button */}
               <button
                 type="submit"
                 disabled={!input.trim()}
-                className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-all duration-200 ${
+                className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-all ${
                   input.trim()
-                    ? "bg-primary-600 text-white shadow-card hover:shadow-card-hover hover:scale-105 active:scale-95"
-                    : "bg-slate-100 text-slate-600 cursor-not-allowed"
+                    ? "bg-slate-900 text-white shadow-2xs hover:bg-slate-800"
+                    : "bg-slate-100 text-slate-400 cursor-not-allowed"
                 }`}
-                title="Send message"
+                title="Send"
               >
                 <Send className="w-4 h-4 ml-0.5" />
               </button>

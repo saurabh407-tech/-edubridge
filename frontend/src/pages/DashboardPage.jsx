@@ -38,20 +38,20 @@ function StatCard({ icon: Icon, label, value, colorStyle, isLoading, to }) {
   return (
     <Link
       to={to || "#"}
-      className="card group relative overflow-hidden p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover border border-slate-200/80 bg-white flex flex-col justify-between"
+      className="card group relative overflow-hidden p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover border border-[#EAE5D9] bg-white flex flex-col justify-between"
     >
       {/* Subtle background glow */}
       <div
-        className={`absolute -top-8 -right-8 w-24 h-24 rounded-full ${colorStyle.glow} blur-2xl opacity-40 pointer-events-none group-hover:opacity-70 transition-opacity`}
+        className={`absolute -top-8 -right-8 w-24 h-24 rounded-full ${colorStyle.glow} blur-2xl opacity-30 pointer-events-none group-hover:opacity-50 transition-opacity`}
       />
 
       <div className="flex items-center justify-between mb-4">
         <div
-          className={`w-11 h-11 rounded-2xl ${colorStyle.bg} ${colorStyle.text} flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform`}
+          className={`w-11 h-11 rounded-2xl ${colorStyle.bg} ${colorStyle.text} flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform`}
         >
           <Icon className="w-5 h-5" />
         </div>
-        <span className="text-[11px] font-semibold text-slate-600 group-hover:text-primary-600 flex items-center gap-0.5 transition-colors">
+        <span className="text-[11px] font-semibold text-slate-400 group-hover:text-primary-600 flex items-center gap-0.5 transition-colors">
           <span>View</span>
           <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
         </span>
@@ -61,11 +61,11 @@ function StatCard({ icon: Icon, label, value, colorStyle, isLoading, to }) {
         {isLoading ? (
           <div className="h-8 w-20 bg-slate-100 rounded-lg animate-pulse mb-1.5" />
         ) : (
-          <div className="text-2xl sm:text-3xl font-display font-bold text-slate-900 mb-1 tracking-tight">
+          <div className="text-2xl sm:text-3xl font-heading font-extrabold text-slate-950 mb-1 tracking-tight">
             {typeof value === "number" ? value.toLocaleString() : value}
           </div>
         )}
-        <p className="text-xs font-medium text-slate-600">{label}</p>
+        <p className="text-xs font-medium text-slate-500">{label}</p>
       </div>
     </Link>
   );
@@ -79,14 +79,14 @@ function QuickActionTile({ icon: Icon, label, to, colorStyle }) {
   return (
     <Link
       to={to}
-      className="flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-slate-50 transition-all duration-200 group border border-transparent hover:border-slate-200/60"
+      className="flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-warm-100/80 transition-all duration-200 group border border-transparent hover:border-warm-200/80"
     >
       <div
-        className={`w-11 h-11 rounded-xl ${colorStyle.bg} ${colorStyle.text} flex items-center justify-center shadow-2xs group-hover:scale-110 group-hover:shadow-card transition-all duration-200`}
+        className={`w-11 h-11 rounded-xl ${colorStyle.bg} ${colorStyle.text} flex items-center justify-center shadow-xs group-hover:scale-105 group-hover:shadow-card transition-all duration-200`}
       >
         <Icon className="w-5 h-5" />
       </div>
-      <span className="text-xs font-semibold text-slate-700 group-hover:text-primary-700 text-center line-clamp-1 transition-colors">
+      <span className="text-xs font-semibold text-slate-700 group-hover:text-slate-950 text-center line-clamp-1 transition-colors">
         {label}
       </span>
     </Link>
@@ -256,25 +256,25 @@ export default function DashboardPage() {
       {/* =========================================================
           HERO BANNER & STUDENT IDENTITY
       ========================================================== */}
-      <div className="relative rounded-3xl overflow-hidden p-6 sm:p-8 bg-gradient-to-r from-primary-600 via-indigo-600 to-sky-600 text-white shadow-card">
-        {/* Ambient background glows */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-sky-300/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="relative rounded-3xl overflow-hidden p-6 sm:p-8 bg-slate-900 text-white shadow-elevated border border-slate-800">
+        {/* Subtle ambient lighting */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary-600/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           {/* Left Info */}
           <div className="space-y-3 flex-1">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-xs font-semibold">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs font-semibold text-slate-200">
               <span>{greetEmoji}</span>
               <span>{greeting}</span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold tracking-tight text-white">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-heading font-extrabold tracking-tight text-white">
               {user?.name || "Student"}
             </h1>
 
-            <p className="text-xs sm:text-sm text-primary-100 flex flex-wrap items-center gap-2">
-              <span className="font-medium">{user?.branch || "General Engineering"}</span>
+            <p className="text-xs sm:text-sm text-slate-300 flex flex-wrap items-center gap-2">
+              <span className="font-semibold text-white">{user?.branch || "General Engineering"}</span>
               <span>•</span>
               <span>Semester {user?.semester || "1"}</span>
               {user?.collegeName && (
@@ -305,14 +305,14 @@ export default function DashboardPage() {
                 },
               ].map(({ label, value, icon: Icon }) => (
                 <div key={label} className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center shadow-2xs">
-                    <Icon className="w-4 h-4 text-white" />
+                  <div className="w-8 h-8 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center shadow-xs">
+                    <Icon className="w-4 h-4 text-slate-200" />
                   </div>
                   <div>
-                    <p className="text-base sm:text-lg font-display font-bold leading-none text-white">
+                    <p className="text-base sm:text-lg font-heading font-extrabold leading-none text-white">
                       {value}
                     </p>
-                    <p className="text-[11px] text-primary-100 mt-0.5">{label}</p>
+                    <p className="text-[11px] text-slate-400 mt-0.5 font-medium">{label}</p>
                   </div>
                 </div>
               ))}
@@ -327,17 +327,17 @@ export default function DashboardPage() {
                   user?.profilePhoto ||
                   `https://ui-avatars.com/api/?name=${encodeURIComponent(
                     user?.name || "Student"
-                  )}&background=ffffff&color=4f46e5&size=128&bold=true`
+                  )}&background=1e293b&color=ffffff&size=128&bold=true`
                 }
                 alt={user?.name || "Student"}
-                className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover border-2 border-white/50 shadow-elevated group-hover:scale-105 transition-transform"
+                className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover border-2 border-white/20 shadow-elevated group-hover:scale-105 transition-transform"
               />
-              <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-400 rounded-full border-2 border-white" />
+              <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-400 rounded-full border-2 border-slate-900" />
             </Link>
 
             <Link
               to="/profile"
-              className="px-3.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/20 text-xs font-semibold text-white transition-all flex items-center gap-1.5"
+              className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/15 text-xs font-semibold text-white transition-all flex items-center gap-1.5"
             >
               <User className="w-3.5 h-3.5" />
               <span>Edit Profile</span>
@@ -347,14 +347,14 @@ export default function DashboardPage() {
 
         {/* Profile Completion Bar (if incomplete) */}
         {completionPct < 100 && (
-          <div className="relative z-10 mt-6 pt-4 border-t border-white/15 bg-white/10 rounded-2xl p-3.5">
+          <div className="relative z-10 mt-6 pt-4 border-t border-white/10 bg-white/5 rounded-2xl p-3.5 border border-white/10">
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-xs font-semibold text-white">Profile Strength</span>
+              <span className="text-xs font-semibold text-slate-200">Profile Strength</span>
               <span className="text-xs font-bold text-white">{completionPct}% Complete</span>
             </div>
-            <div className="h-2 bg-white/20 rounded-full overflow-hidden">
+            <div className="h-2 bg-white/10 rounded-full overflow-hidden">
               <div
-                className="h-full rounded-full bg-white transition-all duration-700"
+                className="h-full rounded-full bg-primary-500 transition-all duration-700"
                 style={{ width: `${completionPct}%` }}
               />
             </div>

@@ -66,13 +66,13 @@ export default function VerifyOTPPage() {
   return (
     <div className="text-center space-y-6">
       {/* Icon Badge */}
-      <div className="w-14 h-14 bg-primary-50 rounded-2xl flex items-center justify-center mx-auto text-primary-600 shadow-card">
+      <div className="w-14 h-14 bg-slate-900 rounded-2xl flex items-center justify-center mx-auto text-white shadow-card">
         <ShieldCheck className="w-7 h-7" />
       </div>
 
       {/* Title */}
       <div>
-        <h2 className="text-xl sm:text-2xl font-display font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl sm:text-2xl font-heading font-extrabold text-slate-950 tracking-tight">
           Verify Your Email
         </h2>
         <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-xs mx-auto">

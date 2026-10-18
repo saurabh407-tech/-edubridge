@@ -58,7 +58,7 @@ export default function LoginPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-xl sm:text-2xl font-display font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl sm:text-2xl font-heading font-extrabold text-slate-950 tracking-tight">
           Welcome back
         </h2>
         <p className="text-xs sm:text-sm text-slate-500 mt-1">

@@ -142,7 +142,7 @@ export default function ResourceDetailPage() {
       </button>
 
       {/* Main Details Card */}
-      <div className="card bg-white p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+      <div className="card bg-white p-6 sm:p-8 border border-[#EAE5D9] shadow-card space-y-6">
         {/* Header Badges & Actions */}
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-3 flex-1">
@@ -153,7 +153,7 @@ export default function ResourceDetailPage() {
                 {categoryConfig.label}
               </span>
               {resource.fileType && (
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200 uppercase">
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-warm-100 text-slate-700 border border-warm-200 uppercase">
                   {resource.fileType}
                 </span>
               )}
@@ -164,7 +164,7 @@ export default function ResourceDetailPage() {
               )}
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-display font-bold text-slate-900 leading-snug">
+            <h1 className="text-2xl sm:text-3xl font-heading font-extrabold text-slate-950 leading-snug">
               {resource.title}
             </h1>
 
@@ -177,7 +177,7 @@ export default function ResourceDetailPage() {
         </div>
 
         {/* Metadata Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 bg-slate-50 border border-slate-200/60 rounded-2xl">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 bg-[#FAF9F5] border border-[#EAE5D9] rounded-2xl">
           {[
             { label: "Subject", value: resource.subject },
             {
@@ -191,10 +191,10 @@ export default function ResourceDetailPage() {
             },
           ].map(({ label, value }) => (
             <div key={label} className="p-2">
-              <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-0.5">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
                 {label}
               </p>
-              <p className="text-xs sm:text-sm font-semibold text-slate-800 truncate">
+              <p className="text-xs sm:text-sm font-bold text-slate-800 truncate">
                 {value}
               </p>
             </div>
@@ -204,11 +204,11 @@ export default function ResourceDetailPage() {
         {/* Tags */}
         {resource.tags?.length > 0 && (
           <div className="flex items-center gap-2 flex-wrap">
-            <Tag className="w-3.5 h-3.5 text-slate-600" />
+            <Tag className="w-3.5 h-3.5 text-slate-400" />
             {resource.tags.map((t) => (
               <span
                 key={t}
-                className="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-medium border border-slate-200/60"
+                className="px-2.5 py-1 rounded-lg bg-warm-100 text-slate-700 text-xs font-semibold border border-warm-200"
               >
                 #{t}
               </span>
@@ -217,24 +217,24 @@ export default function ResourceDetailPage() {
         )}
 
         {/* Engagement Stats Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 py-4 border-y border-slate-100 text-xs text-slate-600">
+        <div className="flex flex-wrap items-center justify-between gap-4 py-4 border-y border-slate-100 text-xs text-slate-500">
           <div className="flex items-center gap-6">
             <span className="flex items-center gap-1.5 font-medium">
-              <Download className="w-4 h-4 text-slate-600" />
+              <Download className="w-4 h-4 text-slate-400" />
               <span>
                 <strong className="text-slate-900">{resource.downloadCount || 0}</strong> downloads
               </span>
             </span>
 
             <span className="flex items-center gap-1.5 font-medium">
-              <Eye className="w-4 h-4 text-slate-600" />
+              <Eye className="w-4 h-4 text-slate-400" />
               <span>
                 <strong className="text-slate-900">{resource.viewCount || 0}</strong> views
               </span>
             </span>
 
             {resource.averageRating > 0 && (
-              <span className="flex items-center gap-1.5 font-semibold text-amber-600">
+              <span className="flex items-center gap-1.5 font-bold text-amber-600">
                 <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
                 <span>
                   {resource.averageRating.toFixed(1)} / 5.0 ({resource.ratings?.length || 0} reviews)
@@ -243,7 +243,7 @@ export default function ResourceDetailPage() {
             )}
           </div>
 
-          <span className="text-[11px] text-slate-600">
+          <span className="text-[11px] text-slate-400 font-medium">
             Uploaded {formatDistanceToNow(new Date(resource.createdAt), { addSuffix: true })}
           </span>
         </div>
@@ -252,7 +252,7 @@ export default function ResourceDetailPage() {
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
           <button
             onClick={handleDownload}
-            className="btn btn-primary flex-1 py-3.5 rounded-2xl flex items-center justify-center gap-2 text-sm font-semibold shadow-card hover:shadow-card-hover"
+            className="btn-primary flex-1 py-3.5 rounded-xl flex items-center justify-center gap-2 text-sm font-bold shadow-xs hover:shadow-card-hover"
           >
             <Download className="w-4 h-4" />
             <span>Download Full Document</span>

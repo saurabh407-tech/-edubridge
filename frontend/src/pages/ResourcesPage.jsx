@@ -171,22 +171,22 @@ export default function ResourcesPage() {
       {/* =====================================================
           HEADER & SEARCH HERO BANNER
       ====================================================== */}
-      <section className="relative rounded-3xl overflow-hidden p-6 sm:p-8 bg-gradient-to-r from-primary-600 via-indigo-600 to-sky-600 text-white shadow-card">
+      <section className="relative rounded-3xl overflow-hidden p-6 sm:p-8 bg-slate-900 text-white shadow-elevated border border-slate-800">
         {/* Ambient glows */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-sky-300/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary-600/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-xs font-semibold">
-            <Sparkles className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs font-semibold text-slate-200">
+            <Sparkles className="w-3.5 h-3.5 text-primary-400" />
             <span>Curated Academic Repository</span>
           </div>
 
-          <h1 className="text-2xl sm:text-4xl font-display font-bold tracking-tight text-white leading-tight">
+          <h1 className="text-2xl sm:text-4xl font-heading font-extrabold tracking-tight text-white leading-tight">
             Explore Study Resources & Notes
           </h1>
 
-          <p className="text-xs sm:text-sm text-primary-100 max-w-xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
             Discover verified handwritten notes, PYQs, practical manuals, and exam guides shared by students and top achievers.
           </p>
 
@@ -202,7 +202,7 @@ export default function ResourcesPage() {
                   setPage(1);
                 }}
                 placeholder="Search by subject, topic, course code, or notes..."
-                className="w-full h-12 pl-11 pr-10 rounded-2xl bg-white text-slate-900 text-xs sm:text-sm font-medium placeholder-slate-400 shadow-md focus:outline-none focus:ring-4 focus:ring-white/30"
+                className="w-full h-12 pl-11 pr-10 rounded-xl bg-white text-slate-900 text-xs sm:text-sm font-medium placeholder-slate-400 shadow-sm focus:outline-none focus:ring-4 focus:ring-white/20"
               />
               {search && (
                 <button
@@ -216,7 +216,7 @@ export default function ResourcesPage() {
 
             <button
               onClick={() => setShowUpload(true)}
-              className="h-12 px-6 rounded-2xl bg-white text-primary-700 hover:bg-slate-50 font-bold text-xs sm:text-sm shadow-md flex items-center justify-center gap-2 hover:-translate-y-0.5 transition-all flex-shrink-0"
+              className="h-12 px-6 rounded-xl bg-white text-slate-950 hover:bg-slate-100 font-bold text-xs sm:text-sm shadow-sm flex items-center justify-center gap-2 hover:-translate-y-0.5 transition-all flex-shrink-0"
             >
               <Upload className="w-4 h-4" />
               <span>Share Notes</span>
@@ -230,7 +230,7 @@ export default function ResourcesPage() {
       ====================================================== */}
       <section>
         <div className="flex items-center justify-between mb-3 px-1">
-          <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
             Explore Categories
           </p>
           {filters.category && (
@@ -249,8 +249,8 @@ export default function ResourcesPage() {
             onClick={() => setFilter("category", "")}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold flex-shrink-0 transition-all ${
               !filters.category
-                ? "bg-primary-600 text-white shadow-card"
-                : "bg-white text-slate-700 border border-slate-200/80 hover:bg-slate-50 hover:border-slate-300 shadow-2xs"
+                ? "bg-slate-900 text-white shadow-xs"
+                : "bg-white text-slate-700 border border-[#EAE5D9] hover:bg-warm-100 hover:text-slate-950 shadow-2xs"
             }`}
           >
             <FolderOpen className="w-3.5 h-3.5" />

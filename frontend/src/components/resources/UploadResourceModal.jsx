@@ -89,7 +89,7 @@ export default function UploadResourceModal({ isOpen, onClose, onSuccess }) {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Share Study Material">
+    <Modal isOpen={isOpen} onClose={onClose} title="Share Study Material" size="lg">
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Dropzone Container */}
         <div
@@ -97,21 +97,21 @@ export default function UploadResourceModal({ isOpen, onClose, onSuccess }) {
           className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition-all duration-200 ${
             isDragActive
               ? "border-primary-500 bg-primary-50/70"
-              : "border-slate-200 hover:border-primary-400 bg-slate-50/50 hover:bg-slate-50"
+              : "border-[#EAE5D9] hover:border-slate-400 bg-[#FAF9F5] hover:bg-warm-100/50"
           }`}
         >
           <input {...getInputProps()} />
           {file ? (
-            <div className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200 shadow-2xs">
+            <div className="flex items-center justify-between p-3.5 rounded-xl bg-white border border-[#EAE5D9] shadow-xs">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center flex-shrink-0">
                   <CheckCircle className="w-5 h-5" />
                 </div>
                 <div className="text-left min-w-0">
-                  <p className="font-semibold text-slate-800 text-xs truncate max-w-xs sm:max-w-sm">
+                  <p className="font-bold text-slate-900 text-xs truncate max-w-xs sm:max-w-sm">
                     {file.name}
                   </p>
-                  <p className="text-[11px] text-slate-600">
+                  <p className="text-[11px] text-slate-500">
                     {(file.size / 1024 / 1024).toFixed(2)} MB • Ready to upload
                   </p>
                 </div>
@@ -122,7 +122,7 @@ export default function UploadResourceModal({ isOpen, onClose, onSuccess }) {
                   e.stopPropagation();
                   setFile(null);
                 }}
-                className="p-1.5 rounded-lg text-slate-600 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
                 title="Remove file"
               >
                 <X className="w-4 h-4" />
@@ -130,13 +130,13 @@ export default function UploadResourceModal({ isOpen, onClose, onSuccess }) {
             </div>
           ) : (
             <div className="py-2">
-              <div className="w-12 h-12 rounded-2xl bg-primary-50 text-primary-600 flex items-center justify-center mx-auto mb-3 shadow-2xs">
-                <Upload className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center mx-auto mb-3 shadow-xs">
+                <Upload className="w-5 h-5" />
               </div>
-              <p className="text-xs font-semibold text-slate-800">
+              <p className="text-xs font-bold text-slate-900">
                 {isDragActive ? "Release to drop the document" : "Drag and drop document, or browse"}
               </p>
-              <p className="text-[11px] text-slate-600 mt-1">
+              <p className="text-[11px] text-slate-500 mt-1">
                 PDF, DOCX, PPT, ZIP, Images • Up to 50MB
               </p>
             </div>

@@ -8,55 +8,47 @@ import {
   Users,
   Briefcase,
   Search,
-  Target,
-  TrendingUp,
   CheckCircle,
   AlertCircle,
   ArrowRight,
-  Zap,
-  Star,
   BookOpen,
   ChevronRight,
   Loader2,
-  Check,
   Bot,
-  Flame,
-  Award,
   ExternalLink
 } from "lucide-react";
 import api from "../services/api";
 import toast from "react-hot-toast";
-import { CardSkeleton } from "../components/common";
 import { useNavigate } from "react-router-dom";
 
 // ── Reusable AI Card wrapper ──
-function AICard({ icon: Icon, title, description, badge, iconBg, children }) {
+function AICard({ icon: Icon, title, description, badge, children }) {
   return (
-    <div className="bg-white rounded-3xl border border-slate-200/80 shadow-soft hover:shadow-card transition-all duration-200 overflow-hidden flex flex-col justify-between">
-      <div className="p-6 border-b border-slate-100">
-        <div className="flex items-start justify-between gap-3 mb-3">
-          <div
-            className={`w-11 h-11 rounded-2xl flex items-center justify-center border shadow-xs ${
-              iconBg || "bg-primary-50 border-primary-100 text-primary-600"
-            }`}
-          >
+    <div className="flex flex-col justify-between overflow-hidden rounded-3xl border border-[#EAE5D9] bg-white p-6 shadow-card transition-all duration-200">
+      <div>
+        <div className="flex items-start justify-between gap-3 mb-3.5">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-warm-100 text-slate-800 border border-[#EAE5D9] shadow-2xs">
             <Icon className="w-5 h-5" />
           </div>
           {badge && (
-            <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-primary-50 text-primary-700 border border-primary-100/80 flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-primary-500" />
+            <span className="inline-flex items-center gap-1 rounded-full bg-[#FAF9F5] border border-[#EAE5D9] px-2.5 py-0.5 text-[10px] font-bold text-slate-700">
+              <Sparkles className="w-3 h-3 text-slate-600" />
               {badge}
             </span>
           )}
         </div>
-        <h3 className="font-display font-bold text-slate-900 text-lg leading-snug">
+
+        <h3 className="font-heading font-extrabold text-slate-900 text-base leading-snug">
           {title}
         </h3>
         <p className="text-slate-500 text-xs mt-1 leading-relaxed">
           {description}
         </p>
+
+        <div className="mt-4 pt-4 border-t border-[#F2EFE8]">
+          {children}
+        </div>
       </div>
-      <div className="p-6 flex-1 flex flex-col justify-between">{children}</div>
     </div>
   );
 }
@@ -80,79 +72,75 @@ function CareerAdvisor() {
       });
       setResults(data.data);
     } catch {
-      toast.error("AI analysis failed. Check your Gemini API key.");
+      toast.error("AI analysis failed. Check your Gemini API connection.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3.5">
       <div>
-        <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
-          Your Technical & Soft Skills
+        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+          Your Core Technical & Soft Skills
         </label>
         <textarea
-          className="input-field resize-none text-xs sm:text-sm py-2.5"
+          className="input resize-none text-xs"
           rows={3}
-          placeholder="e.g. React, Node.js, Python, MongoDB, Data Structures, System Design..."
+          placeholder="e.g. React, Node.js, Python, PostgreSQL, System Design..."
           value={skills}
           onChange={(e) => setSkills(e.target.value)}
         />
       </div>
+
       <button
         onClick={analyze}
         disabled={loading}
-        className="btn-primary w-full py-2.5 inline-flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold shadow-sm"
+        className="btn-primary w-full py-2.5 text-xs flex items-center justify-center gap-2"
       >
         {loading ? (
           <>
-            <Loader2 className="w-4 h-4 animate-spin" />
-            <span>Analyzing Career Paths…</span>
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            <span>Analyzing Career Synergies…</span>
           </>
         ) : (
           <>
-            <BrainCircuit className="w-4 h-4" />
-            <span>Discover Recommended Paths</span>
+            <BrainCircuit className="w-3.5 h-3.5" />
+            <span>Generate Career Tracks</span>
           </>
         )}
       </button>
 
       {results && results.length > 0 && (
-        <div className="space-y-3 mt-3 pt-3 border-t border-slate-100">
+        <div className="space-y-3 pt-3 border-t border-[#F2EFE8]">
           {results.map((c, i) => (
             <div
               key={i}
-              className="p-4 rounded-2xl bg-slate-50/70 border border-slate-100 hover:bg-slate-50 hover:border-primary-200 transition-all"
+              className="p-3.5 rounded-2xl border border-[#EAE5D9] bg-[#FAF9F5]"
             >
-              <div className="flex items-start justify-between gap-2 mb-2">
-                <p className="font-display font-bold text-slate-800 text-sm">{c.title}</p>
-                <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex-shrink-0">
+              <div className="flex items-start justify-between gap-2 mb-1.5">
+                <p className="font-heading font-bold text-slate-900 text-xs">{c.title}</p>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 shrink-0">
                   {c.match}% match
                 </span>
               </div>
-              <p className="text-xs text-slate-600 mb-2.5 leading-relaxed">{c.description}</p>
+              <p className="text-xs text-slate-600 mb-2 leading-relaxed">{c.description}</p>
               {c.avgSalary && (
-                <p className="text-xs font-semibold text-emerald-700 mb-2 flex items-center gap-1">
-                  <span>💰 Estimated Range: {c.avgSalary}</span>
+                <p className="text-[11px] font-bold text-emerald-800 mb-2">
+                  Estimated Compensation: {c.avgSalary}
                 </p>
               )}
               {c.nextSteps?.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mt-2">
+                <div className="flex flex-wrap gap-1 mt-2">
                   {c.nextSteps.map((s, j) => (
                     <span
                       key={j}
-                      className="text-[11px] px-2.5 py-0.5 rounded-lg font-medium bg-primary-50 text-primary-700 border border-primary-100"
+                      className="text-[10px] px-2 py-0.5 rounded-md font-medium bg-white text-slate-700 border border-[#EAE5D9]"
                     >
                       {s}
                     </span>
                   ))}
                 </div>
-              )}
-              {c.companies?.length > 0 && (
-                <p className="text-[11px] font-medium text-slate-500 mt-2.5 pt-2 border-t border-slate-200/60">
-                  🏢 Hiring Companies: {c.companies.join(", ")}
-                </p>
               )}
             </div>
           ))}
@@ -170,7 +158,7 @@ function ResumeAnalyzer() {
 
   const analyze = async () => {
     if (resumeText.trim().length < 50) {
-      return toast.error("Please paste your full resume content (minimum 50 characters)");
+      return toast.error("Please paste full resume text (minimum 50 characters)");
     }
     setLoading(true);
     try {
@@ -183,106 +171,69 @@ function ResumeAnalyzer() {
     }
   };
 
-  const getScoreBadge = (score) => {
-    if (score >= 80) return "text-emerald-700 bg-emerald-50 border-emerald-200";
-    if (score >= 60) return "text-amber-700 bg-amber-50 border-amber-200";
-    return "text-rose-700 bg-rose-50 border-rose-200";
-  };
-
   return (
-    <div className="space-y-4">
+    <div className="space-y-3.5">
       <div>
-        <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
           Paste Plain Resume Text
         </label>
         <textarea
-          className="input-field resize-none text-xs sm:text-sm py-2.5"
-          rows={5}
-          placeholder="Paste your complete resume details here (Education, Technical Skills, Projects, Experience, Certifications)..."
+          className="input resize-none text-xs"
+          rows={4}
+          placeholder="Paste plain text from your resume (Projects, Experience, Skills, Education)..."
           value={resumeText}
           onChange={(e) => setResumeText(e.target.value)}
         />
-        <div className="flex items-center justify-between text-[11px] text-slate-400 mt-1">
-          <span>{resumeText.length} characters entered</span>
-          <span>ATS Evaluation Ready</span>
+        <div className="flex items-center justify-between text-[10px] text-slate-400 mt-1">
+          <span>{resumeText.length} characters</span>
+          <span>ATS Keyword Parsing</span>
         </div>
       </div>
 
       <button
         onClick={analyze}
         disabled={loading}
-        className="btn-primary w-full py-2.5 inline-flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold shadow-sm"
+        className="btn-primary w-full py-2.5 text-xs flex items-center justify-center gap-2"
       >
         {loading ? (
           <>
-            <Loader2 className="w-4 h-4 animate-spin" />
-            <span>Scanning Resume Structure…</span>
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            <span>Scanning ATS Keyword Density…</span>
           </>
         ) : (
           <>
-            <FileSearch className="w-4 h-4" />
-            <span>Evaluate ATS Compatibility</span>
+            <FileSearch className="w-3.5 h-3.5" />
+            <span>Evaluate ATS Score</span>
           </>
         )}
       </button>
 
       {results && !results.error && (
-        <div className="space-y-4 mt-3 pt-3 border-t border-slate-100">
-          {/* ATS Score Card */}
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+        <div className="space-y-3 pt-3 border-t border-[#F2EFE8]">
+          <div className="p-3.5 rounded-2xl border border-[#EAE5D9] bg-[#FAF9F5]">
             <div className="flex items-center justify-between mb-2">
-              <span className="font-semibold text-slate-800 text-sm">Overall ATS Score</span>
-              <span
-                className={`text-base font-display font-bold px-3 py-0.5 rounded-full border ${getScoreBadge(
-                  results.atsScore
-                )}`}
-              >
+              <span className="font-heading font-bold text-slate-800 text-xs">Overall ATS Score</span>
+              <span className="font-heading font-bold text-xs px-2.5 py-0.5 rounded-full border border-slate-900 bg-slate-900 text-white">
                 {results.atsScore}/100
               </span>
             </div>
-            <div className="h-2.5 bg-slate-200 rounded-full overflow-hidden">
+            <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
               <div
-                className="h-full rounded-full transition-all duration-700 bg-gradient-to-r from-primary-500 to-indigo-600"
+                className="h-full rounded-full bg-slate-900 transition-all duration-700"
                 style={{ width: `${results.atsScore}%` }}
               />
             </div>
           </div>
 
-          {/* Section Scores */}
-          {results.sectionScores && (
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2.5">
-              <p className="font-semibold text-slate-800 text-xs uppercase tracking-wider">
-                Section Breakdown
-              </p>
-              {Object.entries(results.sectionScores).map(([section, score]) => (
-                <div key={section} className="flex items-center gap-3">
-                  <span className="text-xs font-medium text-slate-600 w-24 capitalize">
-                    {section}
-                  </span>
-                  <div className="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden">
-                    <div
-                      className="h-full rounded-full bg-primary-500"
-                      style={{ width: `${score}%` }}
-                    />
-                  </div>
-                  <span className="text-xs font-bold text-slate-700 w-8 text-right">
-                    {score}%
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Strengths */}
           {results.strengths?.length > 0 && (
-            <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200/80">
-              <p className="text-xs font-bold text-emerald-800 mb-2 uppercase tracking-wide flex items-center gap-1.5">
-                <CheckCircle className="w-3.5 h-3.5 text-emerald-600" /> Key Strengths
+            <div className="p-3.5 rounded-2xl border border-emerald-200 bg-emerald-50/50">
+              <p className="text-[11px] font-bold text-emerald-800 mb-1.5 uppercase tracking-wide flex items-center gap-1">
+                <CheckCircle className="w-3 h-3 text-emerald-600" /> Key Strengths
               </p>
-              <ul className="space-y-1.5">
+              <ul className="space-y-1">
                 {results.strengths.map((s, i) => (
-                  <li key={i} className="text-xs text-emerald-900 flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0" />
+                  <li key={i} className="text-xs text-emerald-900 flex items-start gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
                     <span>{s}</span>
                   </li>
                 ))}
@@ -290,56 +241,19 @@ function ResumeAnalyzer() {
             </div>
           )}
 
-          {/* Gaps */}
           {results.gaps?.length > 0 && (
-            <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80">
-              <p className="text-xs font-bold text-amber-800 mb-2 uppercase tracking-wide flex items-center gap-1.5">
-                <AlertCircle className="w-3.5 h-3.5 text-amber-600" /> Improvement Areas
+            <div className="p-3.5 rounded-2xl border border-amber-200 bg-amber-50/50">
+              <p className="text-[11px] font-bold text-amber-800 mb-1.5 uppercase tracking-wide flex items-center gap-1">
+                <AlertCircle className="w-3 h-3 text-amber-600" /> Identified Gaps
               </p>
-              <ul className="space-y-1.5">
+              <ul className="space-y-1">
                 {results.gaps.map((g, i) => (
-                  <li key={i} className="text-xs text-amber-900 flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 flex-shrink-0" />
+                  <li key={i} className="text-xs text-amber-900 flex items-start gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 shrink-0" />
                     <span>{g}</span>
                   </li>
                 ))}
               </ul>
-            </div>
-          )}
-
-          {/* Suggestions */}
-          {results.suggestions?.length > 0 && (
-            <div className="p-4 rounded-2xl bg-primary-50/50 border border-primary-200/80">
-              <p className="text-xs font-bold text-primary-800 mb-2 uppercase tracking-wide flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-primary-600" /> Actionable Recommendations
-              </p>
-              <ul className="space-y-1.5">
-                {results.suggestions.map((s, i) => (
-                  <li key={i} className="text-xs text-slate-700 flex items-start gap-2">
-                    <ArrowRight className="w-3.5 h-3.5 text-primary-600 mt-0.5 flex-shrink-0" />
-                    <span>{s}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* Missing Keywords */}
-          {results.missingKeywords?.length > 0 && (
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-              <p className="text-xs font-bold text-slate-700 mb-2 uppercase tracking-wide">
-                Suggested Keywords to Include
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {results.missingKeywords.map((k, i) => (
-                  <span
-                    key={i}
-                    className="text-xs px-2.5 py-0.5 rounded-lg bg-white text-slate-700 border border-slate-200 shadow-xs"
-                  >
-                    {k}
-                  </span>
-                ))}
-              </div>
             </div>
           )}
         </div>
@@ -379,38 +293,39 @@ function SmartSearch() {
   };
 
   return (
-    <form onSubmit={search} className="space-y-4">
+    <form onSubmit={search} className="space-y-3.5">
       <div>
-        <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
           Natural Language Prompt
         </label>
         <textarea
-          className="input-field resize-none text-xs sm:text-sm py-2.5"
+          className="input resize-none text-xs"
           rows={3}
-          placeholder={`e.g. DBMS previous year question papers for 4th semester CSE\ne.g. Machine learning lab manuals for VTU syllabus`}
+          placeholder="e.g. Operating systems previous year question papers for 4th semester CSE"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
       </div>
+
       <button
         type="submit"
         disabled={loading}
-        className="btn-primary w-full py-2.5 inline-flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold shadow-sm"
+        className="btn-primary w-full py-2.5 text-xs flex items-center justify-center gap-2"
       >
         {loading ? (
           <>
-            <Loader2 className="w-4 h-4 animate-spin" />
-            <span>Interpreting Query Parameters…</span>
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            <span>Analyzing Query Intent…</span>
           </>
         ) : (
           <>
-            <Search className="w-4 h-4" />
-            <span>Run Semantic Search</span>
+            <Search className="w-3.5 h-3.5" />
+            <span>Parse & Search Directory</span>
           </>
         )}
       </button>
-      <p className="text-xs text-slate-400 text-center">
-        Gemini parses subjects, semesters, and document types automatically.
+      <p className="text-[11px] text-slate-400 text-center">
+        Gemini automatically maps semester, subject, and file type filters.
       </p>
     </form>
   );
@@ -434,69 +349,54 @@ function InternshipRecommendations() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3.5">
       <button
         onClick={fetchInternships}
         disabled={loading}
-        className="btn-primary w-full py-2.5 inline-flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold shadow-sm"
+        className="btn-primary w-full py-2.5 text-xs flex items-center justify-center gap-2"
       >
         {loading ? (
           <>
-            <Loader2 className="w-4 h-4 animate-spin" />
-            <span>Finding Internship Matches…</span>
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            <span>Matching Student Profile…</span>
           </>
         ) : (
           <>
-            <Briefcase className="w-4 h-4" />
-            <span>Generate Internship Picks</span>
+            <Briefcase className="w-3.5 h-3.5" />
+            <span>Find Internship Matches</span>
           </>
         )}
       </button>
 
       {results && results.length > 0 && (
-        <div className="space-y-3 mt-3 pt-3 border-t border-slate-100">
+        <div className="space-y-3 pt-3 border-t border-[#F2EFE8]">
           {results.map((intern, i) => (
             <div
               key={i}
-              className="p-4 rounded-2xl bg-slate-50/70 border border-slate-100 hover:bg-slate-50 transition-all"
+              className="p-3.5 rounded-2xl border border-[#EAE5D9] bg-[#FAF9F5]"
             >
-              <div className="flex items-start justify-between gap-2 mb-2">
+              <div className="flex items-start justify-between gap-2 mb-1.5">
                 <div>
-                  <p className="font-semibold text-slate-900 text-sm">{intern.role}</p>
-                  <p className="text-xs text-slate-500">🏢 {intern.company}</p>
+                  <p className="font-heading font-bold text-slate-900 text-xs">{intern.role}</p>
+                  <p className="text-[11px] text-slate-500">{intern.company}</p>
                 </div>
-                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
-                  {intern.matchScore}%
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                  {intern.matchScore}% match
                 </span>
               </div>
-              <div className="flex flex-wrap gap-1.5 mb-2.5">
-                {intern.skills?.map((s, j) => (
-                  <span
-                    key={j}
-                    className="text-[11px] px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700"
-                  >
-                    {s}
-                  </span>
-                ))}
-              </div>
-              <div className="flex items-center gap-4 text-xs text-slate-500">
+              <div className="flex items-center gap-3 text-[11px] text-slate-500 mb-2">
                 {intern.stipend && <span>💰 {intern.stipend}</span>}
                 {intern.duration && <span>📅 {intern.duration}</span>}
               </div>
-              {intern.tips && (
-                <p className="text-xs text-primary-700 mt-2 bg-primary-50/60 p-2 rounded-xl border border-primary-100/60">
-                  💡 {intern.tips}
-                </p>
-              )}
               {intern.applyLink && (
                 <a
                   href={intern.applyLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-primary-600 hover:text-primary-700"
+                  className="inline-flex items-center gap-1 text-[11px] font-bold text-primary-700 hover:underline"
                 >
-                  <span>Apply Now</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>Apply on site</span>
+                  <ExternalLink className="w-3 h-3" />
                 </a>
               )}
             </div>
@@ -517,9 +417,9 @@ function ResourceRecommendations() {
 
   if (isLoading) {
     return (
-      <div className="space-y-3">
+      <div className="space-y-2">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="h-14 bg-slate-100 rounded-2xl animate-pulse" />
+          <div key={i} className="h-12 bg-slate-100 rounded-xl animate-pulse" />
         ))}
       </div>
     );
@@ -529,14 +429,14 @@ function ResourceRecommendations() {
     return (
       <div className="text-center py-6">
         <BookOpen className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-        <p className="text-xs font-medium text-slate-500">
-          Complete your profile with academic skills to unlock personalized materials.
+        <p className="text-xs text-slate-500">
+          Add skills and semester in your profile to unlock custom resources.
         </p>
         <a
           href="/profile"
-          className="text-xs font-semibold text-primary-600 hover:underline mt-2 inline-block"
+          className="text-xs font-bold text-slate-900 hover:underline mt-2 inline-block"
         >
-          Update Profile Skills →
+          Update Profile →
         </a>
       </div>
     );
@@ -548,20 +448,20 @@ function ResourceRecommendations() {
         <a
           key={r._id}
           href={`/resources/${r._id}`}
-          className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50/70 border border-slate-100 hover:bg-slate-100/80 hover:border-slate-200 transition-all group"
+          className="flex items-center gap-3 p-3 rounded-xl border border-[#EAE5D9] bg-[#FAF9F5] hover:bg-warm-100 transition-all group"
         >
-          <div className="w-9 h-9 rounded-xl bg-primary-50 text-primary-600 border border-primary-100 flex items-center justify-center flex-shrink-0 text-xs">
+          <div className="w-8 h-8 rounded-lg bg-white border border-[#EAE5D9] flex items-center justify-center shrink-0 text-slate-700 shadow-2xs">
             <BookOpen className="w-4 h-4" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-xs sm:text-sm font-semibold text-slate-800 truncate group-hover:text-primary-600 transition-colors">
+            <p className="text-xs font-bold font-heading text-slate-900 truncate group-hover:text-primary-700 transition-colors">
               {r.title}
             </p>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-[11px] text-slate-500 truncate">
               {r.subject} • {r.category?.replace("_", " ")}
             </p>
           </div>
-          <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-primary-600 group-hover:translate-x-0.5 transition-all flex-shrink-0" />
+          <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition-all shrink-0" />
         </a>
       ))}
     </div>
@@ -580,62 +480,53 @@ export default function AIPage() {
   }, []);
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
-      {/* Header Banner */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-soft relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-indigo-100/40 via-sky-50/30 to-transparent rounded-bl-full pointer-events-none -mr-16 -mt-16" />
+    <div className="space-y-8 pb-12">
+      {/* Editorial Header Banner */}
+      <section className="relative overflow-hidden rounded-3xl border border-[#EAE5D9] bg-slate-900 p-8 sm:p-10 text-white shadow-card">
+        <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-primary-600/15 blur-3xl" />
 
-        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-primary-50 border border-primary-100 text-primary-600 flex items-center justify-center shadow-xs flex-shrink-0">
-              <Bot className="w-7 h-7" />
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-semibold tracking-wider uppercase text-slate-300 backdrop-blur-md">
+              <Sparkles size={12} className="text-primary-300" />
+              Powered by Google Gemini
             </div>
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="px-2.5 py-0.5 rounded-lg text-xs font-semibold uppercase tracking-wider bg-primary-50 text-primary-700 border border-primary-100">
-                  Powered by Gemini
-                </span>
-                <span className="text-xs text-slate-400">•</span>
-                <span className="text-xs font-medium text-slate-500">
-                  Smart Academic Intelligence
-                </span>
-              </div>
-              <h1 className="text-2xl sm:text-3xl font-display font-bold text-slate-900">
-                AI Career & Study Suite
-              </h1>
-              <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-                Generate personalized career recommendations, evaluate resumes, and find internships.
-              </p>
-            </div>
+
+            <h1 className="mt-4 font-heading text-3xl font-extrabold tracking-tight sm:text-4xl text-white">
+              AI Academic & Career <span className="text-slate-300">Intelligence.</span>
+            </h1>
+
+            <p className="mt-3 text-sm sm:text-base leading-relaxed text-slate-300 max-w-xl">
+              Elevate your campus journey with real-time career track discovery, resume ATS benchmarking, semantic resource queries, and personalized internship matching.
+            </p>
           </div>
 
           {aiStatus && (
             <div
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold border self-start sm:self-center ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold border shrink-0 ${
                 aiStatus.status === "active"
-                  ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                  : "bg-rose-50 text-rose-700 border-rose-200"
+                  ? "bg-white/10 text-emerald-300 border-white/20 backdrop-blur-sm"
+                  : "bg-white/10 text-amber-300 border-white/20"
               }`}
             >
               <div
                 className={`w-2 h-2 rounded-full ${
-                  aiStatus.status === "active" ? "bg-emerald-500" : "bg-rose-500"
+                  aiStatus.status === "active" ? "bg-emerald-400" : "bg-amber-400"
                 }`}
               />
-              <span>Gemini Engine {aiStatus.status === "active" ? "Connected" : "Offline"}</span>
+              <span>Engine {aiStatus.status === "active" ? "Ready & Connected" : "Initializing"}</span>
             </div>
           )}
         </div>
-      </div>
+      </section>
 
       {/* Grid of AI Tools */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <AICard
           icon={BrainCircuit}
           title="Career Path Advisor"
-          description="Identify high-growth career tracks matching your skills"
+          description="Identify high-growth engineering and tech roles matched to your coursework"
           badge="Gemini AI"
-          iconBg="bg-primary-50 border-primary-100 text-primary-600"
         >
           <CareerAdvisor />
         </AICard>
@@ -643,9 +534,8 @@ export default function AIPage() {
         <AICard
           icon={FileSearch}
           title="Resume ATS Analyzer"
-          description="Evaluate keyword match rate, strengths & skill gaps"
+          description="Benchmark keyword frequency, strengths, and missing competencies"
           badge="Gemini AI"
-          iconBg="bg-violet-50 border-violet-100 text-violet-600"
         >
           <ResumeAnalyzer />
         </AICard>
@@ -653,19 +543,17 @@ export default function AIPage() {
         <AICard
           icon={Search}
           title="Smart Semantic Search"
-          description="Convert queries into structured subject & semester parameters"
+          description="Convert informal student queries into structured syllabus filters"
           badge="Gemini AI"
-          iconBg="bg-emerald-50 border-emerald-100 text-emerald-600"
         >
           <SmartSearch />
         </AICard>
 
         <AICard
           icon={Briefcase}
-          title="Internship Finder"
-          description="AI-curated internship opportunities aligned with your profile"
+          title="Internship Recommendations"
+          description="AI-curated internship opportunities aligned with your academic degree"
           badge="Gemini AI"
-          iconBg="bg-amber-50 border-amber-100 text-amber-600"
         >
           <InternshipRecommendations />
         </AICard>
@@ -673,34 +561,32 @@ export default function AIPage() {
         <AICard
           icon={BookOpen}
           title="Curated Study Picks"
-          description="Personalized study notes and pyqs tailored for your degree"
-          badge="Auto"
-          iconBg="bg-sky-50 border-sky-100 text-sky-600"
+          description="Study materials and previous papers tailored for your semester"
+          badge="Personalized"
         >
           <ResourceRecommendations />
         </AICard>
 
         <AICard
           icon={Users}
-          title="Team & Project Matching"
-          description="Find matching student collaborators for research & capstone projects"
-          badge="Gemini AI"
-          iconBg="bg-rose-50 border-rose-100 text-rose-600"
+          title="Project Teammate Matching"
+          description="Match with students based on complementary tech skills and project goals"
+          badge="Collaboration"
         >
           <div className="text-center py-6 flex flex-col justify-between h-full">
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-warm-100 border border-[#EAE5D9] text-slate-800 flex items-center justify-center mx-auto mb-3 shadow-2xs">
                 <Users className="w-6 h-6" />
               </div>
               <p className="text-xs text-slate-500 leading-relaxed max-w-xs mx-auto mb-4">
-                Open any collaboration project to see AI-suggested teammates based on skill synergy.
+                Explore student projects to discover matching partners or assemble your dream hackathon team.
               </p>
             </div>
             <a
               href="/projects"
-              className="btn-primary inline-flex items-center justify-center gap-2 text-xs py-2.5 px-4 shadow-sm"
+              className="btn-primary inline-flex items-center justify-center gap-2 text-xs py-2.5 px-4"
             >
-              <span>Explore Projects</span>
+              <span>Explore Projects Directory</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </a>
           </div>

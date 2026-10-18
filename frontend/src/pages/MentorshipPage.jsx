@@ -49,34 +49,13 @@ const CATEGORIES = [
 ];
 
 const CATEGORY_CONFIG = {
-  dsa: {
-    label: "DSA & Coding",
-    badge: "badge-primary",
-  },
-  resume_review: {
-    label: "Resume Review",
-    badge: "badge-violet",
-  },
-  internship_guidance: {
-    label: "Internship Prep",
-    badge: "badge-sky",
-  },
-  mock_interview: {
-    label: "Mock Interview",
-    badge: "badge-rose",
-  },
-  project_help: {
-    label: "Project Help",
-    badge: "badge-amber",
-  },
-  career_guidance: {
-    label: "Career Guidance",
-    badge: "badge-emerald",
-  },
-  other: {
-    label: "General Mentorship",
-    badge: "badge-primary",
-  },
+  dsa: { label: "DSA & Problem Solving" },
+  resume_review: { label: "Resume Critique" },
+  internship_guidance: { label: "Internship & Placement" },
+  mock_interview: { label: "Mock Technical Interview" },
+  project_help: { label: "Capstones & Projects" },
+  career_guidance: { label: "Career & Higher Studies" },
+  other: { label: "Peer Guidance" },
 };
 
 /* =========================================================
@@ -93,61 +72,57 @@ function MentorCard({ mentorship, onBook, onClick }) {
   return (
     <div
       onClick={onClick}
-      className="card group relative flex flex-col justify-between p-5 bg-white border border-slate-200/80 hover:border-primary-300 hover:shadow-card-hover transition-all duration-300 rounded-2xl cursor-pointer"
+      className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-[#EAE5D9] bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-card cursor-pointer"
     >
       <div>
-        {/* Top Header: Avatar & Basic Info */}
-        <div className="flex items-start justify-between gap-3 mb-4">
+        {/* Mentor Header */}
+        <div className="flex items-start justify-between gap-3 mb-3.5">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="relative flex-shrink-0">
+            <div className="relative shrink-0">
               <Avatar
                 src={mentorship.mentor?.profilePhoto}
                 name={mentorName}
                 size="md"
               />
-              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white" />
+              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white" />
             </div>
 
             <div className="min-w-0">
-              <h3 className="font-display font-bold text-sm text-slate-900 truncate group-hover:text-primary-600 transition-colors">
+              <h3 className="font-heading font-bold text-sm text-slate-900 truncate group-hover:text-primary-700 transition-colors">
                 {mentorName}
               </h3>
-              <p className="text-[11px] text-slate-600 truncate flex items-center gap-1">
-                <GraduationCap className="w-3 h-3 text-slate-600" />
+              <p className="text-[11px] text-slate-500 truncate flex items-center gap-1 mt-0.5">
+                <GraduationCap className="w-3 h-3 text-slate-400" />
                 <span>{mentorship.mentor?.branch || "Student Mentor"}</span>
               </p>
             </div>
           </div>
 
-          <div className="p-1 rounded-lg text-slate-600 group-hover:text-primary-600 group-hover:bg-primary-50 transition-colors">
-            <ArrowUpRight className="w-4 h-4" />
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-warm-100 text-slate-500 transition-colors group-hover:bg-slate-900 group-hover:text-white">
+            <ArrowUpRight className="w-3.5 h-3.5" />
           </div>
         </div>
 
-        {/* Rating & Sessions Pill */}
+        {/* Rating and Completed Sessions */}
         {rating > 0 && (
           <div className="flex items-center gap-2 mb-3">
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-200/60 text-xs font-bold">
               <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
               <span>{rating.toFixed(1)}</span>
             </span>
-            <span className="text-[11px] font-medium text-slate-600">
+            <span className="text-[11px] text-slate-400">
               {mentorship.totalSessions || 0} sessions completed
             </span>
           </div>
         )}
 
         {/* Category & Mode Badges */}
-        <div className="flex items-center gap-2 mb-3 flex-wrap">
-          <span className={`badge text-[10px] font-bold uppercase ${category.badge}`}>
+        <div className="flex items-center gap-1.5 mb-3 flex-wrap">
+          <span className="rounded-md bg-warm-100 border border-[#EAE5D9] px-2 py-0.5 text-[10px] font-semibold text-slate-700">
             {category.label}
           </span>
 
-          <span
-            className={`badge text-[10px] font-bold flex items-center gap-1 ${
-              mentorship.meetingMode === "online" ? "badge-sky" : "badge-emerald"
-            }`}
-          >
+          <span className="rounded-md bg-slate-50 border border-slate-200 px-2 py-0.5 text-[10px] font-medium text-slate-600 flex items-center gap-1">
             {mentorship.meetingMode === "online" ? (
               <Video className="w-3 h-3" />
             ) : (
@@ -157,30 +132,30 @@ function MentorCard({ mentorship, onBook, onClick }) {
           </span>
         </div>
 
-        {/* Topic & Description */}
-        <h4 className="font-display font-bold text-sm text-slate-900 line-clamp-1 mb-1.5">
+        {/* Topic Title & Description */}
+        <h4 className="font-heading font-bold text-sm text-slate-900 line-clamp-1 mb-1">
           {mentorship.topic}
         </h4>
 
         {mentorship.description && (
-          <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-4">
+          <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-3.5">
             {mentorship.description}
           </p>
         )}
 
         {/* Mentor Skills */}
         {mentorship.mentor?.skills?.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mb-4">
+          <div className="flex flex-wrap gap-1 mb-4">
             {mentorship.mentor.skills.slice(0, 3).map((skill) => (
               <span
                 key={skill}
-                className="px-2 py-0.5 rounded-md bg-slate-50 border border-slate-200/60 text-slate-700 text-[10px] font-semibold"
+                className="px-2 py-0.5 rounded-md bg-[#FAF9F5] border border-[#EAE5D9] text-slate-600 text-[10px] font-medium"
               >
                 {skill}
               </span>
             ))}
             {mentorship.mentor.skills.length > 3 && (
-              <span className="px-1.5 py-0.5 rounded-md bg-slate-50 text-slate-600 text-[10px] font-medium">
+              <span className="px-1.5 py-0.5 text-slate-400 text-[10px]">
                 +{mentorship.mentor.skills.length - 3}
               </span>
             )}
@@ -188,16 +163,18 @@ function MentorCard({ mentorship, onBook, onClick }) {
         )}
       </div>
 
-      {/* Footer Availability & Booking */}
-      <div>
-        <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
+      {/* Footer Availability & Action */}
+      <div className="pt-3 border-t border-[#F2EFE8]">
+        <div className="flex items-center justify-between mb-3 text-xs">
+          <div className="flex items-center gap-1.5 text-slate-600">
             <Calendar
-              className={`w-4 h-4 ${freeSlots > 0 ? "text-emerald-600" : "text-slate-600"}`}
+              className={`w-3.5 h-3.5 ${
+                freeSlots > 0 ? "text-emerald-600" : "text-slate-400"
+              }`}
             />
             <span
-              className={`text-xs font-semibold ${
-                freeSlots > 0 ? "text-emerald-700" : "text-slate-600"
+              className={`font-medium ${
+                freeSlots > 0 ? "text-emerald-700" : "text-slate-400"
               }`}
             >
               {freeSlots > 0 ? `${freeSlots} slots available` : "Fully Booked"}
@@ -205,9 +182,8 @@ function MentorCard({ mentorship, onBook, onClick }) {
           </div>
 
           {freeSlots > 0 && (
-            <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-100/60 px-2 py-0.5 rounded-md">
-              <CheckCircle2 className="w-3 h-3" />
-              <span>Open</span>
+            <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
+              Open to Book
             </span>
           )}
         </div>
@@ -218,10 +194,10 @@ function MentorCard({ mentorship, onBook, onClick }) {
             onBook(mentorship);
           }}
           disabled={freeSlots === 0}
-          className={`btn w-full py-2.5 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
+          className={`w-full py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
             freeSlots > 0
-              ? "btn-primary shadow-card hover:shadow-card-hover"
-              : "bg-slate-100 text-slate-600 cursor-not-allowed border border-slate-200"
+              ? "bg-slate-900 text-white hover:bg-slate-800 shadow-2xs"
+              : "bg-slate-100 text-slate-400 cursor-not-allowed"
           }`}
         >
           <Calendar className="w-3.5 h-3.5" />
@@ -248,34 +224,20 @@ function OfferMentorshipModal({ isOpen, onClose, onSuccess }) {
   });
 
   const [slots, setSlots] = useState([
-    {
-      date: "",
-      startTime: "",
-      endTime: "",
-    },
+    { date: "", startTime: "", endTime: "" },
   ]);
 
   const set = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
 
   const addSlot = () =>
-    setSlots([
-      ...slots,
-      {
-        date: "",
-        startTime: "",
-        endTime: "",
-      },
-    ]);
+    setSlots([...slots, { date: "", startTime: "", endTime: "" }]);
 
   const removeSlot = (index) =>
     setSlots(slots.filter((_, idx) => idx !== index));
 
   const updateSlot = (index, field, value) => {
     const next = [...slots];
-    next[index] = {
-      ...next[index],
-      [field]: value,
-    };
+    next[index] = { ...next[index], [field]: value };
     setSlots(next);
   };
 
@@ -285,7 +247,9 @@ function OfferMentorshipModal({ isOpen, onClose, onSuccess }) {
       return toast.error("Please enter a mentorship topic");
     }
 
-    const validSlots = slots.filter((slot) => slot.date && slot.startTime && slot.endTime);
+    const validSlots = slots.filter(
+      (slot) => slot.date && slot.startTime && slot.endTime
+    );
     if (validSlots.length === 0) {
       return toast.error("Please add at least one available date and time slot");
     }
@@ -302,7 +266,7 @@ function OfferMentorshipModal({ isOpen, onClose, onSuccess }) {
         })),
       });
 
-      toast.success("Mentorship session published successfully! 🎉");
+      toast.success("Mentorship session published! 🎉");
       onSuccess?.();
       onClose();
 
@@ -315,13 +279,7 @@ function OfferMentorshipModal({ isOpen, onClose, onSuccess }) {
         capacity: 1,
       });
 
-      setSlots([
-        {
-          date: "",
-          startTime: "",
-          endTime: "",
-        },
-      ]);
+      setSlots([{ date: "", startTime: "", endTime: "" }]);
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to create mentorship");
     } finally {
@@ -330,34 +288,34 @@ function OfferMentorshipModal({ isOpen, onClose, onSuccess }) {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Offer 1-on-1 Mentorship">
+    <Modal isOpen={isOpen} onClose={onClose} title="Offer 1-on-1 Mentorship" size="lg">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-xs font-semibold text-slate-700 mb-1">
-            Session Topic <span className="text-rose-500">*</span>
+            Mentorship Topic <span className="text-red-500">*</span>
           </label>
           <input
-            className="input text-xs"
-            placeholder="e.g. DSA Preparation, Resume Review & Mock Interview"
+            className="input text-sm"
+            placeholder="e.g. SDE Internship Prep, Resume Breakdown & System Design Basics"
             value={form.topic}
             onChange={set("topic")}
             required
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1">
               Category
             </label>
             <select
-              className="input text-xs"
+              className="input text-sm"
               value={form.category}
               onChange={set("category")}
             >
-              {CATEGORIES.map((category) => (
-                <option key={category} value={category}>
-                  {category.replace("_", " ").replace(/\b\w/g, (l) => l.toUpperCase())}
+              {CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>
+                  {CATEGORY_CONFIG[cat]?.label || cat}
                 </option>
               ))}
             </select>
@@ -368,25 +326,25 @@ function OfferMentorshipModal({ isOpen, onClose, onSuccess }) {
               Meeting Mode
             </label>
             <select
-              className="input text-xs"
+              className="input text-sm"
               value={form.meetingMode}
               onChange={set("meetingMode")}
             >
-              <option value="online">Online (Video Meet)</option>
-              <option value="offline">In-Person (Campus)</option>
-              <option value="both">Both Available</option>
+              <option value="online">Online (Google Meet / Zoom)</option>
+              <option value="offline">In-Person (Campus Library / Lab)</option>
+              <option value="both">Flexible / Hybrid</option>
             </select>
           </div>
         </div>
 
         <div>
           <label className="block text-xs font-semibold text-slate-700 mb-1">
-            Session Description
+            Description & Prerequisites
           </label>
           <textarea
-            className="input text-xs resize-none"
-            rows={2}
-            placeholder="Outline what students will learn or what they should prepare beforehand…"
+            className="input resize-none text-sm"
+            rows={3}
+            placeholder="Explain how you can help, what juniors should bring, and your target areas..."
             value={form.description}
             onChange={set("description")}
           />
@@ -395,10 +353,10 @@ function OfferMentorshipModal({ isOpen, onClose, onSuccess }) {
         {(form.meetingMode === "online" || form.meetingMode === "both") && (
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1">
-              Meeting URL <span className="text-slate-400 font-normal">(Google Meet, Zoom, Teams)</span>
+              Meeting URL <span className="text-slate-400 font-normal">(Google Meet, Zoom, MS Teams)</span>
             </label>
             <input
-              className="input text-xs"
+              className="input text-sm"
               placeholder="https://meet.google.com/xxx-xxxx-xxx"
               value={form.meetingLink}
               onChange={set("meetingLink")}
@@ -407,18 +365,22 @@ function OfferMentorshipModal({ isOpen, onClose, onSuccess }) {
         )}
 
         {/* Time Slots */}
-        <div className="pt-2">
-          <div className="flex items-center justify-between mb-2">
-            <label className="text-xs font-semibold text-slate-700">
-              Available Time Slots <span className="text-rose-500">*</span>
-            </label>
+        <div className="rounded-xl border border-[#EAE5D9] bg-[#FAF9F5] p-4">
+          <div className="flex items-center justify-between mb-2.5">
+            <div>
+              <span className="text-xs font-bold text-slate-800">
+                Available Time Slots <span className="text-red-500">*</span>
+              </span>
+              <p className="text-[11px] text-slate-400">
+                Add when you are free for student bookings
+              </p>
+            </div>
             <button
               type="button"
               onClick={addSlot}
-              className="inline-flex items-center gap-1 text-xs font-semibold text-primary-600 hover:text-primary-700"
+              className="inline-flex items-center gap-1 text-xs font-semibold text-primary-700 hover:text-primary-800"
             >
-              <Plus className="w-3.5 h-3.5" />
-              <span>Add Another Slot</span>
+              <Plus className="w-3.5 h-3.5" /> Add Slot
             </button>
           </div>
 
@@ -426,7 +388,7 @@ function OfferMentorshipModal({ isOpen, onClose, onSuccess }) {
             {slots.map((slot, index) => (
               <div
                 key={index}
-                className="flex flex-col sm:flex-row sm:items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200"
+                className="flex flex-col sm:flex-row sm:items-center gap-2 p-2 rounded-xl bg-white border border-[#EAE5D9]"
               >
                 <input
                   type="date"
@@ -454,7 +416,7 @@ function OfferMentorshipModal({ isOpen, onClose, onSuccess }) {
                   <button
                     type="button"
                     onClick={() => removeSlot(index)}
-                    className="p-1.5 rounded-lg text-rose-500 hover:bg-rose-50"
+                    className="p-1.5 text-slate-400 hover:text-red-500 transition-colors"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -464,18 +426,20 @@ function OfferMentorshipModal({ isOpen, onClose, onSuccess }) {
           </div>
         </div>
 
-        <div className="pt-3">
+        <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#EAE5D9]">
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-xl border border-[#EAE5D9] bg-white px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-warm-100"
+          >
+            Cancel
+          </button>
           <button
             type="submit"
             disabled={loading}
-            className="btn btn-primary w-full py-3 text-xs font-semibold flex items-center justify-center gap-2 shadow-card hover:shadow-card-hover"
+            className="btn-primary py-2.5 px-5 text-xs"
           >
-            {loading ? (
-              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            ) : (
-              <Plus className="w-4 h-4" />
-            )}
-            <span>{loading ? "Creating Mentorship…" : "Publish Mentorship Availability"}</span>
+            {loading ? "Publishing..." : "Publish Availability"}
           </button>
         </div>
       </form>
@@ -494,7 +458,8 @@ function BookingModal({ mentorship, onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const availableSlots = mentorship?.availableSlots?.filter((slot) => !slot.isBooked) || [];
+    const availableSlots =
+      mentorship?.availableSlots?.filter((slot) => !slot.isBooked) || [];
     if (availableSlots.length > 0) {
       setSelectedSlot(availableSlots[0]._id?.toString() || "");
     } else {
@@ -518,32 +483,32 @@ function BookingModal({ mentorship, onClose, onSuccess }) {
         studentNote: note,
       });
 
-      toast.success("1-on-1 session booked successfully! 🎉");
+      toast.success("1-on-1 session booked! 🎉");
       onSuccess?.();
       onClose();
     } catch (err) {
-      toast.error(err.response?.data?.message || "Booking failed. Please try again.");
+      toast.error(err.response?.data?.message || "Booking failed");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Modal isOpen={!!mentorship} onClose={onClose} title="Book Mentorship Session">
+    <Modal isOpen={!!mentorship} onClose={onClose} title="Book 1-on-1 Session">
       <div className="space-y-4">
         {/* Mentor Preview */}
-        <div className="flex items-center gap-3 rounded-2xl bg-slate-50 p-3.5 border border-slate-200/70">
+        <div className="flex items-center gap-3 rounded-2xl border border-[#EAE5D9] bg-[#FAF9F5] p-3.5">
           <Avatar
             src={mentorship?.mentor?.profilePhoto}
             name={mentorship?.mentor?.name}
             size="md"
           />
           <div className="min-w-0 flex-1">
-            <p className="font-display font-bold text-xs text-slate-900 truncate">
+            <p className="font-heading font-bold text-xs text-slate-900 truncate">
               {mentorship?.mentor?.name}
             </p>
-            <p className="text-[11px] text-slate-600 truncate mt-0.5">
-              Topic: <strong className="text-primary-700">{mentorship?.topic}</strong>
+            <p className="text-[11px] text-slate-500 truncate mt-0.5">
+              Topic: <strong className="text-slate-800">{mentorship?.topic}</strong>
             </p>
           </div>
         </div>
@@ -551,12 +516,12 @@ function BookingModal({ mentorship, onClose, onSuccess }) {
         {/* Slot Selector */}
         <div>
           <label className="block text-xs font-semibold text-slate-700 mb-2">
-            Select Your Preferred Time Slot <span className="text-rose-500">*</span>
+            Select Your Preferred Time Slot <span className="text-red-500">*</span>
           </label>
 
           <div className="space-y-2 max-h-48 overflow-y-auto">
             {slots.length === 0 ? (
-              <div className="rounded-xl bg-slate-50 p-4 text-center text-xs text-slate-400">
+              <div className="rounded-xl border border-[#EAE5D9] bg-[#FAF9F5] p-4 text-center text-xs text-slate-400">
                 No slots currently available.
               </div>
             ) : (
@@ -571,8 +536,8 @@ function BookingModal({ mentorship, onClose, onSuccess }) {
                     onClick={() => setSelectedSlot(slotId)}
                     className={`w-full p-3 rounded-xl border text-left text-xs transition-all flex items-center justify-between ${
                       isSelected
-                        ? "border-primary-500 bg-primary-50/80 font-bold text-primary-900 shadow-2xs"
-                        : "border-slate-200 bg-white hover:bg-slate-50 text-slate-800"
+                        ? "border-slate-900 bg-warm-100 font-bold text-slate-900 shadow-2xs"
+                        : "border-[#EAE5D9] bg-white hover:bg-[#FAF9F5] text-slate-800"
                     }`}
                   >
                     <div>
@@ -583,15 +548,15 @@ function BookingModal({ mentorship, onClose, onSuccess }) {
                           day: "numeric",
                         })}
                       </p>
-                      <p className="text-[11px] text-slate-600 flex items-center gap-1 mt-0.5">
-                        <Clock className="w-3 h-3 text-slate-600" />
+                      <p className="text-[11px] text-slate-500 flex items-center gap-1 mt-0.5">
+                        <Clock className="w-3 h-3 text-slate-400" />
                         <span>
                           {slot.startTime} – {slot.endTime}
                         </span>
                       </p>
                     </div>
 
-                    {isSelected && <CheckCircle2 className="w-4 h-4 text-primary-600" />}
+                    {isSelected && <CheckCircle2 className="w-4 h-4 text-slate-900" />}
                   </button>
                 );
               })
@@ -599,32 +564,34 @@ function BookingModal({ mentorship, onClose, onSuccess }) {
           </div>
         </div>
 
-        {/* Student Note */}
+        {/* Note */}
         <div>
           <label className="block text-xs font-semibold text-slate-700 mb-1">
-            Note for Mentor <span className="text-slate-600 font-normal">(optional questions/context)</span>
+            Questions or context for mentor <span className="text-slate-400 font-normal">(Optional)</span>
           </label>
           <textarea
             className="input text-xs resize-none"
             rows={2}
-            placeholder="Share your specific questions, project challenges, or topics to discuss…"
+            placeholder="Share specific problems or questions you'd like to focus on..."
             value={note}
             onChange={(e) => setNote(e.target.value)}
           />
         </div>
 
-        <div className="pt-2">
+        <div className="flex items-center justify-end gap-3 pt-2 border-t border-[#EAE5D9]">
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-xl border border-[#EAE5D9] bg-white px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-warm-100"
+          >
+            Cancel
+          </button>
           <button
             onClick={handleBook}
             disabled={loading || slots.length === 0}
-            className="btn btn-primary w-full py-3 text-xs font-semibold flex items-center justify-center gap-2 shadow-card hover:shadow-card-hover"
+            className="btn-primary py-2 px-5 text-xs"
           >
-            {loading ? (
-              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            ) : (
-              <Calendar className="w-4 h-4" />
-            )}
-            <span>{loading ? "Confirming Booking…" : "Confirm 1-on-1 Session"}</span>
+            {loading ? "Confirming..." : "Confirm Booking"}
           </button>
         </div>
       </div>
@@ -660,86 +627,112 @@ export default function MentorshipPage() {
   const totalMentors = data?.pagination?.total || 0;
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto animate-fade-in pb-12 font-sans">
-      {/* Hero Banner */}
-      <section className="relative rounded-3xl overflow-hidden p-6 sm:p-8 bg-gradient-to-r from-primary-600 via-indigo-600 to-violet-600 text-white shadow-card">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-violet-400/20 rounded-full blur-3xl pointer-events-none" />
+    <div className="space-y-8 pb-12">
+      {/* Editorial Header Banner */}
+      <section className="relative overflow-hidden rounded-3xl border border-[#EAE5D9] bg-slate-900 p-8 sm:p-10 text-white shadow-card">
+        <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-primary-600/15 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-0 right-1/4 h-48 w-48 rounded-full bg-indigo-500/10 blur-2xl" />
 
-        <div className="relative z-10 max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-xs font-semibold">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Senior Student & Alumni Guidance</span>
-          </div>
-
-          <h1 className="text-2xl sm:text-4xl font-display font-bold tracking-tight text-white leading-tight">
-            Learn faster with verified student mentors.
-          </h1>
-
-          <p className="text-xs sm:text-sm text-primary-100 max-w-xl leading-relaxed">
-            Book 1-on-1 sessions for coding challenges, resume critique, mock technical interviews, and real internship guidance.
-          </p>
-
-          <div className="pt-2 flex flex-col sm:flex-row gap-3">
-            <div className="relative flex-1">
-              <Search className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setPage(1);
-                }}
-                placeholder="Search mentors by name, topic, or technical skill..."
-                className="w-full h-12 pl-11 pr-10 rounded-2xl bg-white text-slate-900 text-xs sm:text-sm font-medium placeholder-slate-400 shadow-md focus:outline-none focus:ring-4 focus:ring-white/30"
-              />
-              {search && (
-                <button
-                  onClick={() => setSearch("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg text-slate-400 hover:text-slate-700"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-semibold tracking-wider uppercase text-slate-300 backdrop-blur-md">
+              <Sparkles size={12} className="text-primary-300" />
+              Senior Student & Alumni Guidance
             </div>
 
-            <button
-              onClick={() => setShowCreate(true)}
-              className="h-12 px-6 rounded-2xl bg-white text-primary-700 hover:bg-slate-50 font-bold text-xs sm:text-sm shadow-md flex items-center justify-center gap-2 hover:-translate-y-0.5 transition-all flex-shrink-0"
-            >
-              <UserPlus className="w-4 h-4" />
-              <span>Offer Mentorship</span>
-            </button>
+            <h1 className="mt-4 font-heading text-3xl font-extrabold tracking-tight sm:text-4xl text-white">
+              Learn faster with <span className="text-slate-300">verified peer mentors.</span>
+            </h1>
+
+            <p className="mt-3 text-sm sm:text-base leading-relaxed text-slate-300 max-w-xl">
+              Book focused 1-on-1 sessions for coding challenges, resume critiques, mock technical interviews, and firsthand placement guidance.
+            </p>
+
+            {/* Search and Action Bar */}
+            <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <div className="relative flex-1">
+                <Search
+                  size={16}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                />
+                <input
+                  value={search}
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                    setPage(1);
+                  }}
+                  placeholder="Search mentors by topic, skill, or department..."
+                  className="h-11 w-full rounded-xl border border-white/15 bg-white/10 px-10 text-sm text-white placeholder-slate-400 outline-none backdrop-blur-sm focus:border-white/40 focus:bg-white/15"
+                />
+                {search && (
+                  <button
+                    onClick={() => setSearch("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
+              </div>
+
+              <button
+                onClick={() => setShowCreate(true)}
+                className="flex h-11 items-center justify-center gap-2 rounded-xl bg-white px-5 text-xs font-bold text-slate-900 shadow-sm transition hover:bg-warm-100"
+              >
+                <UserPlus size={15} />
+                Offer Mentorship
+              </button>
+            </div>
+          </div>
+
+          {/* Quick Metrics Ribbon */}
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:w-72 shrink-0">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
+              <Award size={18} className="text-primary-300 mb-2" />
+              <p className="text-2xl font-bold font-heading text-white">
+                {totalMentors.toLocaleString()}
+              </p>
+              <p className="text-[11px] font-medium text-slate-400">
+                Mentorship Tracks
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
+              <Users size={18} className="text-emerald-400 mb-2" />
+              <p className="text-2xl font-bold font-heading text-white">1-on-1</p>
+              <p className="text-[11px] font-medium text-slate-400">
+                Direct Peer Sessions
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Categories Bar */}
-      <section>
-        <div className="flex items-center justify-between mb-3 px-1">
-          <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+      {/* Focus Area Filter Tabs */}
+      <div>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="font-heading text-xs font-bold text-slate-700 uppercase tracking-wider">
             Mentorship Focus Areas
-          </p>
+          </h2>
           {category && (
             <button
               onClick={() => setCategory("")}
-              className="text-xs font-semibold text-primary-600 hover:text-primary-700"
+              className="text-xs font-semibold text-slate-500 hover:text-slate-800"
             >
-              Reset Category
+              Clear Focus Filter
             </button>
           )}
         </div>
 
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1">
           <button
             onClick={() => setCategory("")}
-            className={`px-4 py-2.5 rounded-xl text-xs font-semibold flex-shrink-0 transition-all ${
+            className={`rounded-xl px-3.5 py-2 text-xs font-medium shrink-0 transition-all ${
               !category
-                ? "bg-primary-600 text-white shadow-card"
-                : "bg-white text-slate-700 border border-slate-200/80 hover:bg-slate-50 shadow-2xs"
+                ? "bg-slate-900 text-white shadow-2xs"
+                : "border border-[#EAE5D9] bg-white text-slate-600 hover:bg-warm-100"
             }`}
           >
-            All Guidance
+            All Tracks
           </button>
 
           {CATEGORIES.map((cat) => {
@@ -750,10 +743,10 @@ export default function MentorshipPage() {
               <button
                 key={cat}
                 onClick={() => setCategory(isActive ? "" : cat)}
-                className={`px-4 py-2.5 rounded-xl text-xs font-semibold flex-shrink-0 transition-all ${
+                className={`rounded-xl px-3.5 py-2 text-xs font-medium shrink-0 transition-all ${
                   isActive
-                    ? "bg-primary-600 text-white shadow-card"
-                    : "bg-white text-slate-700 border border-slate-200/80 hover:bg-slate-50 shadow-2xs"
+                    ? "bg-slate-900 text-white shadow-2xs"
+                    : "border border-[#EAE5D9] bg-white text-slate-600 hover:bg-warm-100"
                 }`}
               >
                 {config.label}
@@ -761,9 +754,9 @@ export default function MentorshipPage() {
             );
           })}
         </div>
-      </section>
+      </div>
 
-      {/* Mentors Grid */}
+      {/* Grid or Empty / Loading State */}
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {Array(6)
@@ -773,22 +766,22 @@ export default function MentorshipPage() {
             ))}
         </div>
       ) : data?.data?.length === 0 ? (
-        <div className="card bg-white p-8 sm:p-12 text-center border border-slate-200/80 shadow-xs">
+        <div className="rounded-2xl border border-[#EAE5D9] bg-white p-12 text-center shadow-2xs">
           <EmptyState
             icon={UserCheck}
-            title="No mentors found"
+            title="No mentorship tracks match"
             description={
               search
-                ? "Try searching for a different topic, skill, or department."
-                : "Be the first senior student to offer mentorship in this area!"
+                ? `No mentorship tracks found for "${search}". Try searching for other skills or topics.`
+                : "Be the first senior student to offer mentorship in this discipline!"
             }
             action={
               <button
                 onClick={() => setShowCreate(true)}
-                className="btn btn-primary text-xs px-5 py-2.5 flex items-center gap-1.5 mx-auto"
+                className="btn-primary inline-flex items-center gap-2 py-2.5 px-4 text-xs"
               >
-                <Plus className="w-3.5 h-3.5" />
-                <span>Offer Mentorship</span>
+                <Plus size={14} />
+                Offer Mentorship
               </button>
             }
           />
@@ -806,6 +799,7 @@ export default function MentorshipPage() {
             ))}
           </div>
 
+          {/* Pagination */}
           {data?.pagination?.pages > 1 && (
             <div className="mt-8 flex justify-center">
               <Pagination

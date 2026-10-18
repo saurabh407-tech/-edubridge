@@ -76,7 +76,7 @@ export default function ResourceCard({ resource, onDownloaded }) {
   return (
     <Link
       to={`/resources/${resource._id}`}
-      className="card group relative flex flex-col justify-between p-5 bg-white border border-slate-200/80 hover:border-primary-300 hover:shadow-card-hover transition-all duration-300 rounded-2xl"
+      className="card group relative flex flex-col justify-between p-5 bg-white border border-[#EAE5D9] hover:border-slate-400 hover:shadow-card-hover transition-all duration-300 rounded-2xl"
     >
       <div>
         {/* Top Badges & File Format */}
@@ -88,7 +88,7 @@ export default function ResourceCard({ resource, onDownloaded }) {
               {categoryConfig.label}
             </span>
             {resource.fileType && (
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-warm-100 text-slate-700 border border-warm-200">
                 {FILE_TYPE_LABELS[resource.fileType] || resource.fileType.toUpperCase()}
               </span>
             )}
@@ -102,7 +102,7 @@ export default function ResourceCard({ resource, onDownloaded }) {
         </div>
 
         {/* Title */}
-        <h3 className="font-display font-bold text-sm text-slate-900 mb-2 line-clamp-2 leading-snug group-hover:text-primary-600 transition-colors">
+        <h3 className="font-heading font-bold text-sm text-slate-950 mb-2 line-clamp-2 leading-snug group-hover:text-primary-600 transition-colors">
           {resource.title}
         </h3>
 

@@ -28,12 +28,12 @@ export function CardSkeleton() {
 // Empty state
 export function EmptyState({ icon: Icon, title, description, action }) {
   return (
-    <div className="flex flex-col items-center justify-center py-14 px-4 text-center">
-      <div className="w-14 h-14 bg-primary-50 rounded-2xl flex items-center justify-center mb-3.5 border border-primary-100/60 shadow-sm">
-        <Icon className="w-7 h-7 text-primary-600" strokeWidth={1.75} />
+    <div className="flex flex-col items-center justify-center py-16 px-6 text-center bg-white/60 rounded-3xl border border-dashed border-slate-200/90 my-4">
+      <div className="w-14 h-14 bg-warm-100/80 rounded-2xl flex items-center justify-center mb-4 border border-warm-200 shadow-2xs">
+        <Icon className="w-6 h-6 text-slate-700" strokeWidth={1.75} />
       </div>
-      <h3 className="text-base font-bold font-display text-slate-800 mb-1.5">{title}</h3>
-      <p className="text-slate-500 max-w-sm text-xs leading-relaxed mb-5">{description}</p>
+      <h3 className="text-base font-bold font-heading text-slate-900 mb-1.5">{title}</h3>
+      <p className="text-slate-500 max-w-sm text-xs leading-relaxed mb-6">{description}</p>
       {action && <div>{action}</div>}
     </div>
   );
@@ -42,18 +42,19 @@ export function EmptyState({ icon: Icon, title, description, action }) {
 // Badge
 export function Badge({ children, color = "blue" }) {
   const colors = {
-    blue: "bg-primary-50 text-primary-700 border border-primary-100/80",
-    indigo: "bg-primary-50 text-primary-700 border border-primary-100/80",
-    sky: "bg-sky-50 text-sky-700 border border-sky-100/80",
-    cyan: "bg-cyan-50 text-cyan-700 border border-cyan-100/80",
-    green: "bg-emerald-50 text-emerald-700 border border-emerald-100/80",
-    emerald: "bg-emerald-50 text-emerald-700 border border-emerald-100/80",
-    amber: "bg-amber-50 text-amber-800 border border-amber-100/80",
-    red: "bg-rose-50 text-rose-700 border border-rose-100/80",
-    rose: "bg-rose-50 text-rose-700 border border-rose-100/80",
-    purple: "bg-violet-50 text-violet-700 border border-violet-100/80",
-    violet: "bg-violet-50 text-violet-700 border border-violet-100/80",
-    slate: "bg-slate-100 text-slate-700 border border-slate-200/60",
+    blue: "bg-primary-50 text-primary-700 border border-primary-200/70",
+    indigo: "bg-indigo-50 text-indigo-700 border border-indigo-200/70",
+    sky: "bg-sky-50 text-sky-700 border border-sky-200/70",
+    cyan: "bg-cyan-50 text-cyan-700 border border-cyan-200/70",
+    green: "bg-emerald-50 text-emerald-700 border border-emerald-200/70",
+    emerald: "bg-emerald-50 text-emerald-700 border border-emerald-200/70",
+    amber: "bg-amber-50 text-amber-800 border border-amber-200/70",
+    red: "bg-rose-50 text-rose-700 border border-rose-200/70",
+    rose: "bg-rose-50 text-rose-700 border border-rose-200/70",
+    purple: "bg-violet-50 text-violet-700 border border-violet-200/70",
+    violet: "bg-violet-50 text-violet-700 border border-violet-200/70",
+    slate: "bg-slate-100 text-slate-700 border border-slate-200/70",
+    warm: "bg-warm-100 text-slate-800 border border-warm-200",
   };
   return <span className={`badge ${colors[color] || colors.blue}`}>{children}</span>;
 }
@@ -66,28 +67,34 @@ export function Avatar({ src, name, size = "md" }) {
     lg: "w-12 h-12 text-base",
     xl: "w-16 h-16 text-lg",
   };
-  const fallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(name || "U")}&background=eef2ff&color=4f46e5&bold=true&size=128`;
+  const fallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(name || "U")}&background=1e293b&color=ffffff&bold=true&size=128`;
   return (
     <img
       src={src || fallback}
       alt={name || "User"}
-      className={`${sizes[size] || sizes.md} rounded-full object-cover flex-shrink-0 ring-2 ring-slate-100`}
+      className={`${sizes[size] || sizes.md} rounded-full object-cover flex-shrink-0 ring-2 ring-slate-100 shadow-2xs`}
     />
   );
 }
 
 // Modal
-export function Modal({ isOpen, onClose, title, children }) {
+export function Modal({ isOpen, onClose, title, size = "md", children }) {
   if (!isOpen) return null;
+  const maxSizes = {
+    sm: "max-w-md",
+    md: "max-w-lg",
+    lg: "max-w-2xl",
+    xl: "max-w-3xl",
+  };
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 animate-fade-in">
-      <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onClick={onClose} />
-      <div className="relative bg-white rounded-2xl shadow-elevated border border-slate-200/80 w-full max-w-lg max-h-[90vh] overflow-y-auto z-10 animate-scale-in">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 sticky top-0 bg-white/95 backdrop-blur-sm z-10">
-          <h2 className="text-lg font-bold font-display text-slate-900">{title}</h2>
+      <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs transition-opacity" onClick={onClose} />
+      <div className={`relative bg-white rounded-3xl shadow-elevated border border-slate-200/90 w-full ${maxSizes[size] || maxSizes.md} max-h-[90vh] overflow-y-auto z-10 animate-scale-in`}>
+        <div className="flex items-center justify-between px-6 py-4.5 border-b border-slate-100 sticky top-0 bg-white/95 backdrop-blur-sm z-10">
+          <h2 className="text-lg font-bold font-heading text-slate-900">{title}</h2>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
             title="Close"
           >
             <X className="w-4 h-4" />

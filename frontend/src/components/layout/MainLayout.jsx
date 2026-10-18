@@ -66,31 +66,31 @@ export default function MainLayout() {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50 text-slate-900 font-sans">
+    <div className="flex h-screen overflow-hidden bg-[#FAF9F5] text-slate-900 font-sans">
       {/* =========================================================
           SIDEBAR (DESKTOP & MOBILE DRAWER)
       ========================================================== */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-white border-r border-slate-200/80 transition-all duration-300 shadow-sm
+        className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-white border-r border-[#EAE5D9] transition-all duration-300 shadow-card
           ${sidebarOpen ? "w-64" : "w-20"}
           ${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}
       >
         {/* Brand Header */}
-        <div className="flex items-center justify-between px-4 h-16 border-b border-slate-100 flex-shrink-0">
+        <div className="flex items-center justify-between px-4 h-16 border-b border-[#EAE5D9] flex-shrink-0">
           <div
             onClick={() => navigate("/dashboard")}
             className="flex items-center gap-3 cursor-pointer group overflow-hidden"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary-600 via-indigo-600 to-sky-500 flex items-center justify-center shadow-card group-hover:shadow-brand-glow transition-all duration-300 flex-shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center shadow-card group-hover:bg-primary-600 transition-colors duration-300 flex-shrink-0">
               <GraduationCap className="w-5 h-5 text-white" />
             </div>
             {sidebarOpen && (
               <div className="flex flex-col min-w-0">
-                <span className="font-display font-bold text-lg tracking-tight text-slate-900 leading-tight">
+                <span className="font-heading font-extrabold text-lg tracking-tight text-slate-950 leading-tight">
                   Edu<span className="text-primary-600">Bridge</span>
                 </span>
-                <span className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider">
+                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
                   Campus Platform
                 </span>
               </div>
@@ -99,7 +99,7 @@ export default function MainLayout() {
 
           <button
             onClick={() => dispatch(toggleSidebar())}
-            className="hidden lg:flex p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+            className="hidden lg:flex p-1.5 rounded-xl text-slate-400 hover:text-slate-900 hover:bg-warm-100 transition-colors"
             title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
           >
             <ChevronLeft
@@ -109,11 +109,11 @@ export default function MainLayout() {
         </div>
 
         {/* Navigation Items */}
-        <nav className="flex-1 overflow-y-auto py-4 space-y-1.5 px-3">
+        <nav className="flex-1 overflow-y-auto py-4 space-y-1 px-3">
           <div className="px-2 pb-1.5">
             {sidebarOpen && (
-              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-600">
-                Menu
+              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                Platform Workspace
               </p>
             )}
           </div>
@@ -124,11 +124,11 @@ export default function MainLayout() {
               to={to}
               onClick={() => setMobileOpen(false)}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 relative group
+                `flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-all duration-150 relative group
                 ${
                   isActive
-                    ? "bg-primary-50 text-primary-700 font-semibold shadow-xs"
-                    : "text-slate-600 hover:bg-slate-100/80 hover:text-slate-900"
+                    ? "bg-slate-900 text-white font-semibold shadow-xs"
+                    : "text-slate-600 hover:bg-warm-100/80 hover:text-slate-950"
                 }
                 ${!sidebarOpen ? "justify-center px-0" : ""}`
               }
@@ -138,8 +138,8 @@ export default function MainLayout() {
                 <>
                   <div className="relative flex-shrink-0">
                     <Icon
-                      className={`w-5 h-5 transition-colors ${
-                        isActive ? "text-primary-600" : "text-slate-600 group-hover:text-slate-800"
+                      className={`w-4 h-4 transition-colors ${
+                        isActive ? "text-white" : "text-slate-500 group-hover:text-slate-800"
                       }`}
                     />
                     {/* Unread dot when collapsed */}
@@ -251,29 +251,29 @@ export default function MainLayout() {
         }`}
       >
         {/* Topbar Header */}
-        <header className="h-16 bg-white/95 backdrop-blur-md border-b border-slate-200/80 flex items-center justify-between px-4 lg:px-8 flex-shrink-0 sticky top-0 z-30 shadow-xs">
+        <header className="h-16 bg-white/95 backdrop-blur-md border-b border-[#EAE5D9] flex items-center justify-between px-4 lg:px-8 flex-shrink-0 sticky top-0 z-30 shadow-card">
           {/* Left: Mobile Toggle & Global Search */}
           <div className="flex items-center gap-3">
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+              className="lg:hidden p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-warm-100 transition-colors"
               aria-label="Open mobile navigation"
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
 
             {/* Smart Search Bar */}
-            <div className="hidden sm:flex items-center gap-2 bg-slate-100/90 border border-slate-200/70 rounded-xl px-3.5 py-2 w-64 md:w-80 lg:w-96 focus-within:bg-white focus-within:border-primary-500 focus-within:ring-3 focus-within:ring-primary-500/15 transition-all">
-              <Search className="w-4 h-4 text-slate-600 flex-shrink-0" />
+            <div className="hidden sm:flex items-center gap-2 bg-warm-100/70 border border-[#EAE5D9] rounded-xl px-3.5 py-2 w-64 md:w-80 lg:w-96 focus-within:bg-white focus-within:border-slate-400 focus-within:ring-2 focus-within:ring-slate-400/20 transition-all">
+              <Search className="w-4 h-4 text-slate-400 flex-shrink-0" />
               <input
                 type="text"
                 placeholder="Search notes, PYQs, projects..."
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 onKeyDown={handleSearchKeyDown}
-                className="bg-transparent text-xs outline-none w-full text-slate-700 placeholder-slate-600 font-medium"
+                className="bg-transparent text-xs outline-none w-full text-slate-800 placeholder-slate-400 font-medium"
               />
-              <span className="hidden md:inline-flex items-center px-1.5 py-0.5 text-[10px] font-semibold text-slate-600 bg-white border border-slate-200 rounded shadow-xs">
+              <span className="hidden md:inline-flex items-center px-1.5 py-0.5 text-[10px] font-bold text-slate-500 bg-white border border-slate-200 rounded shadow-xs">
                 ↵
               </span>
             </div>
@@ -284,24 +284,24 @@ export default function MainLayout() {
             {/* Quick AI Tool Link */}
             <button
               onClick={() => navigate("/ai")}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-violet-50 hover:bg-violet-100/80 text-violet-700 border border-violet-200/70 text-xs font-semibold transition-all shadow-xs"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-warm-100 hover:bg-warm-200 text-slate-800 border border-warm-200 text-xs font-semibold transition-all shadow-xs"
               title="AI Study Assistant"
             >
-              <Sparkles className="w-3.5 h-3.5 text-violet-600" />
+              <Sparkles className="w-3.5 h-3.5 text-primary-600" />
               <span>AI Hub</span>
             </button>
 
             {/* Chat Shortcut */}
             <button
               onClick={() => navigate("/chat")}
-              className="p-2 rounded-xl text-slate-600 hover:text-primary-600 hover:bg-slate-100 relative transition-all"
+              className="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-warm-100 relative transition-all"
               title="Messages"
             >
-              <MessageSquare className="w-5 h-5" />
+              <MessageSquare className="w-4 h-4" />
               {unreadMessageCount > 0 && (
                 <span
                   key={`top-msg-${unreadMessageCount}`}
-                  className="absolute top-1.5 right-1.5 min-w-[18px] h-[18px] bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1 shadow-xs animate-pulse"
+                  className="absolute top-1.5 right-1.5 min-w-[16px] h-[16px] bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center px-1 shadow-xs animate-pulse"
                 >
                   {unreadMessageCount > 9 ? "9+" : unreadMessageCount}
                 </span>
@@ -314,16 +314,16 @@ export default function MainLayout() {
                 onClick={() => setShowNotif(!showNotif)}
                 className={`p-2 rounded-xl relative transition-all ${
                   showNotif
-                    ? "bg-primary-50 text-primary-600"
-                    : "text-slate-600 hover:text-primary-600 hover:bg-slate-100"
+                    ? "bg-warm-100 text-slate-900"
+                    : "text-slate-500 hover:text-slate-900 hover:bg-warm-100"
                 }`}
                 title="Notifications"
               >
-                <Bell className="w-5 h-5" />
+                <Bell className="w-4 h-4" />
                 {unreadCount > 0 && (
                   <span
                     key={`top-bell-${unreadCount}`}
-                    className="absolute top-1.5 right-1.5 min-w-[18px] h-[18px] bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1 shadow-xs animate-pulse"
+                    className="absolute top-1.5 right-1.5 min-w-[16px] h-[16px] bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center px-1 shadow-xs animate-pulse"
                   >
                     {unreadCount > 9 ? "9+" : unreadCount}
                   </span>
@@ -335,19 +335,19 @@ export default function MainLayout() {
             {/* User Profile Shortcut */}
             <button
               onClick={() => navigate("/profile")}
-              className="flex items-center gap-2 pl-2 pr-1.5 py-1 rounded-xl hover:bg-slate-100 transition-all border border-transparent hover:border-slate-200"
+              className="flex items-center gap-2 pl-2 pr-2 py-1 rounded-xl hover:bg-warm-100 transition-all border border-transparent hover:border-slate-200"
             >
               <img
                 src={
                   user?.profilePhoto ||
                   `https://ui-avatars.com/api/?name=${encodeURIComponent(
                     user?.name || "Student"
-                  )}&background=4f46e5&color=fff&bold=true`
+                  )}&background=1e293b&color=fff&bold=true`
                 }
                 alt={user?.name || "Profile"}
-                className="w-7 h-7 rounded-lg object-cover border border-slate-200"
+                className="w-7 h-7 rounded-lg object-cover border border-slate-200 shadow-xs"
               />
-              <span className="hidden md:inline text-xs font-semibold text-slate-700 max-w-[100px] truncate">
+              <span className="hidden md:inline text-xs font-bold text-slate-800 max-w-[100px] truncate">
                 {user?.name?.split(" ")[0] || "Profile"}
               </span>
             </button>
@@ -355,10 +355,10 @@ export default function MainLayout() {
             {/* Logout Button */}
             <button
               onClick={() => dispatch(logout())}
-              className="p-2 rounded-xl text-slate-600 hover:text-rose-600 hover:bg-rose-50 transition-all"
+              className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-all"
               title="Logout from EduBridge"
             >
-              <LogOut className="w-5 h-5" />
+              <LogOut className="w-4 h-4" />
             </button>
           </div>
         </header>
@@ -370,22 +370,22 @@ export default function MainLayout() {
           </div>
 
           {/* In-App Subtle Footer */}
-          <footer className="mt-12 pt-6 border-t border-slate-200/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
+          <footer className="mt-12 pt-6 border-t border-[#EAE5D9] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-slate-600">EduBridge</span>
+              <span className="font-bold text-slate-700">EduBridge</span>
               <span>•</span>
               <span>Student Resource & Collaboration Platform</span>
             </div>
-            <div className="flex items-center gap-4">
-              <span className="hover:text-primary-600 cursor-pointer" onClick={() => navigate("/resources")}>
+            <div className="flex items-center gap-4 text-slate-600 font-medium">
+              <span className="hover:text-slate-900 cursor-pointer" onClick={() => navigate("/resources")}>
                 Resources
               </span>
               <span>•</span>
-              <span className="hover:text-primary-600 cursor-pointer" onClick={() => navigate("/projects")}>
+              <span className="hover:text-slate-900 cursor-pointer" onClick={() => navigate("/projects")}>
                 Projects
               </span>
               <span>•</span>
-              <span className="hover:text-primary-600 cursor-pointer" onClick={() => navigate("/mentorship")}>
+              <span className="hover:text-slate-900 cursor-pointer" onClick={() => navigate("/mentorship")}>
                 Mentorship
               </span>
             </div>
