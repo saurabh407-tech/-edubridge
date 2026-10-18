@@ -76,7 +76,7 @@ export default function ResourceCard({ resource, onDownloaded }) {
   return (
     <Link
       to={`/resources/${resource._id}`}
-      className="card group relative flex flex-col justify-between p-5 bg-white border border-[#EAE5D9] hover:border-slate-400 hover:shadow-card-hover transition-all duration-300 rounded-2xl"
+      className="group relative flex flex-col justify-between p-5 bg-[#0B1D26]/75 backdrop-blur-xl border border-white/15 hover:border-white/30 hover:shadow-2xl transition-all duration-300 rounded-2xl text-white"
     >
       <div>
         {/* Top Badges & File Format */}
@@ -88,36 +88,36 @@ export default function ResourceCard({ resource, onDownloaded }) {
               {categoryConfig.label}
             </span>
             {resource.fileType && (
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-warm-100 text-slate-700 border border-warm-200">
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-white/10 text-slate-200 border border-white/15">
                 {FILE_TYPE_LABELS[resource.fileType] || resource.fileType.toUpperCase()}
               </span>
             )}
           </div>
 
           {resource.isDuplicate && (
-            <span className="badge badge-rose text-[9px] font-bold">
+            <span className="badge bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[9px] font-bold">
               Duplicate
             </span>
           )}
         </div>
 
         {/* Title */}
-        <h3 className="font-heading font-bold text-sm text-slate-950 mb-2 line-clamp-2 leading-snug group-hover:text-primary-600 transition-colors">
+        <h3 className="font-heading font-bold text-sm text-white mb-2 line-clamp-2 leading-snug group-hover:text-[#FBD784] transition-colors">
           {resource.title}
         </h3>
 
         {/* Academic Details Pills */}
         <div className="flex flex-wrap gap-1.5 mb-3">
-          <span className="px-2 py-0.5 rounded-md bg-slate-50 border border-slate-200/60 text-slate-700 text-[11px] font-medium truncate max-w-[160px]">
+          <span className="px-2 py-0.5 rounded-md bg-white/10 border border-white/15 text-slate-200 text-[11px] font-medium truncate max-w-[160px]">
             {resource.subject}
           </span>
           {resource.semester && (
-            <span className="px-2 py-0.5 rounded-md bg-slate-50 border border-slate-200/60 text-slate-600 text-[11px] font-medium">
+            <span className="px-2 py-0.5 rounded-md bg-white/10 border border-white/15 text-slate-300 text-[11px] font-medium">
               Sem {resource.semester}
             </span>
           )}
           {resource.branch && (
-            <span className="px-2 py-0.5 rounded-md bg-slate-50 border border-slate-200/60 text-slate-600 text-[11px] font-medium">
+            <span className="px-2 py-0.5 rounded-md bg-white/10 border border-white/15 text-slate-300 text-[11px] font-medium">
               {resource.branch}
             </span>
           )}
@@ -129,9 +129,9 @@ export default function ResourceCard({ resource, onDownloaded }) {
             {resource.tags.slice(0, 3).map((tag) => (
               <span
                 key={tag}
-                className="text-[10px] text-slate-600 bg-slate-50 px-1.5 py-0.5 rounded border border-slate-100 flex items-center gap-0.5"
+                className="text-[10px] text-slate-300 bg-white/5 px-1.5 py-0.5 rounded border border-white/10 flex items-center gap-0.5"
               >
-                <Tag className="w-2.5 h-2.5 text-slate-600" />
+                <Tag className="w-2.5 h-2.5 text-[#FBD784]" />
                 <span>{tag}</span>
               </span>
             ))}
@@ -141,19 +141,19 @@ export default function ResourceCard({ resource, onDownloaded }) {
 
       <div>
         {/* Statistics & Download Action */}
-        <div className="flex items-center justify-between pt-3.5 border-t border-slate-100 text-xs">
-          <div className="flex items-center gap-3 text-slate-600">
+        <div className="flex items-center justify-between pt-3.5 border-t border-white/10 text-xs">
+          <div className="flex items-center gap-3 text-slate-300">
             <span className="flex items-center gap-1 font-medium" title="Downloads">
-              <Download className="w-3.5 h-3.5 text-slate-600" />
+              <Download className="w-3.5 h-3.5 text-slate-400" />
               <span>{resource.downloadCount || 0}</span>
             </span>
             <span className="flex items-center gap-1 font-medium" title="Views">
-              <Eye className="w-3.5 h-3.5 text-slate-600" />
+              <Eye className="w-3.5 h-3.5 text-slate-400" />
               <span>{resource.viewCount || 0}</span>
             </span>
             {resource.averageRating > 0 && (
-              <span className="flex items-center gap-1 text-amber-600 font-bold" title="Rating">
-                <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+              <span className="flex items-center gap-1 text-[#FBD784] font-bold" title="Rating">
+                <Star className="w-3.5 h-3.5 fill-[#FBD784] text-[#FBD784]" />
                 <span>{resource.averageRating.toFixed(1)}</span>
               </span>
             )}
@@ -161,7 +161,7 @@ export default function ResourceCard({ resource, onDownloaded }) {
 
           <button
             onClick={handleDownload}
-            className="btn btn-soft text-xs py-1 px-2.5 rounded-lg flex items-center gap-1 font-semibold group/btn"
+            className="text-xs py-1 px-2.5 rounded-lg flex items-center gap-1 font-bold bg-[#FBD784] hover:bg-[#ffe39d] text-[#0B1D26] shadow-xs group/btn transition-all"
             title="Instant Download"
           >
             <Download className="w-3.5 h-3.5 group-hover/btn:-translate-y-0.5 transition-transform" />
@@ -171,17 +171,17 @@ export default function ResourceCard({ resource, onDownloaded }) {
 
         {/* Uploader Footer */}
         {resource.uploadedBy && (
-          <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-50">
+          <div className="flex items-center gap-2 mt-3 pt-3 border-t border-white/10">
             <Avatar
               src={resource.uploadedBy.profilePhoto}
               name={resource.uploadedBy.name}
               size="sm"
             />
             <div className="min-w-0 flex-1">
-              <p className="text-[11px] font-semibold text-slate-800 truncate">
+              <p className="text-[11px] font-semibold text-white truncate">
                 {resource.uploadedBy.name}
               </p>
-              <p className="text-[10px] text-slate-600">
+              <p className="text-[10px] text-slate-400">
                 {formatDistanceToNow(new Date(resource.createdAt), { addSuffix: true })}
               </p>
             </div>

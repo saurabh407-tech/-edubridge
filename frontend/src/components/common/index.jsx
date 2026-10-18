@@ -28,12 +28,12 @@ export function CardSkeleton() {
 // Empty state
 export function EmptyState({ icon: Icon, title, description, action }) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 px-6 text-center bg-white/60 rounded-3xl border border-dashed border-slate-200/90 my-4">
-      <div className="w-14 h-14 bg-warm-100/80 rounded-2xl flex items-center justify-center mb-4 border border-warm-200 shadow-2xs">
-        <Icon className="w-6 h-6 text-slate-700" strokeWidth={1.75} />
+    <div className="flex flex-col items-center justify-center py-16 px-6 text-center bg-[#0B1D26]/75 backdrop-blur-xl rounded-3xl border border-white/15 my-4 text-white shadow-2xl">
+      <div className="w-14 h-14 bg-[#FBD784]/15 rounded-2xl flex items-center justify-center mb-4 border border-[#FBD784]/30 shadow-xs">
+        <Icon className="w-6 h-6 text-[#FBD784]" strokeWidth={1.75} />
       </div>
-      <h3 className="text-base font-bold font-heading text-slate-900 mb-1.5">{title}</h3>
-      <p className="text-slate-500 max-w-sm text-xs leading-relaxed mb-6">{description}</p>
+      <h3 className="text-base font-bold font-heading text-white mb-1.5">{title}</h3>
+      <p className="text-slate-300 max-w-sm text-xs leading-relaxed mb-6">{description}</p>
       {action && <div>{action}</div>}
     </div>
   );
@@ -44,7 +44,7 @@ export function Badge({ children, color = "blue" }) {
   const colors = {
     blue: "bg-primary-50 text-primary-700 border border-primary-200/70",
     indigo: "bg-indigo-50 text-indigo-700 border border-indigo-200/70",
-    sky: "bg-sky-50 text-sky-700 border border-sky-200/70",
+    sky: "bg-sky-50 text-sky-700 border border-sky-100/80",
     cyan: "bg-cyan-50 text-cyan-700 border border-cyan-200/70",
     green: "bg-emerald-50 text-emerald-700 border border-emerald-200/70",
     emerald: "bg-emerald-50 text-emerald-700 border border-emerald-200/70",
@@ -67,12 +67,12 @@ export function Avatar({ src, name, size = "md" }) {
     lg: "w-12 h-12 text-base",
     xl: "w-16 h-16 text-lg",
   };
-  const fallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(name || "U")}&background=1e293b&color=ffffff&bold=true&size=128`;
+  const fallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(name || "U")}&background=FBD784&color=0B1D26&bold=true&size=128`;
   return (
     <img
       src={src || fallback}
       alt={name || "User"}
-      className={`${sizes[size] || sizes.md} rounded-full object-cover flex-shrink-0 ring-2 ring-slate-100 shadow-2xs`}
+      className={`${sizes[size] || sizes.md} rounded-full object-cover flex-shrink-0 ring-2 ring-white/20 shadow-2xs`}
     />
   );
 }
@@ -88,19 +88,19 @@ export function Modal({ isOpen, onClose, title, size = "md", children }) {
   };
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 animate-fade-in">
-      <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs transition-opacity" onClick={onClose} />
-      <div className={`relative bg-white rounded-3xl shadow-elevated border border-slate-200/90 w-full ${maxSizes[size] || maxSizes.md} max-h-[90vh] overflow-y-auto z-10 animate-scale-in`}>
-        <div className="flex items-center justify-between px-6 py-4.5 border-b border-slate-100 sticky top-0 bg-white/95 backdrop-blur-sm z-10">
-          <h2 className="text-lg font-bold font-heading text-slate-900">{title}</h2>
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-md transition-opacity" onClick={onClose} />
+      <div className={`relative bg-[#0B1D26]/95 backdrop-blur-2xl text-white rounded-3xl shadow-2xl border border-white/15 w-full ${maxSizes[size] || maxSizes.md} max-h-[90vh] overflow-y-auto z-10 animate-scale-in`}>
+        <div className="flex items-center justify-between px-6 py-4.5 border-b border-white/10 sticky top-0 bg-[#0B1D26]/90 backdrop-blur-xl z-10">
+          <h2 className="text-lg font-bold font-heading text-white">{title}</h2>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
             title="Close"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
-        <div className="p-6">{children}</div>
+        <div className="p-6 text-white">{children}</div>
       </div>
     </div>
   );

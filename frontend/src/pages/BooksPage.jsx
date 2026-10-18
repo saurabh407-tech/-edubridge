@@ -39,11 +39,11 @@ function BookCard({ book, onReserve, onChat, onClick }) {
   return (
     <div
       onClick={onClick}
-      className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-[#EAE5D9] bg-white transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-card cursor-pointer"
+      className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-white/15 bg-[#0B1D26]/75 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-white/30 hover:shadow-2xl cursor-pointer text-white"
     >
       <div>
         {/* Cover / Image Area */}
-        <div className="relative h-52 w-full overflow-hidden bg-warm-100">
+        <div className="relative h-52 w-full overflow-hidden bg-white/5">
           {book.images?.[0] ? (
             <img
               src={book.images[0]}
@@ -52,22 +52,22 @@ function BookCard({ book, onReserve, onChat, onClick }) {
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-[#FAF9F5]">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-[#EAE5D9] bg-white text-slate-400 shadow-2xs">
-                <BookMarked className="h-8 w-8 text-slate-500" />
+            <div className="flex h-full w-full items-center justify-center bg-white/5">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-white/15 bg-white/10 text-[#FBD784] shadow-xs">
+                <BookMarked className="h-8 w-8 text-[#FBD784]" />
               </div>
             </div>
           )}
 
           {/* Condition & Free Badges */}
           <div className="absolute left-3 top-3 flex items-center gap-1.5">
-            <span className="rounded-full border border-white/80 bg-white/95 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-slate-700 shadow-xs backdrop-blur-sm">
+            <span className="rounded-full border border-white/20 bg-[#0B1D26]/80 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-white shadow-xs backdrop-blur-md">
               {cond.label}
             </span>
           </div>
 
           {book.isFree && (
-            <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-emerald-600 px-2.5 py-1 text-[11px] font-bold text-white shadow-xs">
+            <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-emerald-500/90 px-2.5 py-1 text-[11px] font-bold text-white shadow-xs backdrop-blur-sm">
               <Sparkles size={11} />
               FREE
             </div>
@@ -78,42 +78,42 @@ function BookCard({ book, onReserve, onChat, onClick }) {
         <div className="p-5">
           {/* Subject tag */}
           {book.subject && (
-            <div className="mb-2 inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-primary-700">
+            <div className="mb-2 inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-[#FBD784]">
               <Tag size={11} />
               <span>{book.subject}</span>
             </div>
           )}
 
           {/* Book Title */}
-          <h3 className="line-clamp-2 font-heading text-base font-bold text-slate-900 group-hover:text-primary-700 transition-colors">
+          <h3 className="line-clamp-2 font-heading text-base font-bold text-white group-hover:text-[#FBD784] transition-colors">
             {book.bookName}
           </h3>
 
           {/* Author */}
-          <p className="mt-1 text-xs text-slate-500">
-            by <span className="font-medium text-slate-700">{book.author}</span>
+          <p className="mt-1 text-xs text-slate-300">
+            by <span className="font-medium text-white">{book.author}</span>
           </p>
 
           {/* Price & Status */}
-          <div className="mt-4 flex items-baseline justify-between border-t border-[#F2EFE8] pt-3">
+          <div className="mt-4 flex items-baseline justify-between border-t border-white/10 pt-3">
             <div>
               <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                 Price
               </span>
-              <p className={`text-lg font-bold font-heading ${book.isFree ? "text-emerald-700" : "text-slate-900"}`}>
+              <p className={`text-lg font-bold font-heading ${book.isFree ? "text-emerald-400" : "text-[#FBD784]"}`}>
                 {book.isFree ? "Free Exchange" : `₹${book.price}`}
               </p>
             </div>
 
-            <div className="flex items-center gap-1 text-[11px] text-slate-500">
-              <ShieldCheck size={13} className="text-emerald-600" />
+            <div className="flex items-center gap-1 text-[11px] text-slate-300">
+              <ShieldCheck size={13} className="text-emerald-400" />
               <span>Peer Verified</span>
             </div>
           </div>
 
           {/* Location */}
           {book.location && (
-            <div className="mt-2.5 flex items-center gap-1.5 text-xs text-slate-500">
+            <div className="mt-2.5 flex items-center gap-1.5 text-xs text-slate-400">
               <MapPin size={12} className="shrink-0 text-slate-400" />
               <span className="truncate">{book.location}</span>
             </div>
@@ -129,10 +129,10 @@ function BookCard({ book, onReserve, onChat, onClick }) {
         <button
           onClick={() => onReserve(book)}
           disabled={book.availability !== "available"}
-          className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 text-xs font-semibold transition-all ${
+          className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 text-xs font-bold transition-all shadow-sm ${
             book.availability === "available"
-              ? "bg-slate-900 text-white hover:bg-slate-800 shadow-2xs"
-              : "cursor-not-allowed bg-slate-100 text-slate-400"
+              ? "bg-[#FBD784] text-[#0B1D26] hover:bg-[#ffe39d] hover:-translate-y-0.5"
+              : "cursor-not-allowed bg-white/10 text-slate-500"
           }`}
         >
           <ShoppingBag size={13} />
@@ -146,7 +146,7 @@ function BookCard({ book, onReserve, onChat, onClick }) {
         <button
           onClick={() => onChat(book.seller?._id)}
           title="Message Owner"
-          className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#EAE5D9] bg-white text-slate-600 transition hover:border-slate-400 hover:text-slate-900"
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/15 bg-white/10 text-slate-300 transition hover:border-white/30 hover:bg-white/20 hover:text-white"
         >
           <MessageSquare size={14} />
         </button>
@@ -232,14 +232,14 @@ function AddBookModal({ isOpen, onClose, onSuccess }) {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="List a Textbook or Study Material" size="lg">
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 text-white">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="sm:col-span-2">
-            <label className="mb-1 block text-xs font-semibold text-slate-700">
-              Book Title <span className="text-red-500">*</span>
+            <label className="mb-1 block text-xs font-semibold text-slate-200">
+              Book Title <span className="text-[#FBD784]">*</span>
             </label>
             <input
-              className="input text-sm"
+              className="input-dark text-sm"
               placeholder="e.g. Operating System Concepts (Silberschatz)"
               value={form.bookName}
               onChange={set("bookName")}
@@ -248,11 +248,11 @@ function AddBookModal({ isOpen, onClose, onSuccess }) {
           </div>
 
           <div className="sm:col-span-2">
-            <label className="mb-1 block text-xs font-semibold text-slate-700">
-              Author(s) <span className="text-red-500">*</span>
+            <label className="mb-1 block text-xs font-semibold text-slate-200">
+              Author(s) <span className="text-[#FBD784]">*</span>
             </label>
             <input
-              className="input text-sm"
+              className="input-dark text-sm"
               placeholder="e.g. Abraham Silberschatz, Peter Baer Galvin"
               value={form.author}
               onChange={set("author")}
@@ -261,11 +261,11 @@ function AddBookModal({ isOpen, onClose, onSuccess }) {
           </div>
 
           <div>
-            <label className="mb-1 block text-xs font-semibold text-slate-700">
+            <label className="mb-1 block text-xs font-semibold text-slate-200">
               Book Condition
             </label>
             <select
-              className="input text-sm"
+              className="input-dark text-sm"
               value={form.condition}
               onChange={set("condition")}
             >
@@ -276,7 +276,7 @@ function AddBookModal({ isOpen, onClose, onSuccess }) {
                 { val: "fair", label: "Fair (Some highlights)" },
                 { val: "poor", label: "Used / Notes included" },
               ].map((c) => (
-                <option key={c.val} value={c.val}>
+                <option key={c.val} value={c.val} className="bg-[#0B1D26] text-white">
                   {c.label}
                 </option>
               ))}
@@ -284,34 +284,34 @@ function AddBookModal({ isOpen, onClose, onSuccess }) {
           </div>
 
           <div>
-            <label className="mb-1 block text-xs font-semibold text-slate-700">
+            <label className="mb-1 block text-xs font-semibold text-slate-200">
               Academic Subject
             </label>
             <input
-              className="input text-sm"
+              className="input-dark text-sm"
               placeholder="e.g. Computer Science / OS"
               value={form.subject}
               onChange={set("subject")}
             />
           </div>
 
-          <div className="sm:col-span-2 rounded-xl border border-[#EAE5D9] bg-[#FAF9F5] p-3 flex items-center justify-between gap-4">
-            <label className="flex items-center gap-2.5 text-xs font-semibold text-slate-800 cursor-pointer">
+          <div className="sm:col-span-2 rounded-xl border border-white/15 bg-white/5 backdrop-blur-md p-3 flex items-center justify-between gap-4">
+            <label className="flex items-center gap-2.5 text-xs font-semibold text-white cursor-pointer">
               <input
                 type="checkbox"
                 id="isFree"
                 checked={form.isFree}
                 onChange={set("isFree")}
-                className="h-4 w-4 rounded border-[#D6D0C2] text-primary-600 focus:ring-primary-500"
+                className="h-4 w-4 rounded border-white/30 text-[#FBD784] focus:ring-[#FBD784]"
               />
               Offer as Free Community Share
             </label>
 
             {!form.isFree && (
               <div className="flex items-center gap-2">
-                <span className="text-xs font-medium text-slate-500">₹</span>
+                <span className="text-xs font-bold text-[#FBD784]">₹</span>
                 <input
-                  className="input w-32 py-1.5 text-sm"
+                  className="input-dark w-32 py-1.5 text-sm"
                   type="number"
                   placeholder="Price"
                   value={form.price}
@@ -322,11 +322,11 @@ function AddBookModal({ isOpen, onClose, onSuccess }) {
           </div>
 
           <div className="sm:col-span-2">
-            <label className="mb-1 block text-xs font-semibold text-slate-700">
-              Pickup / Campus Location <span className="text-red-500">*</span>
+            <label className="mb-1 block text-xs font-semibold text-slate-200">
+              Pickup / Campus Location <span className="text-[#FBD784]">*</span>
             </label>
             <input
-              className="input text-sm"
+              className="input-dark text-sm"
               placeholder="e.g. Main Library, North Campus or City"
               value={form.location}
               onChange={set("location")}
@@ -335,11 +335,11 @@ function AddBookModal({ isOpen, onClose, onSuccess }) {
           </div>
 
           <div className="sm:col-span-2">
-            <label className="mb-1 block text-xs font-semibold text-slate-700">
+            <label className="mb-1 block text-xs font-semibold text-slate-200">
               Notes & Edition Details
             </label>
             <textarea
-              className="input resize-none text-sm"
+              className="input-dark resize-none text-sm"
               rows={3}
               placeholder="Include edition, included notes, or meeting preferences..."
               value={form.description}
@@ -351,41 +351,41 @@ function AddBookModal({ isOpen, onClose, onSuccess }) {
         {/* Dropzone */}
         <div
           {...getRootProps()}
-          className="group cursor-pointer rounded-xl border-2 border-dashed border-[#D6D0C2] bg-warm-50 p-5 text-center transition hover:border-slate-600 hover:bg-white"
+          className="group cursor-pointer rounded-xl border-2 border-dashed border-white/20 bg-white/5 p-5 text-center transition hover:border-[#FBD784] hover:bg-white/10 backdrop-blur-md"
         >
           <input {...getInputProps()} />
-          <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-white text-slate-600 shadow-2xs">
+          <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-[#FBD784]/15 text-[#FBD784] border border-[#FBD784]/30 shadow-2xs">
             <BookMarked size={18} />
           </div>
 
           {images.length > 0 ? (
-            <p className="text-xs font-semibold text-emerald-700">
+            <p className="text-xs font-semibold text-emerald-400">
               ✓ {images.length} photo(s) selected
             </p>
           ) : (
             <>
-              <p className="text-xs font-semibold text-slate-800">
+              <p className="text-xs font-semibold text-white">
                 Upload book photos
               </p>
-              <p className="mt-0.5 text-[11px] text-slate-400">
+              <p className="mt-0.5 text-[11px] text-slate-300">
                 Click or drag up to 5 clear photos of the cover and pages
               </p>
             </>
           )}
         </div>
 
-        <div className="flex items-center justify-end gap-3 pt-2 border-t border-[#EAE5D9]">
+        <div className="flex items-center justify-end gap-3 pt-2 border-t border-white/10">
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl border border-[#EAE5D9] bg-white px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-warm-100"
+            className="rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/15 transition-all"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="btn-primary py-2.5 px-5 text-xs"
+            className="btn-gold py-2.5 px-5 text-xs"
           >
             {loading ? "Publishing..." : "Publish Listing"}
           </button>
@@ -435,20 +435,20 @@ export default function BooksPage() {
   return (
     <div className="space-y-8 pb-12">
       {/* Editorial Header Banner */}
-      <section className="relative overflow-hidden rounded-3xl border border-[#EAE5D9] bg-slate-900 p-8 sm:p-10 text-white shadow-card">
+      <section className="relative overflow-hidden rounded-3xl border border-white/15 bg-[#0B1D26]/85 backdrop-blur-xl p-8 sm:p-10 text-white shadow-2xl">
         {/* Subtle decorative circles */}
-        <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-primary-600/15 blur-3xl" />
-        <div className="pointer-events-none absolute bottom-0 right-1/4 h-48 w-48 rounded-full bg-indigo-500/10 blur-2xl" />
+        <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-[#FBD784]/10 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-0 right-1/4 h-48 w-48 rounded-full bg-teal-500/10 blur-2xl" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-semibold tracking-wider uppercase text-slate-300 backdrop-blur-md">
-              <Sparkles size={12} className="text-primary-300" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-bold tracking-wider uppercase text-[#FBD784] backdrop-blur-md">
+              <Sparkles size={12} className="text-[#FBD784]" />
               Student Book Exchange
             </div>
 
             <h1 className="mt-4 font-heading text-3xl font-extrabold tracking-tight sm:text-4xl text-white">
-              Give textbooks a <span className="text-slate-300">second life.</span>
+              Give textbooks a <span className="text-[#FBD784]">second life.</span>
             </h1>
 
             <p className="mt-3 text-sm sm:text-base leading-relaxed text-slate-300 max-w-xl">
@@ -469,7 +469,7 @@ export default function BooksPage() {
                     setPage(1);
                   }}
                   placeholder="Search by title, author, subject..."
-                  className="h-11 w-full rounded-xl border border-white/15 bg-white/10 px-10 text-sm text-white placeholder-slate-400 outline-none backdrop-blur-sm focus:border-white/40 focus:bg-white/15"
+                  className="h-11 w-full rounded-xl border border-white/20 bg-white/10 px-10 text-sm text-white placeholder-slate-400 outline-none backdrop-blur-md focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
                 />
                 {search && (
                   <button
@@ -483,7 +483,7 @@ export default function BooksPage() {
 
               <button
                 onClick={() => setShowAdd(true)}
-                className="flex h-11 items-center justify-center gap-2 rounded-xl bg-white px-5 text-xs font-bold text-slate-900 shadow-sm transition hover:bg-warm-100"
+                className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#FBD784] hover:bg-[#ffe39d] px-5 text-xs font-bold text-[#0B1D26] shadow-md transition hover:-translate-y-0.5"
               >
                 <Plus size={15} />
                 List a Book
@@ -493,20 +493,20 @@ export default function BooksPage() {
 
           {/* Quick Metrics Ribbon */}
           <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:w-72 shrink-0">
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
-              <BookOpen size={18} className="text-primary-300 mb-2" />
+            <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+              <BookOpen size={18} className="text-[#FBD784] mb-2" />
               <p className="text-2xl font-bold font-heading text-white">
                 {totalBooks.toLocaleString()}
               </p>
-              <p className="text-[11px] font-medium text-slate-400">
+              <p className="text-[11px] font-medium text-slate-300">
                 Books in Circulation
               </p>
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
+            <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
               <ShieldCheck size={18} className="text-emerald-400 mb-2" />
               <p className="text-2xl font-bold font-heading text-white">100%</p>
-              <p className="text-[11px] font-medium text-slate-400">
+              <p className="text-[11px] font-medium text-slate-300">
                 Campus Peer Verified
               </p>
             </div>
@@ -517,15 +517,15 @@ export default function BooksPage() {
       {/* Directory Section Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="font-heading text-xl font-bold text-slate-900">
+          <h2 className="font-heading text-xl font-bold text-white">
             Available Textbooks & Materials
           </h2>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-slate-300 mt-0.5">
             Discover peer-listed books ready for campus handoff or courier
           </p>
         </div>
 
-        <div className="rounded-full border border-[#EAE5D9] bg-white px-3 py-1 text-xs font-semibold text-slate-600 shadow-2xs">
+        <div className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold text-slate-200 shadow-xs">
           {totalBooks} {totalBooks === 1 ? "Listing" : "Listings"}
         </div>
       </div>
@@ -540,7 +540,7 @@ export default function BooksPage() {
             ))}
         </div>
       ) : data?.data?.length === 0 ? (
-        <div className="rounded-2xl border border-[#EAE5D9] bg-white p-12 text-center shadow-2xs">
+        <div className="rounded-2xl border border-white/15 bg-[#0B1D26]/75 backdrop-blur-xl p-12 text-center shadow-xl text-white">
           <EmptyState
             icon={BookMarked}
             title="No books currently listed"
@@ -552,7 +552,7 @@ export default function BooksPage() {
             action={
               <button
                 onClick={() => setShowAdd(true)}
-                className="btn-primary inline-flex items-center gap-2 py-2.5 px-4 text-xs"
+                className="bg-[#FBD784] hover:bg-[#ffe39d] text-[#0B1D26] font-bold inline-flex items-center gap-2 py-2.5 px-4 text-xs rounded-xl shadow-md"
               >
                 <Plus size={14} />
                 List Your First Book
