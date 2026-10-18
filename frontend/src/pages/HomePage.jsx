@@ -396,17 +396,6 @@ export default function HomePage() {
                     </div>
                   </div>
 
-                  {/* Overlapping Badge: Live Community Pulse */}
-                  <div className="absolute -bottom-5 -left-4 sm:-left-6 bg-[#0B1D26]/90 backdrop-blur-md border border-white/20 rounded-2xl p-3.5 shadow-2xl flex items-center gap-3 animate-fade-in">
-                    <div className="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center font-bold text-xs">
-                      4.9★
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-white">Student Verified</p>
-                      <p className="text-[10px] text-slate-400">Peer rated semester materials</p>
-                    </div>
-                  </div>
-
                   {/* Overlapping Top-Right Badge: Active Study Teams */}
                   <div className="absolute -top-4 -right-2 sm:-right-4 bg-[#0B1D26]/90 backdrop-blur-md border border-white/20 rounded-2xl px-3.5 py-2 shadow-2xl hidden sm:flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
