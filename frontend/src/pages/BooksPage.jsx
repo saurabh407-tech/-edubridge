@@ -39,7 +39,7 @@ function BookCard({ book, onReserve, onChat, onClick }) {
   return (
     <div
       onClick={onClick}
-      className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-white/15 bg-[#0B1D26]/75 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-white/30 hover:shadow-2xl cursor-pointer text-white"
+      className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-white/15 bg-[#0B1D26]/85 backdrop-blur-md hover:border-[#FBD784]/40 hover:shadow-2xl transition-colors duration-150 cursor-pointer text-white"
     >
       <div>
         {/* Cover / Image Area */}
@@ -131,7 +131,7 @@ function BookCard({ book, onReserve, onChat, onClick }) {
           disabled={book.availability !== "available"}
           className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 text-xs font-bold transition-all shadow-sm ${
             book.availability === "available"
-              ? "bg-[#FBD784] text-[#0B1D26] hover:bg-[#ffe39d] hover:-translate-y-0.5"
+              ? "bg-[#FBD784] text-[#0B1D26] hover:bg-[#ffe39d]"
               : "cursor-not-allowed bg-white/10 text-slate-500"
           }`}
         >
@@ -483,7 +483,7 @@ export default function BooksPage() {
 
               <button
                 onClick={() => setShowAdd(true)}
-                className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#FBD784] hover:bg-[#ffe39d] px-5 text-xs font-bold text-[#0B1D26] shadow-md transition hover:-translate-y-0.5"
+                className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#FBD784] hover:bg-[#ffe39d] px-5 text-xs font-bold text-[#0B1D26] shadow-md transition-colors"
               >
                 <Plus size={15} />
                 List a Book
@@ -586,16 +586,16 @@ export default function BooksPage() {
           )}
 
           {/* Peer Community Callout */}
-          <div className="rounded-2xl border border-[#EAE5D9] bg-white p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 shadow-2xs">
+          <div className="rounded-2xl border border-white/15 bg-[#0B1D26]/85 backdrop-blur-md p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 text-white shadow-xl">
             <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-warm-100 text-slate-800 border border-[#EAE5D9]">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#FBD784]/15 text-[#FBD784] border border-[#FBD784]/30">
                 <BookMarked size={22} />
               </div>
               <div>
-                <h3 className="font-heading text-base font-bold text-slate-900">
+                <h3 className="font-heading text-base font-bold text-white">
                   Finished with your current semester courses?
                 </h3>
-                <p className="mt-1 text-xs text-slate-500 max-w-xl">
+                <p className="mt-1 text-xs text-slate-300 max-w-xl">
                   Pass your books forward to junior peers. It frees up your desk, helps fellow students avoid high retail costs, and keeps academic knowledge circulating.
                 </p>
               </div>
@@ -603,7 +603,7 @@ export default function BooksPage() {
 
             <button
               onClick={() => setShowAdd(true)}
-              className="btn-primary shrink-0 text-xs py-2.5 px-4 flex items-center gap-2"
+              className="btn-gold shrink-0 text-xs py-2.5 px-4 flex items-center gap-2"
             >
               <Plus size={14} />
               List Another Book

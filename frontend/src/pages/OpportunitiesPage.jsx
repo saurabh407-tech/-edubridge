@@ -82,7 +82,7 @@ function OpportunityCard({ opp, onApply }) {
   return (
     <article
       onClick={() => navigate(`/opportunities/${opp._id}`)}
-      className={`group flex flex-col justify-between overflow-hidden rounded-2xl border border-[#EAE5D9] bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-card cursor-pointer ${
+      className={`group flex flex-col justify-between overflow-hidden rounded-2xl border border-white/15 bg-[#0B1D26]/85 backdrop-blur-md p-5 hover:border-[#FBD784]/40 hover:shadow-xl transition-colors duration-150 cursor-pointer text-white ${
         isExpired ? "opacity-75" : ""
       }`}
     >
@@ -90,12 +90,12 @@ function OpportunityCard({ opp, onApply }) {
         {/* Card Header Badges */}
         <div className="flex items-start justify-between gap-2 mb-3">
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="rounded-md bg-warm-100 border border-[#EAE5D9] px-2.5 py-0.5 text-[11px] font-semibold text-slate-800">
+            <span className="rounded-md bg-white/10 border border-white/15 px-2.5 py-0.5 text-[11px] font-semibold text-[#FBD784]">
               {config.label}
             </span>
 
             {opp.isRemote && (
-              <span className="rounded-md bg-slate-50 border border-slate-200 px-2 py-0.5 text-[11px] font-medium text-slate-600">
+              <span className="rounded-md bg-white/5 border border-white/10 px-2.5 py-0.5 text-[11px] font-medium text-slate-300">
                 Remote
               </span>
             )}
@@ -103,28 +103,28 @@ function OpportunityCard({ opp, onApply }) {
 
           <div className="flex items-center gap-1 text-[11px] text-slate-400">
             {hasApplied && (
-              <span className="inline-flex items-center gap-1 text-emerald-700 font-semibold bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
+              <span className="inline-flex items-center gap-1 text-emerald-400 font-semibold bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 rounded-md">
                 <CheckCircle2 size={11} /> Applied
               </span>
             )}
-            <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-warm-100 text-slate-500 transition-colors group-hover:bg-slate-900 group-hover:text-white">
+            <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-white/10 text-slate-300 transition-colors group-hover:bg-[#FBD784] group-hover:text-[#0B1D26]">
               <ArrowUpRight size={13} />
             </div>
           </div>
         </div>
 
         {/* Title & Organizer */}
-        <h3 className="line-clamp-2 font-heading text-base font-bold text-slate-900 group-hover:text-primary-700 transition-colors">
+        <h3 className="line-clamp-2 font-heading text-base font-bold text-white group-hover:text-[#FBD784] transition-colors">
           {opp.title}
         </h3>
 
-        <p className="mt-1 text-xs text-slate-500 flex items-center gap-1">
+        <p className="mt-1 text-xs text-slate-300 flex items-center gap-1">
           <Building2 size={12} className="text-slate-400 shrink-0" />
           <span className="truncate">{opp.organizer}</span>
         </p>
 
         {opp.description && (
-          <p className="mt-2 line-clamp-2 min-h-[34px] text-xs leading-relaxed text-slate-500">
+          <p className="mt-2 line-clamp-2 min-h-[34px] text-xs leading-relaxed text-slate-300">
             {opp.description}
           </p>
         )}
@@ -555,19 +555,19 @@ export default function OpportunitiesPage() {
   return (
     <div className="space-y-8 pb-12">
       {/* Editorial Header Banner */}
-      <section className="relative overflow-hidden rounded-3xl border border-[#EAE5D9] bg-slate-900 p-8 sm:p-10 text-white shadow-card">
-        <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-primary-600/15 blur-3xl" />
-        <div className="pointer-events-none absolute bottom-0 right-1/4 h-48 w-48 rounded-full bg-indigo-500/10 blur-2xl" />
+      <section className="relative overflow-hidden rounded-3xl border border-white/15 bg-[#0B1D26]/85 backdrop-blur-md p-8 sm:p-10 text-white shadow-2xl">
+        <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-[#FBD784]/10 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-0 right-1/4 h-48 w-48 rounded-full bg-teal-500/10 blur-2xl" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-semibold tracking-wider uppercase text-slate-300 backdrop-blur-md">
-              <Sparkles size={12} className="text-primary-300" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-bold tracking-wider uppercase text-[#FBD784] backdrop-blur-md">
+              <Sparkles size={12} className="text-[#FBD784]" />
               Campus & Industry Opportunities
             </div>
 
             <h1 className="mt-4 font-heading text-3xl font-extrabold tracking-tight sm:text-4xl text-white">
-              Launch your career <span className="text-slate-300">before graduation.</span>
+              Launch your career <span className="text-[#FBD784]">before graduation.</span>
             </h1>
 
             <p className="mt-3 text-sm sm:text-base leading-relaxed text-slate-300 max-w-xl">
@@ -588,7 +588,7 @@ export default function OpportunitiesPage() {
                     setPage(1);
                   }}
                   placeholder="Search opportunities by title, company, or stack..."
-                  className="h-11 w-full rounded-xl border border-white/15 bg-white/10 px-10 text-sm text-white placeholder-slate-400 outline-none backdrop-blur-sm focus:border-white/40 focus:bg-white/15"
+                  className="h-11 w-full rounded-xl border border-white/20 bg-white/10 px-10 text-sm text-white placeholder-slate-400 outline-none backdrop-blur-md focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
                 />
                 {search && (
                   <button
@@ -602,7 +602,7 @@ export default function OpportunitiesPage() {
 
               <button
                 onClick={() => setShowPost(true)}
-                className="flex h-11 items-center justify-center gap-2 rounded-xl bg-white px-5 text-xs font-bold text-slate-900 shadow-sm transition hover:bg-warm-100"
+                className="btn-gold flex h-11 items-center justify-center gap-2 px-5 text-xs font-bold shadow-md"
               >
                 <Plus size={15} />
                 Post Opportunity
@@ -612,20 +612,20 @@ export default function OpportunitiesPage() {
 
           {/* Quick Metrics Ribbon */}
           <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:w-72 shrink-0">
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
-              <Briefcase size={18} className="text-primary-300 mb-2" />
+            <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+              <Briefcase size={18} className="text-[#FBD784] mb-2" />
               <p className="text-2xl font-bold font-heading text-white">
                 {totalOpps.toLocaleString()}
               </p>
-              <p className="text-[11px] font-medium text-slate-400">
+              <p className="text-[11px] font-medium text-slate-300">
                 Active Listings
               </p>
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
-              <Trophy size={18} className="text-amber-400 mb-2" />
+            <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+              <Trophy size={18} className="text-emerald-400 mb-2" />
               <p className="text-2xl font-bold font-heading text-white">Verified</p>
-              <p className="text-[11px] font-medium text-slate-400">
+              <p className="text-[11px] font-medium text-slate-300">
                 Competitions & Drives
               </p>
             </div>

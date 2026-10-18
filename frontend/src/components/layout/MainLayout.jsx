@@ -331,12 +331,12 @@ export default function MainLayout() {
           MAIN APPLICATION AREA (TOPBAR + CONTENT)
       ========================================================== */}
       <div
-        className={`flex-1 flex flex-col min-w-0 transition-all duration-300 relative z-10 ${
+        className={`flex-1 flex flex-col min-w-0 transition-[margin] duration-200 ease-out relative z-10 ${
           sidebarOpen ? "lg:ml-64" : "lg:ml-20"
         }`}
       >
         {/* Topbar Header */}
-        <header className="h-16 bg-[#0B1D26]/75 backdrop-blur-xl border-b border-white/10 flex items-center justify-between px-4 lg:px-8 flex-shrink-0 sticky top-0 z-30 shadow-lg text-white">
+        <header className="h-16 bg-[#0B1D26]/85 backdrop-blur-md border-b border-white/10 flex items-center justify-between px-4 lg:px-8 flex-shrink-0 sticky top-0 z-30 shadow-lg text-white">
           {/* Left: Mobile Toggle & Global Search */}
           <div className="flex items-center gap-3">
             <button
@@ -448,8 +448,8 @@ export default function MainLayout() {
           </div>
         </header>
 
-        {/* Page Content Viewport */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 animate-fade-in flex flex-col justify-between relative z-10 text-white">
+        {/* Page Content Viewport with Lockstep Hardware Acceleration */}
+        <main className="flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col justify-between relative z-10 text-white smooth-scroll-viewport">
           <div>
             <Outlet />
           </div>

@@ -76,7 +76,7 @@ export default function ResourceCard({ resource, onDownloaded }) {
   return (
     <Link
       to={`/resources/${resource._id}`}
-      className="group relative flex flex-col justify-between p-5 bg-[#0B1D26]/75 backdrop-blur-xl border border-white/15 hover:border-white/30 hover:shadow-2xl transition-all duration-300 rounded-2xl text-white"
+      className="group relative flex flex-col justify-between p-5 bg-[#0B1D26]/85 backdrop-blur-md border border-white/15 hover:border-[#FBD784]/40 hover:shadow-xl transition-colors duration-150 rounded-2xl text-white"
     >
       <div>
         {/* Top Badges & File Format */}

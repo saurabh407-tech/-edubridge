@@ -38,7 +38,7 @@ function StatCard({ icon: Icon, label, value, colorStyle, isLoading, to }) {
   return (
     <Link
       to={to || "#"}
-      className="group relative overflow-hidden p-5 transition-all duration-300 hover:-translate-y-1 hover:border-white/30 border border-white/15 bg-[#0B1D26]/75 backdrop-blur-xl rounded-2xl shadow-xl flex flex-col justify-between"
+      className="group relative overflow-hidden p-5 transition-colors duration-150 hover:border-[#FBD784]/40 border border-white/15 bg-[#0B1D26]/85 backdrop-blur-md rounded-2xl shadow-xl flex flex-col justify-between"
     >
       {/* Subtle background glow */}
       <div
@@ -252,7 +252,7 @@ export default function DashboardPage() {
   );
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto animate-fade-in pb-8">
+    <div className="space-y-6 max-w-7xl mx-auto pb-8">
       {/* =========================================================
           HERO BANNER & STUDENT IDENTITY
       ========================================================== */}

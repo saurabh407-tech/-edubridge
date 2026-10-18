@@ -167,7 +167,7 @@ export default function ResourcesPage() {
   const totalResources = data?.pagination?.total || 0;
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto animate-fade-in pb-12">
+    <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* =====================================================
           HEADER & SEARCH HERO BANNER
       ====================================================== */}
@@ -216,7 +216,7 @@ export default function ResourcesPage() {
 
             <button
               onClick={() => setShowUpload(true)}
-              className="h-12 px-6 rounded-xl bg-[#FBD784] hover:bg-[#ffe39d] text-[#0B1D26] font-bold text-xs sm:text-sm shadow-md flex items-center justify-center gap-2 hover:-translate-y-0.5 transition-all flex-shrink-0"
+              className="h-12 px-6 rounded-xl bg-[#FBD784] hover:bg-[#ffe39d] text-[#0B1D26] font-bold text-xs sm:text-sm shadow-md flex items-center justify-center gap-2 transition-colors flex-shrink-0"
             >
               <Upload className="w-4 h-4 text-[#0B1D26]" />
               <span>Share Notes</span>
@@ -456,7 +456,7 @@ export default function ResourcesPage() {
         </div>
         <button
           onClick={() => setShowUpload(true)}
-          className="bg-[#FBD784] hover:bg-[#ffe39d] text-[#0B1D26] font-bold text-xs px-5 py-2.5 rounded-xl shadow-md hover:-translate-y-0.5 transition-all flex items-center gap-2 flex-shrink-0"
+          className="bg-[#FBD784] hover:bg-[#ffe39d] text-[#0B1D26] font-bold text-xs px-5 py-2.5 rounded-xl shadow-md transition-colors flex items-center gap-2 flex-shrink-0"
         >
           <Upload className="w-4 h-4" />
           <span>Upload Academic Files</span>

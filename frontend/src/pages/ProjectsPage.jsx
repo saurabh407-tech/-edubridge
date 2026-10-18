@@ -61,7 +61,7 @@ function ProjectCard({ project }) {
   return (
     <Link
       to={`/projects/${project._id}`}
-      className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-white/15 bg-[#0B1D26]/75 backdrop-blur-xl p-5 transition-all duration-300 hover:-translate-y-1 hover:border-white/30 hover:shadow-2xl text-white"
+      className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-white/15 bg-[#0B1D26]/85 backdrop-blur-md p-5 hover:border-[#FBD784]/40 hover:shadow-xl transition-colors duration-150 text-white"
     >
       <div>
         {/* Card Header */}
@@ -296,7 +296,7 @@ export default function ProjectsPage() {
 
               <button
                 onClick={() => setShowCreate(true)}
-                className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#FBD784] hover:bg-[#ffe39d] px-5 text-xs font-bold text-[#0B1D26] shadow-md transition hover:-translate-y-0.5"
+                className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#FBD784] hover:bg-[#ffe39d] px-5 text-xs font-bold text-[#0B1D26] shadow-md transition-colors"
               >
                 <Plus size={15} />
                 Create Project
@@ -429,7 +429,7 @@ export default function ProjectsPage() {
 
             <button
               onClick={() => setShowCreate(true)}
-              className="bg-[#FBD784] hover:bg-[#ffe39d] text-[#0B1D26] font-bold shrink-0 text-xs py-2.5 px-5 rounded-xl flex items-center gap-2 shadow-md hover:-translate-y-0.5 transition-all"
+              className="bg-[#FBD784] hover:bg-[#ffe39d] text-[#0B1D26] font-bold shrink-0 text-xs py-2.5 px-5 rounded-xl flex items-center gap-2 shadow-md transition-colors"
             >
               <Plus size={14} />
               Start a Project

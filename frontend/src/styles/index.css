@@ -18,7 +18,6 @@
   }
 
   html {
-    scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -30,53 +29,57 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading tracking-tight text-slate-900;
   }
-
-  * {
-    @apply transition-colors duration-150;
-  }
 }
 
 @layer components {
+  /* Unified Hardware-Accelerated Smooth Scrolling */
+  .smooth-scroll-viewport {
+    -webkit-overflow-scrolling: touch;
+    overflow-anchor: none;
+  }
+
   /* Cards */
   .card {
-    @apply bg-white rounded-2xl border border-slate-200/85 shadow-card transition-all duration-200;
+    @apply bg-white rounded-2xl border border-slate-200/85 shadow-card transition-colors duration-150;
   }
   
   .card-hover {
-    @apply hover:border-primary-300 hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200;
+    @apply hover:border-primary-300 hover:shadow-card-hover transition-colors duration-150;
   }
 
   .card-warm {
-    @apply bg-[#FAF9F5] rounded-2xl border border-[#EAE5D9] shadow-card transition-all duration-200;
+    @apply bg-[#FAF9F5] rounded-2xl border border-[#EAE5D9] shadow-card transition-colors duration-150;
   }
 
   .glass-panel {
     @apply bg-white/85 backdrop-blur-md border border-white/80 shadow-card rounded-2xl;
   }
 
-  /* Workspace Theme Card Overrides */
+  /* Workspace Theme Card Overrides - Single-Layer Synchronous Painting */
   .workspace-theme .card,
   .workspace-card {
-    background-color: rgba(11, 29, 38, 0.78);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background-color: rgba(11, 29, 38, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.12);
     color: #ffffff;
-    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
   
   .workspace-theme .card:hover,
   .workspace-card:hover {
-    border-color: rgba(255, 255, 255, 0.28);
+    border-color: rgba(251, 215, 132, 0.4);
+    box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.55);
   }
 
   .workspace-glass {
-    background-color: rgba(11, 29, 38, 0.82);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background-color: rgba(11, 29, 38, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.14);
     color: #ffffff;
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.5);
   }
 
   .workspace-theme h1,
@@ -88,17 +91,17 @@
     color: #ffffff;
   }
 
-  /* Buttons */
+  /* Buttons - Clean hover without vertical jitter during scrolling */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-white font-semibold text-sm px-4 py-2.5 rounded-xl shadow-xs hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none focus:outline-none focus:ring-4 focus:ring-slate-900/15;
+    @apply inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-white font-semibold text-sm px-4 py-2.5 rounded-xl shadow-xs hover:shadow-md transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-slate-900/15;
   }
 
   .btn-gold {
-    @apply inline-flex items-center justify-center gap-2 bg-[#FBD784] hover:bg-[#ffe39d] active:bg-[#f2cb73] text-[#0B1D26] font-bold text-sm px-4 py-2.5 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-[#FBD784]/25;
+    @apply inline-flex items-center justify-center gap-2 bg-[#FBD784] hover:bg-[#ffe39d] active:bg-[#f2cb73] text-[#0B1D26] font-bold text-sm px-4 py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-[#FBD784]/25;
   }
 
   .btn-accent {
-    @apply inline-flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white font-semibold text-sm px-4 py-2.5 rounded-xl shadow-brand-glow hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-primary-500/20;
+    @apply inline-flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white font-semibold text-sm px-4 py-2.5 rounded-xl shadow-brand-glow hover:shadow-lg transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-4 focus:ring-primary-500/20;
   }
 
   .btn-secondary {

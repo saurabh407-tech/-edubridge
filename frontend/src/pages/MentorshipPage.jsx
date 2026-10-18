@@ -72,7 +72,7 @@ function MentorCard({ mentorship, onBook, onClick }) {
   return (
     <div
       onClick={onClick}
-      className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-white/15 bg-[#0B1D26]/75 backdrop-blur-xl p-5 transition-all duration-300 hover:-translate-y-1 hover:border-white/30 hover:shadow-2xl cursor-pointer text-white"
+      className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-white/15 bg-[#0B1D26]/85 backdrop-blur-md p-5 hover:border-[#FBD784]/40 hover:shadow-xl transition-colors duration-150 cursor-pointer text-white"
     >
       <div>
         {/* Mentor Header */}
@@ -194,9 +194,9 @@ function MentorCard({ mentorship, onBook, onClick }) {
             onBook(mentorship);
           }}
           disabled={freeSlots === 0}
-          className={`w-full py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-md ${
+          className={`w-full py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow-md ${
             freeSlots > 0
-              ? "bg-[#FBD784] text-[#0B1D26] hover:bg-[#ffe39d] hover:-translate-y-0.5"
+              ? "bg-[#FBD784] text-[#0B1D26] hover:bg-[#ffe39d]"
               : "bg-white/10 text-slate-500 cursor-not-allowed"
           }`}
         >
@@ -676,7 +676,7 @@ export default function MentorshipPage() {
 
               <button
                 onClick={() => setShowCreate(true)}
-                className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#FBD784] hover:bg-[#ffe39d] px-5 text-xs font-bold text-[#0B1D26] shadow-md transition hover:-translate-y-0.5"
+                className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#FBD784] hover:bg-[#ffe39d] px-5 text-xs font-bold text-[#0B1D26] shadow-md transition-colors"
               >
                 <UserPlus size={15} />
                 Offer Mentorship
