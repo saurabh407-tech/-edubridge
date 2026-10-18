@@ -88,7 +88,7 @@ export default function MainLayout() {
           SIDEBAR (DESKTOP & MOBILE DRAWER)
       ========================================================== */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-[#0B1D26]/92 backdrop-blur-2xl border-r border-white/10 transition-all duration-300 shadow-2xl text-white relative overflow-hidden
+        className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-[#0B1D26]/95 backdrop-blur-2xl border-r border-white/10 transition-all duration-300 shadow-2xl text-white overflow-hidden
           ${sidebarOpen ? "w-64" : "w-20"}
           ${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}
