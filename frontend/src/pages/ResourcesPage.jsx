@@ -171,13 +171,13 @@ export default function ResourcesPage() {
       {/* =====================================================
           HEADER & SEARCH HERO BANNER
       ====================================================== */}
-      <section className="relative rounded-3xl overflow-hidden p-6 sm:p-8 bg-[#0B1D26]/85 backdrop-blur-xl text-white shadow-2xl border border-white/15">
+      <section className="relative rounded-3xl overflow-hidden p-6 sm:p-8 bg-[#0D202A] text-white shadow-2xl border border-white/15">
         {/* Ambient glows */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#FBD784]/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs font-bold text-[#FBD784]">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.08] border border-white/15 text-xs font-bold text-[#FBD784]">
             <Sparkles className="w-3.5 h-3.5 text-[#FBD784]" />
             <span>Curated Academic Repository</span>
           </div>
@@ -202,7 +202,7 @@ export default function ResourcesPage() {
                   setPage(1);
                 }}
                 placeholder="Search by subject, topic, course code, or notes..."
-                className="w-full h-12 pl-11 pr-10 rounded-xl bg-white/10 text-white text-xs sm:text-sm font-medium placeholder-slate-400 border border-white/20 shadow-sm focus:outline-none focus:ring-4 focus:ring-[#FBD784]/20 focus:border-[#FBD784] backdrop-blur-md"
+                className="w-full h-12 pl-11 pr-10 rounded-xl bg-white/[0.07] text-white text-xs sm:text-sm font-medium placeholder-slate-400 border border-white/20 shadow-sm focus:outline-none focus:ring-4 focus:ring-[#FBD784]/20 focus:border-[#FBD784]"
               />
               {search && (
                 <button
@@ -228,7 +228,7 @@ export default function ResourcesPage() {
       {/* =====================================================
           CATEGORY SELECTOR PILLS
       ====================================================== */}
-      <section>
+      <section className="pt-2">
         <div className="flex items-center justify-between mb-3 px-1">
           <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
             Explore Categories
@@ -250,7 +250,7 @@ export default function ResourcesPage() {
             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold flex-shrink-0 transition-all ${
               !filters.category
                 ? "bg-[#FBD784] text-[#0B1D26] font-bold shadow-md"
-                : "bg-[#0B1D26]/75 backdrop-blur-md text-slate-300 border border-white/15 hover:bg-white/10 hover:text-white shadow-xs"
+                : "bg-[#0B1D26]/90 text-slate-300 border border-white/15 hover:bg-white/10 hover:text-white shadow-xs"
             }`}
           >
             <FolderOpen className="w-3.5 h-3.5" />
@@ -268,7 +268,7 @@ export default function ResourcesPage() {
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold flex-shrink-0 transition-all ${
                   isActive
                     ? "bg-[#FBD784] text-[#0B1D26] font-bold shadow-md"
-                    : "bg-[#0B1D26]/75 backdrop-blur-md text-slate-300 border border-white/15 hover:bg-white/10 hover:text-white shadow-xs"
+                    : "bg-[#0B1D26]/90 text-slate-300 border border-white/15 hover:bg-white/10 hover:text-white shadow-xs"
                 }`}
               >
                 <Icon className={`w-3.5 h-3.5 ${isActive ? "text-[#0B1D26]" : "text-slate-400"}`} />
@@ -282,7 +282,7 @@ export default function ResourcesPage() {
       {/* =====================================================
           FILTER & SORT TOOLBAR
       ====================================================== */}
-      <section className="bg-[#0B1D26]/75 backdrop-blur-xl p-3.5 rounded-2xl border border-white/15 shadow-xl text-white">
+      <section className="bg-[#0D202A] p-3.5 rounded-2xl border border-white/15 shadow-xl text-white">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           {/* Left: Filter Toggle Button */}
           <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -392,7 +392,7 @@ export default function ResourcesPage() {
             ))}
         </div>
       ) : data?.data?.length === 0 ? (
-        <div className="bg-[#0B1D26]/75 backdrop-blur-xl p-8 sm:p-12 text-center rounded-2xl border border-white/15 shadow-xl text-white">
+        <div className="bg-[#0D202A] p-8 sm:p-12 text-center rounded-2xl border border-white/15 shadow-xl text-white">
           <EmptyState
             icon={BookOpen}
             title="No study materials found"
@@ -444,7 +444,7 @@ export default function ResourcesPage() {
       {/* =====================================================
           BOTTOM CONTRIBUTION BANNER
       ====================================================== */}
-      <section className="relative rounded-2xl overflow-hidden p-6 bg-[#0B1D26]/80 backdrop-blur-xl border border-white/15 text-white shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
+      <section className="relative rounded-2xl overflow-hidden p-6 bg-[#0D202A] border border-white/15 text-white shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
           <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#FBD784] to-amber-500 text-[#0B1D26] flex items-center justify-center flex-shrink-0 shadow-md">
             <Upload className="w-5 h-5" />

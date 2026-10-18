@@ -79,7 +79,7 @@ export default function MainLayout() {
           className="w-full h-full object-cover object-center filter brightness-[0.70] contrast-[1.10] saturate-[1.15]"
         />
         {/* Frosted midnight depth gradient matching Home Page (#0B1D26) */}
-        <div className="absolute inset-0 bg-[#0B1D26]/75 backdrop-blur-[1px]" />
+        <div className="absolute inset-0 bg-[#0B1D26]/75" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0B1D26]/85 via-transparent to-[#0B1D26]/90" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0B1D26]/80 via-transparent to-[#0B1D26]/75" />
       </div>

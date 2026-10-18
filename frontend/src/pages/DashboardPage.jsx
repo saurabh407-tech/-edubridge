@@ -38,7 +38,7 @@ function StatCard({ icon: Icon, label, value, colorStyle, isLoading, to }) {
   return (
     <Link
       to={to || "#"}
-      className="group relative overflow-hidden p-5 transition-colors duration-150 hover:border-[#FBD784]/40 border border-white/15 bg-[#0B1D26]/85 backdrop-blur-md rounded-2xl shadow-xl flex flex-col justify-between"
+      className="group relative overflow-hidden p-5 transition-colors duration-150 hover:border-[#FBD784]/40 border border-white/15 bg-[#0E232E] rounded-2xl shadow-xl flex flex-col justify-between"
     >
       {/* Subtle background glow */}
       <div
@@ -105,7 +105,7 @@ function AIResourceWidget() {
   });
 
   return (
-    <div className="bg-[#0B1D26]/75 backdrop-blur-xl rounded-2xl p-5 lg:p-6 border border-white/15 shadow-xl flex flex-col justify-between h-full text-white">
+    <div className="bg-[#0D202A] rounded-2xl p-5 lg:p-6 border border-white/15 shadow-xl flex flex-col justify-between h-full text-white">
       <div>
         {/* Header */}
         <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/10">
@@ -256,7 +256,7 @@ export default function DashboardPage() {
       {/* =========================================================
           HERO BANNER & STUDENT IDENTITY
       ========================================================== */}
-      <div className="relative rounded-3xl overflow-hidden p-6 sm:p-8 bg-[#0B1D26]/85 backdrop-blur-xl text-white shadow-2xl border border-white/15">
+      <div className="relative rounded-3xl overflow-hidden p-6 sm:p-8 bg-[#0D202A] text-white shadow-2xl border border-white/15">
         {/* Subtle ambient lighting */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#FBD784]/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -264,7 +264,7 @@ export default function DashboardPage() {
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           {/* Left Info */}
           <div className="space-y-3 flex-1">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs font-bold text-[#FBD784]">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.08] border border-white/15 text-xs font-bold text-[#FBD784]">
               <span>{greetEmoji}</span>
               <span>{greeting}</span>
             </div>
@@ -337,7 +337,7 @@ export default function DashboardPage() {
 
             <Link
               to="/profile"
-              className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/15 text-xs font-bold text-white transition-all flex items-center gap-1.5"
+              className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-xs font-bold text-white transition-all flex items-center gap-1.5"
             >
               <User className="w-3.5 h-3.5" />
               <span>Edit Profile</span>
@@ -419,7 +419,7 @@ export default function DashboardPage() {
       {/* =========================================================
           QUICK ACTIONS STATION
       ========================================================== */}
-      <div className="bg-[#0B1D26]/75 backdrop-blur-xl p-5 rounded-2xl border border-white/15 shadow-xl text-white">
+      <div className="bg-[#0D202A] p-5 rounded-2xl border border-white/15 shadow-xl text-white">
         <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/10">
           <h2 className="font-heading font-bold text-sm text-white flex items-center gap-2">
             <Zap className="w-4 h-4 text-[#FBD784]" />
@@ -496,7 +496,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Right 2 Columns: Opportunities */}
-        <div className="lg:col-span-2 bg-[#0B1D26]/75 backdrop-blur-xl p-5 lg:p-6 rounded-2xl border border-white/15 shadow-xl flex flex-col justify-between text-white">
+        <div className="lg:col-span-2 bg-[#0D202A] p-5 lg:p-6 rounded-2xl border border-white/15 shadow-xl flex flex-col justify-between text-white">
           <div>
             <div className="flex items-center justify-between mb-5 pb-3 border-b border-white/10">
               <div className="flex items-center gap-2.5">
@@ -593,7 +593,7 @@ export default function DashboardPage() {
           OPEN PROJECT TEAMS GRID
       ========================================================== */}
       {projects?.length > 0 && (
-        <div className="bg-[#0B1D26]/75 backdrop-blur-xl p-5 lg:p-6 rounded-2xl border border-white/15 shadow-xl text-white">
+        <div className="bg-[#0D202A] p-5 lg:p-6 rounded-2xl border border-white/15 shadow-xl text-white">
           <div className="flex items-center justify-between mb-5 pb-3 border-b border-white/10">
             <div className="flex items-center gap-2.5">
               <div className="w-9 h-9 rounded-xl bg-sky-500/20 text-sky-300 border border-sky-500/30 flex items-center justify-center shadow-xs">

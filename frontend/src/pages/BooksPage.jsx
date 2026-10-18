@@ -39,7 +39,7 @@ function BookCard({ book, onReserve, onChat, onClick }) {
   return (
     <div
       onClick={onClick}
-      className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-white/15 bg-[#0B1D26]/85 backdrop-blur-md hover:border-[#FBD784]/40 hover:shadow-2xl transition-colors duration-150 cursor-pointer text-white"
+      className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-white/15 bg-[#0E232E] hover:border-[#FBD784]/40 hover:shadow-2xl transition-colors duration-150 cursor-pointer text-white"
     >
       <div>
         {/* Cover / Image Area */}
@@ -61,13 +61,13 @@ function BookCard({ book, onReserve, onChat, onClick }) {
 
           {/* Condition & Free Badges */}
           <div className="absolute left-3 top-3 flex items-center gap-1.5">
-            <span className="rounded-full border border-white/20 bg-[#0B1D26]/80 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-white shadow-xs backdrop-blur-md">
+            <span className="rounded-full border border-white/20 bg-[#0B1D26]/90 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-white shadow-xs">
               {cond.label}
             </span>
           </div>
 
           {book.isFree && (
-            <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-emerald-500/90 px-2.5 py-1 text-[11px] font-bold text-white shadow-xs backdrop-blur-sm">
+            <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-emerald-500/90 px-2.5 py-1 text-[11px] font-bold text-white shadow-xs">
               <Sparkles size={11} />
               FREE
             </div>
@@ -295,7 +295,7 @@ function AddBookModal({ isOpen, onClose, onSuccess }) {
             />
           </div>
 
-          <div className="sm:col-span-2 rounded-xl border border-white/15 bg-white/5 backdrop-blur-md p-3 flex items-center justify-between gap-4">
+          <div className="sm:col-span-2 rounded-xl border border-white/15 bg-white/5 p-3 flex items-center justify-between gap-4">
             <label className="flex items-center gap-2.5 text-xs font-semibold text-white cursor-pointer">
               <input
                 type="checkbox"
@@ -351,7 +351,7 @@ function AddBookModal({ isOpen, onClose, onSuccess }) {
         {/* Dropzone */}
         <div
           {...getRootProps()}
-          className="group cursor-pointer rounded-xl border-2 border-dashed border-white/20 bg-white/5 p-5 text-center transition hover:border-[#FBD784] hover:bg-white/10 backdrop-blur-md"
+          className="group cursor-pointer rounded-xl border-2 border-dashed border-white/20 bg-white/5 p-5 text-center transition hover:border-[#FBD784] hover:bg-white/10"
         >
           <input {...getInputProps()} />
           <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-[#FBD784]/15 text-[#FBD784] border border-[#FBD784]/30 shadow-2xs">
@@ -435,14 +435,14 @@ export default function BooksPage() {
   return (
     <div className="space-y-8 pb-12">
       {/* Editorial Header Banner */}
-      <section className="relative overflow-hidden rounded-3xl border border-white/15 bg-[#0B1D26]/85 backdrop-blur-xl p-8 sm:p-10 text-white shadow-2xl">
+      <section className="relative overflow-hidden rounded-3xl border border-white/15 bg-[#0D202A] p-8 sm:p-10 text-white shadow-2xl">
         {/* Subtle decorative circles */}
         <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-[#FBD784]/10 blur-3xl" />
         <div className="pointer-events-none absolute bottom-0 right-1/4 h-48 w-48 rounded-full bg-teal-500/10 blur-2xl" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-bold tracking-wider uppercase text-[#FBD784] backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.08] px-3 py-1 text-[11px] font-bold tracking-wider uppercase text-[#FBD784]">
               <Sparkles size={12} className="text-[#FBD784]" />
               Student Book Exchange
             </div>
@@ -469,7 +469,7 @@ export default function BooksPage() {
                     setPage(1);
                   }}
                   placeholder="Search by title, author, subject..."
-                  className="h-11 w-full rounded-xl border border-white/20 bg-white/10 px-10 text-sm text-white placeholder-slate-400 outline-none backdrop-blur-md focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
+                  className="h-11 w-full rounded-xl border border-white/20 bg-white/[0.07] px-10 text-sm text-white placeholder-slate-400 outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
                 />
                 {search && (
                   <button
@@ -493,7 +493,7 @@ export default function BooksPage() {
 
           {/* Quick Metrics Ribbon */}
           <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:w-72 shrink-0">
-            <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+            <div className="rounded-2xl border border-white/15 bg-white/[0.06] p-4">
               <BookOpen size={18} className="text-[#FBD784] mb-2" />
               <p className="text-2xl font-bold font-heading text-white">
                 {totalBooks.toLocaleString()}
@@ -503,7 +503,7 @@ export default function BooksPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+            <div className="rounded-2xl border border-white/15 bg-white/[0.06] p-4">
               <ShieldCheck size={18} className="text-emerald-400 mb-2" />
               <p className="text-2xl font-bold font-heading text-white">100%</p>
               <p className="text-[11px] font-medium text-slate-300">
@@ -515,7 +515,7 @@ export default function BooksPage() {
       </section>
 
       {/* Directory Section Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pt-4 pb-1">
         <div>
           <h2 className="font-heading text-xl font-bold text-white">
             Available Textbooks & Materials
@@ -540,7 +540,7 @@ export default function BooksPage() {
             ))}
         </div>
       ) : data?.data?.length === 0 ? (
-        <div className="rounded-2xl border border-white/15 bg-[#0B1D26]/75 backdrop-blur-xl p-12 text-center shadow-xl text-white">
+        <div className="rounded-2xl border border-white/15 bg-[#0D202A] p-12 text-center shadow-xl text-white">
           <EmptyState
             icon={BookMarked}
             title="No books currently listed"
@@ -586,7 +586,7 @@ export default function BooksPage() {
           )}
 
           {/* Peer Community Callout */}
-          <div className="rounded-2xl border border-white/15 bg-[#0B1D26]/85 backdrop-blur-md p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 text-white shadow-xl">
+          <div className="rounded-2xl border border-white/15 bg-[#0D202A] p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 text-white shadow-xl">
             <div className="flex items-start gap-4">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#FBD784]/15 text-[#FBD784] border border-[#FBD784]/30">
                 <BookMarked size={22} />

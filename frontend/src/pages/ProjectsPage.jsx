@@ -61,7 +61,7 @@ function ProjectCard({ project }) {
   return (
     <Link
       to={`/projects/${project._id}`}
-      className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-white/15 bg-[#0B1D26]/85 backdrop-blur-md p-5 hover:border-[#FBD784]/40 hover:shadow-xl transition-colors duration-150 text-white"
+      className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-white/15 bg-[#0E232E] p-5 hover:border-[#FBD784]/40 hover:shadow-xl transition-colors duration-150 text-white"
     >
       <div>
         {/* Card Header */}
@@ -249,13 +249,13 @@ export default function ProjectsPage() {
   return (
     <div className="space-y-8 pb-12">
       {/* Editorial Header Banner */}
-      <section className="relative overflow-hidden rounded-3xl border border-white/15 bg-[#0B1D26]/85 backdrop-blur-xl p-8 sm:p-10 text-white shadow-2xl">
+      <section className="relative overflow-hidden rounded-3xl border border-white/15 bg-[#0D202A] p-8 sm:p-10 text-white shadow-2xl">
         <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-[#FBD784]/10 blur-3xl" />
         <div className="pointer-events-none absolute bottom-0 right-1/4 h-48 w-48 rounded-full bg-teal-500/10 blur-2xl" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-bold tracking-wider uppercase text-[#FBD784] backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.08] px-3 py-1 text-[11px] font-bold tracking-wider uppercase text-[#FBD784]">
               <Sparkles size={12} className="text-[#FBD784]" />
               Student Collaboration Hub
             </div>
@@ -282,7 +282,7 @@ export default function ProjectsPage() {
                     setPage(1);
                   }}
                   placeholder="Search projects by title, stack, or role..."
-                  className="h-11 w-full rounded-xl border border-white/20 bg-white/10 px-10 text-sm text-white placeholder-slate-400 outline-none backdrop-blur-md focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
+                  className="h-11 w-full rounded-xl border border-white/20 bg-white/[0.07] px-10 text-sm text-white placeholder-slate-400 outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
                 />
                 {search && (
                   <button
@@ -306,7 +306,7 @@ export default function ProjectsPage() {
 
           {/* Quick Metrics Ribbon */}
           <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:w-72 shrink-0">
-            <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+            <div className="rounded-2xl border border-white/15 bg-white/[0.06] p-4">
               <Briefcase size={18} className="text-[#FBD784] mb-2" />
               <p className="text-2xl font-bold font-heading text-white">
                 {totalProjects.toLocaleString()}
@@ -316,7 +316,7 @@ export default function ProjectsPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+            <div className="rounded-2xl border border-white/15 bg-white/[0.06] p-4">
               <Users size={18} className="text-emerald-400 mb-2" />
               <p className="text-2xl font-bold font-heading text-white">Peer-Led</p>
               <p className="text-[11px] font-medium text-slate-300">
@@ -328,7 +328,7 @@ export default function ProjectsPage() {
       </section>
 
       {/* Filter and Status Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 pb-1">
         <div>
           <h2 className="font-heading text-xl font-bold text-white">
             Student Projects & Collaborations
@@ -338,7 +338,7 @@ export default function ProjectsPage() {
           </p>
         </div>
 
-        <div className="flex rounded-xl border border-white/15 bg-[#0B1D26]/75 backdrop-blur-md p-1 shadow-sm">
+        <div className="flex rounded-xl border border-white/15 bg-[#0B1D26]/90 p-1 shadow-sm">
           {[
             { value: "open", label: "Open for Members" },
             { value: "in_progress", label: "In Progress" },
@@ -372,7 +372,7 @@ export default function ProjectsPage() {
             ))}
         </div>
       ) : data?.data?.length === 0 ? (
-        <div className="rounded-2xl border border-white/15 bg-[#0B1D26]/75 backdrop-blur-xl p-12 text-center shadow-xl text-white">
+        <div className="rounded-2xl border border-white/15 bg-[#0D202A] p-12 text-center shadow-xl text-white">
           <EmptyState
             icon={Users}
             title="No projects match your criteria"
@@ -412,7 +412,7 @@ export default function ProjectsPage() {
           )}
 
           {/* Project Callout */}
-          <div className="rounded-2xl border border-white/15 bg-[#0B1D26]/80 backdrop-blur-xl p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 shadow-xl text-white">
+          <div className="rounded-2xl border border-white/15 bg-[#0D202A] p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 shadow-xl text-white">
             <div className="flex items-start gap-4">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#FBD784] to-amber-500 text-[#0B1D26] shadow-md">
                 <Sparkles size={22} />

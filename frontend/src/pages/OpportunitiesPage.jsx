@@ -82,7 +82,7 @@ function OpportunityCard({ opp, onApply }) {
   return (
     <article
       onClick={() => navigate(`/opportunities/${opp._id}`)}
-      className={`group flex flex-col justify-between overflow-hidden rounded-2xl border border-white/15 bg-[#0B1D26]/85 backdrop-blur-md p-5 hover:border-[#FBD784]/40 hover:shadow-xl transition-colors duration-150 cursor-pointer text-white ${
+      className={`group flex flex-col justify-between overflow-hidden rounded-2xl border border-white/15 bg-[#0E232E] p-5 hover:border-[#FBD784]/40 hover:shadow-xl transition-colors duration-150 cursor-pointer text-white ${
         isExpired ? "opacity-75" : ""
       }`}
     >
@@ -555,13 +555,13 @@ export default function OpportunitiesPage() {
   return (
     <div className="space-y-8 pb-12">
       {/* Editorial Header Banner */}
-      <section className="relative overflow-hidden rounded-3xl border border-white/15 bg-[#0B1D26]/85 backdrop-blur-md p-8 sm:p-10 text-white shadow-2xl">
+      <section className="relative overflow-hidden rounded-3xl border border-white/15 bg-[#0D202A] p-8 sm:p-10 text-white shadow-2xl">
         <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-[#FBD784]/10 blur-3xl" />
         <div className="pointer-events-none absolute bottom-0 right-1/4 h-48 w-48 rounded-full bg-teal-500/10 blur-2xl" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-bold tracking-wider uppercase text-[#FBD784] backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.08] px-3 py-1 text-[11px] font-bold tracking-wider uppercase text-[#FBD784]">
               <Sparkles size={12} className="text-[#FBD784]" />
               Campus & Industry Opportunities
             </div>
@@ -588,7 +588,7 @@ export default function OpportunitiesPage() {
                     setPage(1);
                   }}
                   placeholder="Search opportunities by title, company, or stack..."
-                  className="h-11 w-full rounded-xl border border-white/20 bg-white/10 px-10 text-sm text-white placeholder-slate-400 outline-none backdrop-blur-md focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
+                  className="h-11 w-full rounded-xl border border-white/20 bg-white/[0.07] px-10 text-sm text-white placeholder-slate-400 outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
                 />
                 {search && (
                   <button
@@ -612,7 +612,7 @@ export default function OpportunitiesPage() {
 
           {/* Quick Metrics Ribbon */}
           <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:w-72 shrink-0">
-            <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+            <div className="rounded-2xl border border-white/15 bg-white/[0.06] p-4">
               <Briefcase size={18} className="text-[#FBD784] mb-2" />
               <p className="text-2xl font-bold font-heading text-white">
                 {totalOpps.toLocaleString()}
@@ -622,7 +622,7 @@ export default function OpportunitiesPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+            <div className="rounded-2xl border border-white/15 bg-white/[0.06] p-4">
               <Trophy size={18} className="text-emerald-400 mb-2" />
               <p className="text-2xl font-bold font-heading text-white">Verified</p>
               <p className="text-[11px] font-medium text-slate-300">
@@ -634,15 +634,15 @@ export default function OpportunitiesPage() {
       </section>
 
       {/* Category Pills */}
-      <div>
+      <div className="pt-4 pb-1">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-heading text-xs font-bold text-slate-700 uppercase tracking-wider">
+          <h2 className="font-heading text-xs font-bold text-slate-300 uppercase tracking-wider">
             Filter by Opportunity Type
           </h2>
           {type && (
             <button
               onClick={() => setType("")}
-              className="text-xs font-semibold text-slate-500 hover:text-slate-800"
+              className="text-xs font-bold text-[#FBD784] hover:text-[#ffe39d]"
             >
               Show All Types
             </button>
@@ -655,10 +655,10 @@ export default function OpportunitiesPage() {
               setType("");
               setPage(1);
             }}
-            className={`rounded-xl px-3.5 py-2 text-xs font-medium shrink-0 transition-all ${
+            className={`rounded-xl px-3.5 py-2 text-xs font-bold shrink-0 transition-all ${
               !type
-                ? "bg-slate-900 text-white shadow-2xs"
-                : "border border-[#EAE5D9] bg-white text-slate-600 hover:bg-warm-100"
+                ? "bg-[#FBD784] text-[#0B1D26] shadow-sm"
+                : "border border-white/15 bg-[#0B1D26]/90 text-slate-300 hover:bg-white/10 hover:text-white"
             }`}
           >
             All Opportunities
@@ -675,10 +675,10 @@ export default function OpportunitiesPage() {
                   setType(isActive ? "" : t);
                   setPage(1);
                 }}
-                className={`rounded-xl px-3.5 py-2 text-xs font-medium shrink-0 transition-all ${
+                className={`rounded-xl px-3.5 py-2 text-xs font-bold shrink-0 transition-all ${
                   isActive
-                    ? "bg-slate-900 text-white shadow-2xs"
-                    : "border border-[#EAE5D9] bg-white text-slate-600 hover:bg-warm-100"
+                    ? "bg-[#FBD784] text-[#0B1D26] shadow-sm"
+                    : "border border-white/15 bg-[#0B1D26]/90 text-slate-300 hover:bg-white/10 hover:text-white"
                 }`}
               >
                 {config.label}
@@ -698,7 +698,7 @@ export default function OpportunitiesPage() {
             ))}
         </div>
       ) : data?.data?.length === 0 ? (
-        <div className="rounded-2xl border border-[#EAE5D9] bg-white p-12 text-center shadow-2xs">
+        <div className="rounded-2xl border border-white/15 bg-[#0D202A] p-12 text-center shadow-xl text-white">
           <EmptyState
             icon={Briefcase}
             title="No opportunities found"
@@ -710,7 +710,7 @@ export default function OpportunitiesPage() {
             action={
               <button
                 onClick={() => setShowPost(true)}
-                className="btn-primary inline-flex items-center gap-2 py-2.5 px-4 text-xs"
+                className="btn-gold inline-flex items-center gap-2 py-2.5 px-4 text-xs font-bold"
               >
                 <Plus size={14} />
                 Post an Opportunity
