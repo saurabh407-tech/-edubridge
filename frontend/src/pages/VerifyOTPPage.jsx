@@ -66,16 +66,16 @@ export default function VerifyOTPPage() {
   return (
     <div className="text-center space-y-6">
       {/* Icon Badge */}
-      <div className="w-14 h-14 bg-slate-900 rounded-2xl flex items-center justify-center mx-auto text-white shadow-card">
+      <div className="w-14 h-14 bg-white/10 border border-white/20 rounded-2xl flex items-center justify-center mx-auto text-[#FBD784] shadow-md">
         <ShieldCheck className="w-7 h-7" />
       </div>
 
       {/* Title */}
       <div>
-        <h2 className="text-xl sm:text-2xl font-heading font-extrabold text-slate-950 tracking-tight">
+        <h2 className="text-xl sm:text-2xl font-heading font-extrabold text-white tracking-tight">
           Verify Your Email
         </h2>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-xs mx-auto">
+        <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-xs mx-auto">
           We sent a 6-digit security code to your student email.
         </p>
       </div>
@@ -92,21 +92,21 @@ export default function VerifyOTPPage() {
             value={digit}
             onChange={(e) => handleChange(idx, e.target.value)}
             onKeyDown={(e) => handleKeyDown(idx, e)}
-            className="w-10 sm:w-12 h-12 sm:h-14 text-center text-lg sm:text-xl font-display font-bold rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-900 focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/15 outline-none transition-all"
+            className="w-10 sm:w-12 h-12 sm:h-14 text-center text-lg sm:text-xl font-display font-bold rounded-xl border border-white/20 bg-white/[0.08] text-white focus:bg-white/[0.14] focus:border-[#FBD784] focus:ring-4 focus:ring-[#FBD784]/20 outline-none transition-all"
           />
         ))}
       </div>
 
       {/* Verifying Status */}
       {loading && (
-        <div className="flex items-center justify-center gap-2 text-xs font-semibold text-primary-600">
-          <div className="w-4 h-4 border-2 border-primary-600 border-t-transparent rounded-full animate-spin" />
+        <div className="flex items-center justify-center gap-2 text-xs font-semibold text-[#FBD784]">
+          <div className="w-4 h-4 border-2 border-[#FBD784]/40 border-t-[#FBD784] rounded-full animate-spin" />
           <span>Verifying security code…</span>
         </div>
       )}
 
       {/* Resend Action */}
-      <div className="pt-2 text-xs text-slate-500 border-t border-slate-100">
+      <div className="pt-2 text-xs text-slate-400 border-t border-white/10">
         <span>Didn't receive the email? </span>
         {resendTimer > 0 ? (
           <span className="font-semibold text-slate-400">Resend code in {resendTimer}s</span>
@@ -114,7 +114,7 @@ export default function VerifyOTPPage() {
           <button
             onClick={handleResend}
             type="button"
-            className="font-bold text-primary-600 hover:text-primary-700 hover:underline"
+            className="font-bold text-[#FBD784] hover:text-white hover:underline transition-colors"
           >
             Resend OTP
           </button>

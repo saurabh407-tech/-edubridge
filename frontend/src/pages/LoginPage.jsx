@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Eye, EyeOff, ArrowRight, Mail, Lock, LogIn } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, Mail, Lock, LogIn, Sparkles } from "lucide-react";
 import { useGoogleLogin } from "@react-oauth/google";
 import { loginUser, googleLogin, clearError } from "../store/slices/authSlice";
 import toast from "react-hot-toast";
@@ -58,10 +58,10 @@ export default function LoginPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-xl sm:text-2xl font-heading font-extrabold text-slate-950 tracking-tight">
+        <h2 className="text-xl sm:text-2xl font-heading font-extrabold text-white tracking-tight">
           Welcome back
         </h2>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1">
+        <p className="text-xs sm:text-sm text-slate-300 mt-1">
           Sign in to access your student workspace
         </p>
       </div>
@@ -71,12 +71,12 @@ export default function LoginPage() {
         onClick={() => handleGoogleLogin()}
         disabled={googleLoading}
         type="button"
-        className="w-full flex items-center justify-center gap-3 bg-white hover:bg-slate-50 border border-slate-200/80 rounded-2xl py-3 px-4 text-xs sm:text-sm font-semibold text-slate-700 shadow-2xs hover:shadow-xs transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+        className="w-full flex items-center justify-center gap-3 bg-white/10 hover:bg-white/15 border border-white/20 rounded-2xl py-3 px-4 text-xs sm:text-sm font-semibold text-white shadow-sm hover:border-white/30 transition-all disabled:opacity-60 disabled:cursor-not-allowed group"
       >
         {googleLoading ? (
-          <div className="w-4 h-4 border-2 border-slate-300 border-t-primary-600 rounded-full animate-spin" />
+          <div className="w-4 h-4 border-2 border-white/30 border-t-[#FBD784] rounded-full animate-spin" />
         ) : (
-          <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 flex-shrink-0 group-hover:scale-105 transition-transform" viewBox="0 0 24 24">
             <path
               fill="#4285F4"
               d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -101,10 +101,10 @@ export default function LoginPage() {
       {/* Divider */}
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-slate-200" />
+          <div className="w-full border-t border-white/15" />
         </div>
         <div className="relative flex justify-center text-[11px] uppercase tracking-wider">
-          <span className="bg-white px-3 text-slate-400 font-semibold">
+          <span className="bg-[#0B1D26] px-3 text-slate-400 font-semibold">
             or sign in with email
           </span>
         </div>
@@ -114,14 +114,14 @@ export default function LoginPage() {
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Email */}
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+          <label className="block text-xs font-semibold text-slate-300 mb-1.5">
             Email Address
           </label>
           <div className="relative">
             <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="email"
-              className="input pl-10 text-xs py-2.5"
+              className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-white/15 bg-white/[0.06] text-white text-xs placeholder:text-slate-500 shadow-sm transition-all focus:outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
               placeholder="you@college.edu"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -133,12 +133,12 @@ export default function LoginPage() {
         {/* Password */}
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <label className="text-xs font-semibold text-slate-700">
+            <label className="text-xs font-semibold text-slate-300">
               Password
             </label>
             <Link
               to="/forgot-password"
-              className="text-xs text-primary-600 hover:text-primary-700 font-semibold"
+              className="text-xs text-[#FBD784] hover:text-white font-semibold transition-colors"
             >
               Forgot password?
             </Link>
@@ -147,7 +147,7 @@ export default function LoginPage() {
             <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type={showPass ? "text" : "password"}
-              className="input pl-10 pr-10 text-xs py-2.5"
+              className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-white/15 bg-white/[0.06] text-white text-xs placeholder:text-slate-500 shadow-sm transition-all focus:outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
               placeholder="••••••••"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
@@ -156,7 +156,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => setShowPass(!showPass)}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
             >
               {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
@@ -168,12 +168,12 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="btn btn-primary w-full py-3 text-xs font-semibold flex items-center justify-center gap-2 shadow-card hover:shadow-card-hover"
+            className="w-full py-3.5 rounded-xl bg-[#FBD784] hover:bg-[#ffe299] text-[#0B1D26] font-bold text-xs sm:text-sm shadow-lg hover:shadow-[#FBD784]/25 transition-all flex items-center justify-center gap-2 group relative overflow-hidden disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? (
-              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <div className="w-4 h-4 border-2 border-[#0B1D26]/40 border-t-[#0B1D26] rounded-full animate-spin" />
             ) : (
-              <LogIn className="w-4 h-4" />
+              <LogIn className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             )}
             <span>{loading ? "Signing in…" : "Sign In to Dashboard"}</span>
           </button>
@@ -181,9 +181,9 @@ export default function LoginPage() {
       </form>
 
       {/* Footer Register Link */}
-      <p className="text-center text-xs text-slate-600 pt-2">
+      <p className="text-center text-xs text-slate-400 pt-2">
         Don't have an account yet?{" "}
-        <Link to="/register" className="text-primary-600 font-bold hover:underline">
+        <Link to="/register" className="text-[#FBD784] font-bold hover:underline ml-1">
           Create one free
         </Link>
       </p>

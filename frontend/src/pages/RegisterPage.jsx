@@ -104,14 +104,14 @@ export default function RegisterPage() {
       {/* Header */}
       <div>
         <div className="flex items-center justify-between">
-          <h2 className="text-xl sm:text-2xl font-heading font-extrabold text-slate-950 tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-heading font-extrabold text-white tracking-tight">
             Create Account
           </h2>
-          <span className="text-[11px] font-bold text-slate-800 bg-warm-100 px-2.5 py-1 rounded-full border border-warm-200">
+          <span className="text-[11px] font-bold text-[#FBD784] bg-[#FBD784]/15 px-2.5 py-1 rounded-full border border-[#FBD784]/30">
             Step {step} of 3
           </span>
         </div>
-        <p className="text-xs text-slate-500 mt-1 font-medium">
+        <p className="text-xs text-slate-300 mt-1 font-medium">
           {stepTitles[step - 1]}
         </p>
       </div>
@@ -122,7 +122,7 @@ export default function RegisterPage() {
           <div
             key={s}
             className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
-              s <= step ? "bg-primary-600" : "bg-slate-200"
+              s <= step ? "bg-[#FBD784]" : "bg-white/10"
             }`}
           />
         ))}
@@ -133,11 +133,11 @@ export default function RegisterPage() {
         {step === 1 && (
           <div className="space-y-3.5 animate-fade-in">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                Full Name <span className="text-rose-500">*</span>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Full Name <span className="text-rose-400">*</span>
               </label>
               <input
-                className="input text-xs py-2.5"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 bg-white/[0.06] text-white text-xs placeholder:text-slate-500 shadow-sm transition-all focus:outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
                 placeholder="e.g. Alex Sharma"
                 value={form.name}
                 onChange={set("name")}
@@ -146,11 +146,11 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                Student Email Address <span className="text-rose-500">*</span>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Student Email Address <span className="text-rose-400">*</span>
               </label>
               <input
-                className="input text-xs py-2.5"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 bg-white/[0.06] text-white text-xs placeholder:text-slate-500 shadow-sm transition-all focus:outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
                 type="email"
                 placeholder="you@college.edu"
                 value={form.email}
@@ -160,11 +160,11 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Phone Number <span className="text-slate-400 font-normal">(optional)</span>
               </label>
               <input
-                className="input text-xs py-2.5"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 bg-white/[0.06] text-white text-xs placeholder:text-slate-500 shadow-sm transition-all focus:outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
                 type="tel"
                 placeholder="+91 9876543210"
                 value={form.phone}
@@ -174,11 +174,11 @@ export default function RegisterPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Password <span className="text-rose-500">*</span>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  Password <span className="text-rose-400">*</span>
                 </label>
                 <input
-                  className="input text-xs py-2.5"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 bg-white/[0.06] text-white text-xs placeholder:text-slate-500 shadow-sm transition-all focus:outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
                   type="password"
                   placeholder="Min. 6 characters"
                   value={form.password}
@@ -188,11 +188,11 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Confirm Password <span className="text-rose-500">*</span>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  Confirm Password <span className="text-rose-400">*</span>
                 </label>
                 <input
-                  className="input text-xs py-2.5"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 bg-white/[0.06] text-white text-xs placeholder:text-slate-500 shadow-sm transition-all focus:outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
                   type="password"
                   placeholder="Re-enter password"
                   value={form.confirmPassword}
@@ -206,7 +206,7 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={validateStep1}
-                className="btn btn-primary w-full py-3 text-xs font-semibold flex items-center justify-center gap-1.5 shadow-card hover:shadow-card-hover"
+                className="w-full py-3.5 rounded-xl bg-[#FBD784] hover:bg-[#ffe299] text-[#0B1D26] font-bold text-xs sm:text-sm shadow-lg hover:shadow-[#FBD784]/25 transition-all flex items-center justify-center gap-1.5"
               >
                 <span>Continue to Academic Info</span>
                 <ChevronRight className="w-4 h-4" />
@@ -219,17 +219,17 @@ export default function RegisterPage() {
         {step === 2 && (
           <div className="space-y-3.5 animate-fade-in">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 University Affiliation
               </label>
               <select
-                className="input text-xs py-2.5"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 bg-[#0B1D26] text-white text-xs shadow-sm transition-all focus:outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
                 value={form.universityId}
                 onChange={set("universityId")}
               >
-                <option value="">Select University (optional)</option>
+                <option value="" className="bg-[#0B1D26] text-slate-300">Select University (optional)</option>
                 {universities.map((u) => (
-                  <option key={u._id} value={u._id}>
+                  <option key={u._id} value={u._id} className="bg-[#0B1D26] text-white">
                     {u.name}
                   </option>
                 ))}
@@ -237,11 +237,11 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                College / Institution Name <span className="text-rose-500">*</span>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                College / Institution Name <span className="text-rose-400">*</span>
               </label>
               <input
-                className="input text-xs py-2.5"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 bg-white/[0.06] text-white text-xs placeholder:text-slate-500 shadow-sm transition-all focus:outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
                 placeholder="e.g. National Institute of Technology"
                 value={form.collegeName}
                 onChange={set("collegeName")}
@@ -251,18 +251,18 @@ export default function RegisterPage() {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Branch / Major <span className="text-rose-500">*</span>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  Branch / Major <span className="text-rose-400">*</span>
                 </label>
                 <select
-                  className="input text-xs py-2.5"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 bg-[#0B1D26] text-white text-xs shadow-sm transition-all focus:outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
                   value={form.branch}
                   onChange={set("branch")}
                   required
                 >
-                  <option value="">Branch</option>
+                  <option value="" className="bg-[#0B1D26] text-slate-300">Branch</option>
                   {BRANCHES.map((b) => (
-                    <option key={b} value={b}>
+                    <option key={b} value={b} className="bg-[#0B1D26] text-white">
                       {b}
                     </option>
                   ))}
@@ -270,18 +270,18 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Current Semester <span className="text-rose-500">*</span>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  Current Semester <span className="text-rose-400">*</span>
                 </label>
                 <select
-                  className="input text-xs py-2.5"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 bg-[#0B1D26] text-white text-xs shadow-sm transition-all focus:outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
                   value={form.semester}
                   onChange={set("semester")}
                   required
                 >
-                  <option value="">Sem</option>
+                  <option value="" className="bg-[#0B1D26] text-slate-300">Sem</option>
                   {SEMESTERS.map((s) => (
-                    <option key={s} value={s}>
+                    <option key={s} value={s} className="bg-[#0B1D26] text-white">
                       Semester {s}
                     </option>
                   ))}
@@ -291,11 +291,11 @@ export default function RegisterPage() {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   State
                 </label>
                 <input
-                  className="input text-xs py-2.5"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 bg-white/[0.06] text-white text-xs placeholder:text-slate-500 shadow-sm transition-all focus:outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
                   placeholder="e.g. Karnataka"
                   value={form.state}
                   onChange={set("state")}
@@ -303,11 +303,11 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Graduation Year
                 </label>
                 <input
-                  className="input text-xs py-2.5"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 bg-white/[0.06] text-white text-xs placeholder:text-slate-500 shadow-sm transition-all focus:outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
                   type="number"
                   placeholder="2026"
                   value={form.graduationYear}
@@ -322,7 +322,7 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="btn btn-secondary flex-1 py-3 text-xs font-semibold flex items-center justify-center gap-1"
+                className="flex-1 py-3 px-4 rounded-xl bg-white/10 hover:bg-white/15 text-white border border-white/20 font-semibold text-xs transition-all flex items-center justify-center gap-1"
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span>Back</span>
@@ -330,7 +330,7 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={validateStep2}
-                className="btn btn-primary flex-1 py-3 text-xs font-semibold flex items-center justify-center gap-1 shadow-card hover:shadow-card-hover"
+                className="flex-1 py-3 px-4 rounded-xl bg-[#FBD784] hover:bg-[#ffe299] text-[#0B1D26] font-bold text-xs shadow-lg transition-all flex items-center justify-center gap-1"
               >
                 <span>Continue</span>
                 <ChevronRight className="w-4 h-4" />
@@ -343,11 +343,11 @@ export default function RegisterPage() {
         {step === 3 && (
           <div className="space-y-3.5 animate-fade-in">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Technical Skills <span className="text-slate-400 font-normal">(comma-separated)</span>
               </label>
               <input
-                className="input text-xs py-2.5"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 bg-white/[0.06] text-white text-xs placeholder:text-slate-500 shadow-sm transition-all focus:outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
                 placeholder="e.g. React, Python, DSA, Figma, SQL"
                 value={form.skills}
                 onChange={set("skills")}
@@ -355,11 +355,11 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Interest Areas <span className="text-slate-400 font-normal">(comma-separated)</span>
               </label>
               <input
-                className="input text-xs py-2.5"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 bg-white/[0.06] text-white text-xs placeholder:text-slate-500 shadow-sm transition-all focus:outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
                 placeholder="e.g. Full Stack, AI/ML, Hackathons, Cloud"
                 value={form.interestAreas}
                 onChange={set("interestAreas")}
@@ -368,11 +368,11 @@ export default function RegisterPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   LinkedIn URL
                 </label>
                 <input
-                  className="input text-xs py-2.5"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 bg-white/[0.06] text-white text-xs placeholder:text-slate-500 shadow-sm transition-all focus:outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
                   placeholder="https://linkedin.com/in/username"
                   value={form.linkedIn}
                   onChange={set("linkedIn")}
@@ -380,11 +380,11 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   GitHub URL
                 </label>
                 <input
-                  className="input text-xs py-2.5"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 bg-white/[0.06] text-white text-xs placeholder:text-slate-500 shadow-sm transition-all focus:outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20"
                   placeholder="https://github.com/username"
                   value={form.github}
                   onChange={set("github")}
@@ -393,11 +393,11 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Bio
               </label>
               <textarea
-                className="input text-xs resize-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-white/15 bg-white/[0.06] text-white text-xs placeholder:text-slate-500 shadow-sm transition-all focus:outline-none focus:border-[#FBD784] focus:ring-2 focus:ring-[#FBD784]/20 resize-none"
                 rows={2}
                 placeholder="Tell potential teammates and mentors what you are working on…"
                 value={form.bio}
@@ -409,7 +409,7 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={() => setStep(2)}
-                className="btn btn-secondary flex-1 py-3 text-xs font-semibold flex items-center justify-center gap-1"
+                className="flex-1 py-3 px-4 rounded-xl bg-white/10 hover:bg-white/15 text-white border border-white/20 font-semibold text-xs transition-all flex items-center justify-center gap-1"
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span>Back</span>
@@ -417,10 +417,10 @@ export default function RegisterPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="btn btn-primary flex-1 py-3 text-xs font-semibold flex items-center justify-center gap-2 shadow-card hover:shadow-card-hover"
+                className="flex-1 py-3 px-4 rounded-xl bg-[#FBD784] hover:bg-[#ffe299] text-[#0B1D26] font-bold text-xs shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-60"
               >
                 {loading ? (
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <div className="w-4 h-4 border-2 border-[#0B1D26]/40 border-t-[#0B1D26] rounded-full animate-spin" />
                 ) : (
                   <UserPlus className="w-4 h-4" />
                 )}
@@ -432,9 +432,9 @@ export default function RegisterPage() {
       </form>
 
       {/* Footer Login Link */}
-      <p className="text-center text-xs text-slate-600 pt-1">
+      <p className="text-center text-xs text-slate-400 pt-1">
         Already registered on EduBridge?{" "}
-        <Link to="/login" className="text-primary-600 font-bold hover:underline">
+        <Link to="/login" className="text-[#FBD784] font-bold hover:underline ml-1">
           Sign in
         </Link>
       </p>
