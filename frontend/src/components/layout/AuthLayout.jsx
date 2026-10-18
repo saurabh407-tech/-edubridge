@@ -4,6 +4,9 @@ import {
   GraduationCap,
   BookOpen,
   Users,
+  UserCheck,
+  Briefcase,
+  BookMarked,
   Sparkles,
   Star,
   ShieldCheck,
@@ -12,11 +15,49 @@ import {
 } from "lucide-react";
 import axios from "axios";
 
-const FEATURES = [
-  { icon: BookOpen, text: "Curated Notes, PYQs & Lab Manuals" },
-  { icon: Users, text: "Hackathon & Course Team Matchmaker" },
-  { icon: Sparkles, text: "AI-Powered Learning & Career Tools" },
-  { icon: Star, text: "1-on-1 Guidance with Senior Mentors" },
+const SIX_COMPONENTS = [
+  {
+    icon: BookOpen,
+    title: "Resource Library",
+    desc: "Curated notes, PYQs & lab manuals",
+    accent: "text-[#FBD784]",
+    glow: "group-hover:border-[#FBD784]/40",
+  },
+  {
+    icon: Users,
+    title: "Team Matchmaker",
+    desc: "Hackathon & project partners",
+    accent: "text-sky-400",
+    glow: "group-hover:border-sky-400/40",
+  },
+  {
+    icon: UserCheck,
+    title: "Senior Mentorship",
+    desc: "1-on-1 academic & career advice",
+    accent: "text-violet-400",
+    glow: "group-hover:border-violet-400/40",
+  },
+  {
+    icon: Briefcase,
+    title: "Opportunities",
+    desc: "Verified internships & drives",
+    accent: "text-amber-400",
+    glow: "group-hover:border-amber-400/40",
+  },
+  {
+    icon: BookMarked,
+    title: "Book Exchange",
+    desc: "Peer-to-peer campus marketplace",
+    accent: "text-emerald-400",
+    glow: "group-hover:border-emerald-400/40",
+  },
+  {
+    icon: Sparkles,
+    title: "AI Study Assistant",
+    desc: "Smart roadmaps & interview prep",
+    accent: "text-indigo-300",
+    glow: "group-hover:border-indigo-400/40",
+  },
 ];
 
 function AnimatedCount({ target, suffix = "" }) {
@@ -101,7 +142,7 @@ export default function AuthLayout() {
         {/* =====================================================
             LEFT SHOWCASE PANEL (GLITTERING CELESTIAL MOUNTAIN LIBRARY)
         ====================================================== */}
-        <div className="hidden lg:flex lg:col-span-6 xl:col-span-7 flex-col justify-between rounded-3xl p-8 sm:p-10 bg-[#0B1D26] text-white shadow-2xl border border-white/20 relative overflow-hidden min-h-[660px] group">
+        <div className="hidden lg:flex lg:col-span-6 xl:col-span-7 flex-col justify-between rounded-3xl p-8 sm:p-10 bg-[#0B1D26] text-white shadow-2xl border border-white/20 relative overflow-hidden min-h-[680px] group">
           {/* High-Resolution Glittering Celestial Mountain Library Image */}
           <img
             src="/images/auth-glitter.jpg"
@@ -110,29 +151,18 @@ export default function AuthLayout() {
           />
 
           {/* Atmospheric Cinematic Dark Overlays */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0B1D26] via-[#0B1D26]/50 to-[#0B1D26]/70" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0B1D26]/85 via-[#0B1D26]/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0B1D26] via-[#0B1D26]/55 to-[#0B1D26]/65" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0B1D26]/85 via-[#0B1D26]/45 to-transparent" />
 
-          {/* Dynamic glittering stars & sparkles across the sky */}
+          {/* Dynamic glittering stars across the sky */}
           <Sparkles className="w-5 h-5 text-[#FBD784] absolute top-10 right-20 animate-glitter pointer-events-none" />
           <Star className="w-3.5 h-3.5 text-white fill-white absolute top-24 right-44 animate-glitter-fast pointer-events-none" />
           <Sparkles className="w-4 h-4 text-sky-300 absolute top-16 right-8 animate-glitter pointer-events-none" />
           <div className="w-2.5 h-2.5 rounded-full bg-[#FBD784] absolute top-28 right-28 animate-glitter shadow-lg shadow-[#FBD784]/80 pointer-events-none" />
           <div className="w-1.5 h-1.5 rounded-full bg-white absolute top-12 right-64 animate-glitter-fast shadow-md shadow-white pointer-events-none" />
 
-          {/* Floating Live Community Badge (animated float) */}
-          <div className="animate-float-slow absolute top-36 right-8 bg-[#0B1D26]/85 backdrop-blur-md border border-white/20 rounded-2xl p-3.5 shadow-2xl hidden xl:flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center font-bold text-xs">
-              4.9★
-            </div>
-            <div>
-              <p className="text-xs font-bold text-white">Peer Rated Library</p>
-              <p className="text-[10px] text-slate-300">Community verified notes</p>
-            </div>
-          </div>
-
-          {/* Top Brand & Tag */}
-          <div className="relative z-10 flex items-center justify-between">
+          {/* Top Brand */}
+          <div className="relative z-10">
             <Link to="/" className="inline-flex items-center gap-3 group/brand">
               <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-md group-hover/brand:scale-105 transition-transform text-[#FBD784]">
                 <GraduationCap className="w-5 h-5" />
@@ -151,15 +181,10 @@ export default function AuthLayout() {
                 </span>
               </div>
             </Link>
-
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0B1D26]/80 backdrop-blur-md border border-white/20 text-xs font-semibold text-[#FBD784] shadow-md">
-              <Sparkles className="w-3.5 h-3.5 text-[#FBD784] animate-spin" style={{ animationDuration: "10s" }} />
-              <span>Campus Ecosystem</span>
-            </div>
           </div>
 
           {/* Center Content */}
-          <div className="relative z-10 my-6 space-y-5">
+          <div className="relative z-10 my-4 space-y-5">
             {/* Eyebrow in MNTN gold line style */}
             <div className="inline-flex items-center gap-3 animate-fade-in">
               <span className="w-8 h-[2px] bg-[#FBD784]" />
@@ -178,17 +203,24 @@ export default function AuthLayout() {
               Say goodbye to fragmented WhatsApp groups and lost links. Access peer-rated study notes, find project partners, and connect with mentors in one place.
             </p>
 
-            {/* Feature Bullets */}
+            {/* Enhanced All Six Components with Classic & Attractive Design */}
             <div className="grid sm:grid-cols-2 gap-2.5 pt-1">
-              {FEATURES.map(({ icon: Icon, text }) => (
+              {SIX_COMPONENTS.map(({ icon: Icon, title, desc, accent, glow }) => (
                 <div
-                  key={text}
-                  className="flex items-center gap-2.5 p-2 rounded-xl bg-[#0B1D26]/70 backdrop-blur-sm border border-white/15"
+                  key={title}
+                  className={`p-3 rounded-2xl bg-[#0B1D26]/80 backdrop-blur-md border border-white/15 ${glow} hover:bg-[#0B1D26]/95 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-3 group shadow-sm`}
                 >
-                  <div className="w-7 h-7 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center flex-shrink-0 text-[#FBD784]">
-                    <Icon className="w-3.5 h-3.5" />
+                  <div className={`w-9 h-9 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center flex-shrink-0 ${accent} group-hover:scale-105 transition-transform shadow-2xs`}>
+                    <Icon className="w-4 h-4" />
                   </div>
-                  <span className="text-xs font-medium text-slate-200 truncate">{text}</span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-bold text-white font-heading truncate group-hover:text-[#FBD784] transition-colors">
+                      {title}
+                    </p>
+                    <p className="text-[11px] text-slate-300 truncate mt-0.5">
+                      {desc}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
