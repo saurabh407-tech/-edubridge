@@ -9,6 +9,7 @@ const {
   analyzeResume,
   smartSearch,
   getInternshipRecommendations,
+  aiChat,
 } = require("../services/aiService");
 
 // ── 1. Resource Recommendations ──
@@ -60,6 +61,18 @@ router.get("/recommendations/internships", protect, async (req, res, next) => {
   try {
     const data = await getInternshipRecommendations(req.user._id);
     res.json({ success: true, data });
+  } catch (err) { next(err); }
+});
+
+// ── 6. Interactive AI Academic Co-Pilot Chat ──
+router.post("/chat", protect, async (req, res, next) => {
+  try {
+    const { message, history } = req.body;
+    if (!message || !message.trim()) {
+      return res.status(400).json({ success: false, message: "Query message is required" });
+    }
+    const reply = await aiChat(message.trim(), history || [], req.user);
+    res.json({ success: true, data: { reply } });
   } catch (err) { next(err); }
 });
 

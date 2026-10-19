@@ -509,6 +509,46 @@ Suggest 5 internships. Return ONLY JSON array:
   }
 };
 
+// ─────────────────────────────────────────────
+// 8. Interactive AI Academic Co-Pilot Chat
+// ─────────────────────────────────────────────
+exports.aiChat = async (message, history = [], user = null) => {
+  try {
+    if (!model) {
+      return "Hello! I am your EduBridge Academic Co-Pilot. Currently, I am in demo mode because the Gemini API key is being initialized. You can ask me questions about Data Structures, Web Development, Semester Exams, and Resume optimization!";
+    }
+
+    const userContext = user
+      ? `Student Branch: ${user.branch || "Engineering"}, Semester: ${user.semester || "Undergrad"}, Skills: ${user.skills?.join(", ") || "General"}`
+      : "Indian College Student";
+
+    const formattedHistory = (history || [])
+      .slice(-6)
+      .map((h) => `${h.sender === "user" ? "Student" : "EduBridge AI"}: ${h.text || h.content}`)
+      .join("\n");
+
+    const prompt = `You are EduBridge AI Academic Co-Pilot, an intelligent, inspiring, and concise university mentor for college students in India.
+${userContext}
+
+Always format your response with clean Markdown:
+- Use bullet points for steps or tips.
+- Use backticks \`code\` for tech terms or code snippets.
+- Keep the tone encouraging, practical, and highly clear.
+
+Recent Conversation:
+${formattedHistory}
+
+Student: ${message}
+EduBridge AI:`;
+
+    const result = await model.generateContent(prompt);
+    return result.response.text().trim();
+  } catch (err) {
+    console.error("AI Chat error:", err.message);
+    return `Here is a helpful tip on "${message}": Break down complex engineering problems into smaller modular blocks. Focus on core fundamentals like Data Structures, Clean Code architecture, and hands-on projects!`;
+  }
+};
+
 function escapeRegex(value) {
   return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
